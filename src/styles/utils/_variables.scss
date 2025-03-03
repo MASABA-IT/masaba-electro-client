@@ -1,0 +1,38 @@
+/*  BreakPoint*/
+$bp-largest: 75em; //Large desktops and above
+$bp-large: 62em; //Desktops
+$bp-medium: 48em; //Tablets
+$bp-small: 30em; //Mobile devices
+
+//fonts
+$font-primary: "Nunito", sans-serif;
+$font-display: "Josefin Sans";
+
+//theme-color
+$color-primary: #90d68d;
+$color-primary-light: "";
+$color-primary-dark: "";
+
+$color-primary-glass: "";
+$color-secondary: "";
+
+/* Grey Tones */
+$color-grey-dark-1: #333; //Heading-h1
+$color-grey-dark-2: #777; //Secondary Text -h2-p
+$color-grey-dark-3: #999; //bg-small-text-input-disable
+
+$color-grey-light-1: #faf9f9;
+$color-grey-light-2: #f4f2f2;
+$color-grey-light-3: #f0eeee;
+$color-grey-light-4: #ccc;
+
+/* Basic Colors */
+$color-white: #fff;
+$color-black: #333;
+
+//grid
+$grid-width: 114rem;
+$grid-width-small: 50rem;
+$gutter-vertical: 8rem;
+$gutter-vertical-small: 6rem;
+$gutter-horizontal: 6rem;

@@ -1,14 +1,25 @@
-import React from "react";
+import { useState } from "react";
 import { Outlet } from "react-router-dom";
 
-const Main = () => {
+import Navbar from "../shared/Navbar/Navbar";
+import Sidebar from "../Shared/Sidebar/Sidebar";
+import Footer from "../shared/Footer/Footer";
+
+export default function Main() {
+  const [showSidebar, setShowSidebar] = useState(false);
+
   return (
-    <div>
-      <h2>Navbar</h2>
-      <Outlet />
-      <h2 className="text-amber-500">Footer</h2>
+    <div className="app">
+      {/* Top Navbar */}{" "}
+      <Navbar showSidebar={showSidebar} setShowSidebar={setShowSidebar} />
+      {/* Sidebar (Only for Mobile) */}
+      <Sidebar showSidebar={showSidebar} setShowSidebar={setShowSidebar} />
+      {/* Main Content */}
+      <main className="main-home">
+        <Outlet />
+      </main>
+      {/* Footer */}
+      <Footer />
     </div>
   );
-};
-
-export default Main;
+}

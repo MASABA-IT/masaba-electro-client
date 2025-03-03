@@ -1,0 +1,59 @@
+@use '../utils/variables' as *;
+.navbar {
+  width: 100%;
+  margin: 0 auto;
+  font-size: large;
+  background-color: $color-white;
+  padding: 1rem 0;
+}
+.brand > span{
+    color: $color-primary-light;
+ 
+}
+.nav-content {
+  max-width: 120rem;
+  width: 100%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  color: rgb(29, 29, 29);
+}
+
+@media (max-width: 1200px) {
+  /* Large desktops */
+  .navbar {
+    font-size: 1.4rem;
+  }
+  .nav-content {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 992px) {
+  /* Medium desktop */
+  .navbar {
+    font-size: 1.3rem;
+  }
+  .nav-content {
+    padding: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Tablets */
+  .navbar {
+    font-size: 1.2rem;
+  }
+  .nav-content {
+    padding: 10px;
+    text-align: center;
+  }
+  .sidebar {
+    width: 0; /* Initially hidden on tablets */
+  }
+  .main-home {
+    padding: 15px;
+  }
+}

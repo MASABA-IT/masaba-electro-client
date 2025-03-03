@@ -1,7 +1,7 @@
-* {
-  margin: 0;
-  padding: 0;
-}
+// * {
+//   margin: 0;
+//   padding: 0;
+// }
 
 *,
 *::after,
@@ -10,14 +10,59 @@
 }
 
 html {
-  font-size: 62.5%;
+  font-size: 62.5%; // This helps with using rems more effectively (1rem = 10px)
   box-sizing: border-box;
   scroll-behavior: smooth;
 }
-/*  color:   $color-grey-dark-2;
-  font-family: $font-primary; */
+
 body {
   font-weight: 300;
   line-height: 1.6;
   font-family: "Poppins", sans-serif;
+}
+
+.app {
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  margin: 0 auto;
+}
+
+
+
+.main-home {
+  max-width: 120rem;
+  width: 100%;
+  background: #eceee3;
+  margin: 0 auto;
+  flex-grow: 1;
+  padding: 20px;
+}
+
+
+/* Media Queries for Responsive Design */
+
+
+// --------------------Mobile view for only 
+@media (max-width: 576px) {
+  /* Mobile devices */
+  .navbar {
+    font-size: 1.1rem;
+  }
+  .nav-content {
+    padding: 8px;
+  }
+  .sidebar {
+    width: 0; /* Initially hidden on mobile */
+  }
+  .sidebar.show {
+    width: 150px; /* Expanded width on mobile */
+  }
+  .main-home {
+    padding: 10px;
+  }
+  .footer-content {
+    font-size: 1.2rem;
+  }
 }

@@ -1,7 +1,9 @@
-// * {
-//   margin: 0;
-//   padding: 0;
-// }
+@use "../utils/variables" as *;
+@import "./tailwind.css";
+* {
+  margin: 0;
+  padding: 0;
+}
 
 *,
 *::after,
@@ -29,22 +31,18 @@ body {
   margin: 0 auto;
 }
 
-
-
 .main-home {
-  max-width: 120rem;
+ 
   width: 100%;
-  background: #eceee3;
+  background-color: $color-grey ;
   margin: 0 auto;
   flex-grow: 1;
   padding: 20px;
 }
 
-
 /* Media Queries for Responsive Design */
 
-
-// --------------------Mobile view for only 
+// --------------------Mobile view for only
 @media (max-width: 576px) {
   /* Mobile devices */
   .navbar {

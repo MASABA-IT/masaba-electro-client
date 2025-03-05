@@ -1,14 +1,53 @@
+@use "../utils/variables" as *;
 .footer {
-    width: 100%;
-    background-color: rgb(252, 245, 237);
-    text-align: center;
+  width: 100%;
+
+  text-align: center;
+}
+
+.footer_content {
+  color: rgb(31, 29, 29);
+  max-width: 140rem;
+  width: 100%;
+  margin: 0 auto;
+  font-size: large;
+  p {
+    font-size: 1.4rem;
   }
-  
-  .footer-content {
-    color: rgb(31, 29, 29);
-    max-width: 120rem;
-    width: 100%;
-    margin: 0 auto;
-    font-size: large;
+}
+.social-links {
+  padding: 1rem 0;
+  margin-bottom: 1rem;
+  li {
+    font-size: 1.6rem;
+    width: 3rem;
+    padding: 0.7rem;
+    aspect-ratio: 1;
+    border-radius: 100%;
+    background-color: $color-grey-light-4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    a {
+      color: white;
+      transition: all 0.2s ease-in;
+    }
   }
-  
+}
+@media (max-width: 768px) {
+  .footer_content {
+    margin-left: 1rem;
+    p {
+      font-size: 1.2rem;
+    }
+  }
+}
+@media (max-width: 425px) {
+  .footer_content {
+    margin-left: 0;
+
+    p {
+      font-size: 1.2rem;
+    }
+  }
+}

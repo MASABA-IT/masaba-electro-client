@@ -1,6 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import "./styles/tailwind.css";
+import "./styles/tailwind.css"; // Tailwind CSS
+
 import { AppProvider } from "./providers/AppProviders";
 import AppRoutes from "./routes/AppRoutes";
 

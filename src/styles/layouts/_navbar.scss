@@ -1,24 +1,27 @@
-@use '../utils/variables' as *;
+@use "../utils/variables" as *;
 .navbar {
   width: 100%;
   margin: 0 auto;
   font-size: large;
-  background-color: $color-white;
+  background-color: $color-grey-light-1;
   padding: 1rem 0;
 }
-.brand > span{
-    color: $color-primary-light;
- 
+.brand > span {
+  color: $color-secondary-light;
 }
 .nav-content {
-  max-width: 120rem;
+  max-width: 140rem;
   width: 100%;
+
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
+  padding: 5px 20px;
   color: rgb(29, 29, 29);
+}
+.nav-icons button > span {
+  font-size: 1.4rem;
 }
 
 @media (max-width: 1200px) {
@@ -56,4 +59,13 @@
   .main-home {
     padding: 15px;
   }
+  .nav-icons {
+    margin-right: 1rem;
+    font-size: 1.8rem;
+  }
+  .nav-icons button > span {
+    font-size: 1.2rem;
+  }
+}
+@media (max-width: 420px) {
 }

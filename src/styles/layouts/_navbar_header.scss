@@ -1,0 +1,36 @@
+@use "../utils/variables" as *;
+.navbar_header {
+  width: 100%;
+  margin: 0 auto;
+  font-size: large;
+  background-color: $color-white;
+
+  .navbar_content {
+    max-width: 140rem;
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 10px;
+    color: rgb(29, 29, 29);
+    font-size: 1.6rem;
+
+    & div:nth-child(1) > button:nth-child(1) {
+      font-size: 2rem;
+      color: $color-grey-dark-1;
+    }
+    & div > button {
+      color: $color-grey-dark-2;
+      padding: 1rem;
+    }
+  }
+}
+@media (max-width: 768px) {
+  .navbar_content {
+    & div > button {
+      color: $color-secondary-light !important;
+      background-color: $color-grey-light-1;
+    }
+  }
+}

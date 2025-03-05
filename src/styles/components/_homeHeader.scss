@@ -1,0 +1,36 @@
+@use "../utils/variables" as *;
+.header_content {
+  grid-column: full-start / full-end;
+  background-color: $color-white;
+  display: grid;
+  grid-template-columns: [item-1-start] 18% [item-1-end item-2-start] 1fr [item-2-end item-3-start] 15% [item-3-end];
+
+  .item-1 {
+    grid-column: item-1-start/ item-1-end;
+    h2 {
+      background-color: $color-secondary-light-2;
+    }
+  }
+  .item-2 {
+    grid-column: item-2-start / item-2-end;
+    background-image: url("/src/assets/imgs/Banner-board.png");
+    background-size: 100% 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  .item-3 {
+    grid-column: item-3-start/ item-3-end;
+     
+    div:nth-child(1) {
+      background-color: $color-secondary-light-2;
+    }
+
+    &-user {
+      width: 100%;
+
+      p {
+        background-color: $color-secondary-light-1;
+      }
+    }
+  }
+}

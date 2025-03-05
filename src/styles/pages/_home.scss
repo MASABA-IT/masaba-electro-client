@@ -5,9 +5,11 @@
   margin: 0 auto;
   padding: 5px 20px;
   display: grid;
-  grid-template-rows: 40vh repeat(3, min-content) repeat(2, 50vh) 30vh min-content;
-  grid-template-columns: repeat(
-    8,
-    [col-start] minmax(min-content, 14rem) [col-end]
-  );
+  grid-template-rows: 45vh repeat(3, min-content) repeat(2, 50vh) 30vh min-content;
+  grid-template-columns:
+    [full-start] minmax(6rem, 1fr) repeat(
+      8,
+      [col-start] minmax(min-content, 14rem) [col-end]
+    )
+    minmax(6rem, 1fr) [full-end];
 }

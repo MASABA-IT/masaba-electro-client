@@ -1,0 +1,6 @@
+.home_collections{
+    grid-column: full-start / full-end;
+    display: flex ;
+    flex-direction: column;
+    gap: 3rem;
+}

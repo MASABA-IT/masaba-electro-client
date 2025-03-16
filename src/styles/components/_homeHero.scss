@@ -1,5 +1,5 @@
 @use "../utils/variables" as *;
-.header_content {
+.hero_content {
   grid-column: full-start / full-end;
   background-color: $color-white;
   display: grid;
@@ -7,8 +7,17 @@
 
   .item-1 {
     grid-column: item-1-start/ item-1-end;
-    h2 {
-      background-color: $color-secondary-light-2;
+    background-color: transparent; // Default background
+    cursor: pointer;
+
+    border-radius: 6px;
+    & ul > li {
+      padding: 8px 10px;
+    }
+    &.active {
+      background-color: $color-secondary-light-2; // Use SCSS variable when active
+      font-weight: bold;
+      color: $color-grey-dark-1;
     }
   }
   .item-2 {
@@ -20,7 +29,7 @@
   }
   .item-3 {
     grid-column: item-3-start/ item-3-end;
-     
+
     div:nth-child(1) {
       background-color: $color-secondary-light-2;
     }
@@ -32,5 +41,19 @@
         background-color: $color-secondary-light-1;
       }
     }
+  }
+}
+@media (max-width: 768px) {
+}
+@media (max-width: 425px) {
+  .hero_content {
+    height: 25vh !important;
+  }
+  .item-1,
+  .item-3 {
+    display: none !important;
+  }
+  .item-2 {
+    grid-column: item-1-start/item-3-end !important;
   }
 }

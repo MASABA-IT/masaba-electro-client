@@ -32,12 +32,11 @@ body {
 }
 
 .main-home {
- 
   width: 100%;
-  background-color: $color-grey ;
+  background-color: $color-grey;
   margin: 0 auto;
   flex-grow: 1;
-  padding: 20px;
+  padding: 0 !important;
 }
 
 /* Media Queries for Responsive Design */

@@ -1,0 +1,80 @@
+@use "../utils/variables" as *;
+.product-main-offers {
+  display: grid;
+  grid-template-columns: 20% 80%; /* Left side takes 20%, right side takes the remaining 80% */
+}
+
+.main-offer-left {
+  padding: 20px;
+  background-color: #fff;
+}
+
+.countdown-timer {
+  margin-top: 20px;
+}
+
+.countdown {
+  display: flex;
+  gap: 10px;
+}
+
+.countdown-box {
+  width: 50px;
+  padding: 4px;
+  text-align: center;
+  background-color: $color-grey-dark-2;
+  color: $color-grey;
+  border-radius: 4px;
+}
+
+.countdown-box p {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: $color-grey;
+}
+
+.main-offer-right {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+}
+.offer-box {
+  background-color: #fff;
+  border: 1px solid #e6d9d9;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: box-shadow 0.3s ease;
+}
+
+.offer-box:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.offer-image {
+  width: 100%;
+  height: 60%; /* Set height to 60% */
+  display: flex;
+  justify-content: center; /* Centers the image horizontally */
+}
+
+.offer-image img {
+  width: 100%;
+  height: 100%; /* The image will fill its container */
+  object-fit: contain; /* Ensures the entire image is visible without distortion */
+}
+
+.offer-details {
+  margin-top: 10px; /* Adds spacing between the image and the text */
+}
+
+.offer-box h4 {
+  color: $color-grey-dark-1;
+  margin: 10px 0; /* Adds vertical spacing around the title */
+}
+
+.offer-box p {
+  color: #e74c3c;
+  font-size: 1.5rem;
+  margin-top: 10px;
+}

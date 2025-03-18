@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const recommendedItems = [
   {
@@ -62,27 +62,48 @@ const recommendedItems = [
     imageUrl: "/src/assets/imgs/reItem10.png",
   },
 ];
-
 const HomeRecommendedItems = () => {
-  return (
-    <div className="home_recommendedItems w-full rounded-lg  ">
-      <h2 className="    mb-4">Recommended Items</h2>
+  const [visibleItems, setVisibleItems] = useState([]);
 
-      <div className="grid  ">
-        {recommendedItems.map((item, index) => (
+  const handleIntersection = (entries, observer) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        setVisibleItems((prev) => [...prev, entry.target.id]);
+      }
+    });
+  };
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(handleIntersection, {
+      threshold: 0.1, // 10% of the item should be visible
+    });
+
+    const items = document.querySelectorAll(".item-card");
+    items.forEach((item) => observer.observe(item));
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  return (
+    <div className="home_recommendedItems w-full rounded-lg">
+      <h2 className="mb-4">Recommended Items</h2>
+
+      <div className="grid">
+        {recommendedItems.map((item) => (
           <div
             key={item.id}
-            className="item-card  "
-            style={{
-              animation: `fadeIn 0.5s ease ${index * 0.1}s forwards`,
-              opacity: 0,
-            }}
+            id={`item-${item.id}`}
+            className={`item-card ${
+              visibleItems.includes(`item-${item.id}`) ? "fade-in" : ""
+            }`}
           >
             <div>
               <img
                 src={item.imageUrl}
                 alt={item.title}
-                className="w-full   object-cover rounded-md"
+                className="w-full object-cover rounded-md"
               />
             </div>
             <p>{item.price}</p>

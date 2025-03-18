@@ -6,9 +6,7 @@ const CollectionItem = ({ item }) => (
   <div key={item.id} className="collection-item relative ">
     <div className="item-info">
       <h4 className="text-xl md:text-3xl">{item.title}</h4>
-      <p className="price">
-        From <br /> USD {item.price}
-      </p>
+      <p className="price">From USD {item.price}</p>
     </div>
     <div className="item-image absolute right-2 bottom-6">
       <img src={item.imageUrl} alt={item.title} />
@@ -39,7 +37,7 @@ const Collection = ({ collection }) => {
           Source Now
         </button>
       </div>
-      <button className="w-60  flex justify-center items-center gap-2 md:hidden   px-8 py-4 rounded-lg text-2xl font-semibold text-blue-600 transition duration-300 ease-in-out hover:shadow-md hover:-translate-y-1 hover:scale-105 active:scale-95">
+      <button className="w-60  flex justify-center items-center gap-2 md:hidden   px-8 py-4 rounded-lg text-xl font-semibold text-blue-500 transition duration-300 ease-in-out hover:shadow-md hover:-translate-y-1 hover:scale-105 active:scale-95">
         Source Now <FaArrowRight />
       </button>
 

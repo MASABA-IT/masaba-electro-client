@@ -4,6 +4,7 @@ import { HiMiniShoppingCart } from "react-icons/hi2";
 
 import { IoIosSearch, IoMdMenu } from "react-icons/io";
 import { MdMessage } from "react-icons/md";
+import { Link } from "react-router-dom";
 const Navbar = ({ showSidebar, setShowSidebar }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [category, setCategory] = useState("All");
@@ -23,12 +24,14 @@ const Navbar = ({ showSidebar, setShowSidebar }) => {
         </button>
         <div className="w-full  flex justify-between items-center  ">
           <div className="brand flex justify-center items-center gap-2 md:text-3xl lg:text-5xl font-black">
-            <img
-              src="/src/assets/logo/nav-logo.svg"
-              alt="Brand Logo"
-              className="brand-logo md:w-12"
-            />
-            <span>Brand</span>
+            <Link to="/" className="flex justify-center items-center gap-2">
+              <img
+                src="/src/assets/logo/nav-logo.svg"
+                alt="Brand Logo"
+                className="brand-logo md:w-12"
+              />
+              <span>Brand</span>
+            </Link>
           </div>
           {/* Input field */}
           <div className="md:w-[50%] lg:w-auto h-14 flex items-center   border rounded-lg border-blue-500">

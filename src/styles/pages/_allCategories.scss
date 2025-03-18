@@ -1,0 +1,16 @@
+.categories_content {
+  max-width: 140rem;
+  width: 100%;
+  margin: 0 auto;
+  padding: 5px 20px;
+  display: grid;
+  grid-template-rows: min-content repeat(7, min-content);
+  grid-template-columns:
+    [full-start] minmax(6rem, 1fr) repeat(
+      8,
+      [col-start] minmax(min-content, 14rem) [col-end]
+    )
+    minmax(6rem, 1fr) [full-end];
+
+  row-gap: 2rem;
+}

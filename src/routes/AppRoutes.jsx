@@ -2,6 +2,7 @@ import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Main from "../layouts/Main";
 import Home from "../pages/Home/Home";
+import AllCateGories from "../pages/AllCateGories/AllCateGories";
 
 const AppRoutes = () => {
   const router = createBrowserRouter([
@@ -12,6 +13,10 @@ const AppRoutes = () => {
         {
           path: "/",
           element: <Home />,
+        },
+        {
+          path: "/categories",
+          element: <AllCateGories />,
         },
       ],
     },

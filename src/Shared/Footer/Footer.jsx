@@ -15,9 +15,9 @@ const Footer = () => {
   return (
     <footer className="footer ">
       {/* First Section: Subscribe */}
-      <div className="w-full   bg-gray-100">
+      <div className="w-full bg-[#eef2f5]" >
         <div className="footer_content py-10  flex flex-col gap-y-2 text-center mb-8 text-gray-600 text-2xl">
-          <h2 className="text-3xl font-semibold mb-2 font-serif ">
+          <h2 className="text-3xl font-semibold mb-2  ">
             Subscribe on Our Newsletter
           </h2>
           <p className="  md:text-2xl mb-2">
@@ -97,10 +97,18 @@ const Footer = () => {
           <div className="text-2xl text-gray-400">
             <h3 className="text-2xl font-semibold mb-3 text-gray-600">About</h3>
             <ul>
-              <li>About Us</li>
-              <li>Find Store</li>
-              <li>Categories</li>
-              <li>Blogs</li>
+              <li className="hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-blue-500 hover:to-teal-500 hover:scale-105 cursor-pointer transition-all duration-500 ease-in-out">
+                About Us
+              </li>
+              <li className="hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-blue-500 hover:to-teal-500 hover:scale-105 cursor-pointer transition-all duration-500 ease-in-out">
+                Find Store
+              </li>
+              <li className="hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-blue-500 hover:to-teal-500 hover:scale-105 cursor-pointer transition-all duration-500 ease-in-out">
+                Categories
+              </li>
+              <li className="hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-blue-500 hover:to-teal-500 hover:scale-105 cursor-pointer transition-all duration-500 ease-in-out">
+                Blogs
+              </li>
             </ul>
           </div>
 
@@ -110,48 +118,79 @@ const Footer = () => {
               Partnership
             </h3>
             <ul>
-              <li>Help Center</li>
-              <li>Money Rewfund </li>
-              <li>Shipping</li>
-              <li>Contact Us</li>
+              <li className="hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-blue-500 hover:to-teal-500 hover:scale-105 cursor-pointer transition-all duration-500 ease-in-out">
+                Help Center
+              </li>
+              <li className="hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-blue-500 hover:to-teal-500 hover:scale-105 cursor-pointer transition-all duration-500 ease-in-out">
+                Money Refund
+              </li>
+              <li className="hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-blue-500 hover:to-teal-500 hover:scale-105 cursor-pointer transition-all duration-500 ease-in-out">
+                Shipping
+              </li>
+              <li className="hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-blue-500 hover:to-teal-500 hover:scale-105 cursor-pointer transition-all duration-500 ease-in-out">
+                Contact Us
+              </li>
             </ul>
           </div>
+
           {/* Column 4: Information Info */}
           <div className="text-2xl text-gray-400">
             <h3 className="text-2xl font-semibold mb-3 text-gray-600">
               Information
             </h3>
             <ul>
-              <li>Help Center</li>
-              <li>Money Rewfund </li>
-              <li>Shipping</li>
-              <li>Contact Us</li>
+              <li className="hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-blue-500 hover:to-teal-500 hover:scale-105 cursor-pointer transition-all duration-500 ease-in-out">
+                Help Center
+              </li>
+              <li className="hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-blue-500 hover:to-teal-500 hover:scale-105 cursor-pointer transition-all duration-500 ease-in-out">
+                Money Refund
+              </li>
+              <li className="hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-blue-500 hover:to-teal-500 hover:scale-105 cursor-pointer transition-all duration-500 ease-in-out">
+                Shipping
+              </li>
+              <li className="hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-blue-500 hover:to-teal-500 hover:scale-105 cursor-pointer transition-all duration-500 ease-in-out">
+                Contact Us
+              </li>
             </ul>
           </div>
+
           {/* Column 5: For Users Info */}
           <div className="text-2xl text-gray-400">
             <h3 className="text-2xl font-semibold mb-3 text-gray-600">
               For Users
             </h3>
             <ul>
-              <li>Login</li>
-              <li>Register </li>
-              <li>Settings</li>
-              <li>My Orders</li>
+              <li className="hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-blue-500 hover:to-teal-500 hover:scale-105 cursor-pointer transition-all duration-500 ease-in-out">
+                Login
+              </li>
+              <li className="hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-blue-500 hover:to-teal-500 hover:scale-105 cursor-pointer transition-all duration-500 ease-in-out">
+                Register
+              </li>
+              <li className="hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-blue-500 hover:to-teal-500 hover:scale-105 cursor-pointer transition-all duration-500 ease-in-out">
+                Settings
+              </li>
+              <li className="hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-blue-500 hover:to-teal-500 hover:scale-105 cursor-pointer transition-all duration-500 ease-in-out">
+                My Orders
+              </li>
             </ul>
           </div>
+
           {/* Column 6: For App Info */}
           <div className="text-2xl text-gray-500">
             <h3 className="text-2xl font-semibold mb-3">Get App</h3>
             <ul className="flex flex-col gap-y-2">
-              <li>
-                <img src="/src/assets/imgs/Group.png" alt="" className="h-14" />
+              <li className="hover:scale-110 cursor-pointer transition-all duration-500 ease-in-out">
+                <img
+                  src="/src/assets/imgs/Group.png"
+                  alt=""
+                  className="h-14 transition-all duration-500 ease-in-out"
+                />
               </li>
-              <li>
+              <li className="hover:scale-110 cursor-pointer transition-all duration-500 ease-in-out">
                 <img
                   src="/src/assets/imgs/market-button.png"
                   alt=""
-                  className="h-14"
+                  className="h-14 transition-all duration-500 ease-in-out"
                 />
               </li>
             </ul>

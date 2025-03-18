@@ -41,15 +41,15 @@ const CountdownTimer = ({ endDate }) => {
       </div>
       <div className="countdown-box">
         <p>{timeRemaining?.hours}</p>
-        <span>Hours</span>
+        <span>Hour</span>
       </div>
       <div className="countdown-box">
         <p>{timeRemaining?.minutes}</p>
-        <span>Minutes</span>
+        <span>Min</span>
       </div>
       <div className="countdown-box">
         <p>{timeRemaining?.seconds}</p>
-        <span>Seconds</span>
+        <span>Sec</span>
       </div>
     </div>
   );
@@ -57,11 +57,13 @@ const CountdownTimer = ({ endDate }) => {
 
 // MainOffer Component
 const MainOffer = ({ offer }) => (
-  <div className="main-offer-left">
-    <h2 className="text-2xl md:text-4xl font-bold text-gray-800">
-      {offer?.title}
-    </h2>
-    <p className="text-xl md:text-2xl">{offer?.subtitle}</p>
+  <div className="main-offer-left ">
+    <div>
+      <h2 className="text-2xl md:text-4xl font-bold text-gray-800">
+        {offer?.title}
+      </h2>
+      <p className="text-xl md:text-2xl">{offer?.subtitle}</p>
+    </div>
     <div className="countdown-timer">
       <h3 className="text-xl font-semibold ">Time Left for Offer:</h3>
       <CountdownTimer endDate={offer?.countdownEndDate} />
@@ -77,9 +79,7 @@ const OfferItem = ({ item }) => (
     </div>
     <div className="offer-details flex flex-col justify-center items-center">
       <h4 className="text-2xl font-medium">{item.title}</h4>
-      <p className="bg-red-100 w-24 px-3 py-2 rounded-full  ">
-        -{item.discount}
-      </p>
+      <p className="bg-red-100 w-24 px-3   rounded-full  ">-{item.discount}</p>
     </div>
   </div>
 );
@@ -89,7 +89,7 @@ const ProductMainOffers = () => {
   const [offersData, setOffersData] = useState([]);
 
   useEffect(() => {
-    // Demo data, replace with actual API data as needed.
+     
     setOffersData([
       {
         id: 1,
@@ -143,7 +143,7 @@ const ProductMainOffers = () => {
       {/* Display the first offer and its countdown */}
       <MainOffer offer={offersData[0]} />
 
-      <div className="main-offer-right">
+      <div className="main-offer-right  ">
         {offersData[0]?.items.map((item) => (
           <OfferItem key={item.id} item={item} />
         ))}

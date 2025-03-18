@@ -1,0 +1,10 @@
+
+.home_suppliers {
+  grid-column: full-start/full-end;
+  & > h2 {
+    font-size: 1.75rem;
+    font-weight: bold;
+    color: #2d3748;
+    margin-bottom: 1.5rem;
+  }
+}

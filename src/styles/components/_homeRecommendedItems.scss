@@ -1,92 +1,109 @@
 .home_recommendedItems {
-    grid-column: full-start / full-end;
-    background-color: #f7fafc;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  grid-column: full-start / full-end;
+
+  background-color: #f7fafc;
+  border-radius: 10px;
+  // box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.home_recommendedItems h2 {
+  font-size: 1.75rem;
+  font-weight: bold;
+  color: #2d3748;
+  margin-bottom: 1.5rem;
+}
+
+/* Grid setup for 5 items per row */
+.home_recommendedItems .grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1.5rem;
+  padding: 1rem 0;
+}
+
+/* Item Card Styling */
+.home_recommendedItems .item-card {
+  max-height: 240px;
+  background-color: #fff;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  & > div {
+    height: 70%;
   }
-  
-  .home_recommendedItems h2 {
-    font-size: 1.75rem;
-    font-weight: bold;
-    color: #2d3748;
-    margin-bottom: 1.5rem;
-  }
-  
-  /* Grid setup for 5 items per row */
-  .home_recommendedItems .grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 1.5rem;
-    padding: 1rem 0;
-  }
-  
-  /* Item Card Styling */
-  .home_recommendedItems .item-card {
-    background-color: #fff;
-    padding: 1.5rem;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Image Styling */
+.home_recommendedItems .item-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.home_recommendedItems .item-card h3 {
+  font-size: 1.4rem;
+  font-weight: 400;
+  margin-top: 1rem;
+  color: #4a5568;
+}
+
+.home_recommendedItems .item-card p {
+  font-size: 1.6rem;
+  color: #2b6cb0;
+  font-weight: 600;
+  margin-top: 0.5rem;
+}
+
+/* Hover effects */
+.home_recommendedItems .item-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+  from {
     opacity: 0;
-    animation: fadeIn 0.5s ease forwards;
+    transform: translateY(10px);
   }
-  
-  /* Image Styling */
-  .home_recommendedItems .item-card img {
-    width: 100%;
-    height: 160px;
-    object-fit: cover;
-    border-radius: 8px;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
-  .home_recommendedItems .item-card h3 {
-    font-size: 1.1rem;
-    font-weight: bold;
-    margin-top: 1rem;
-    color: #4a5568;
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 1024px) {
+  .home_recommendedItems .grid {
+    grid-template-columns: repeat(4, 1fr);
   }
-  
-  .home_recommendedItems .item-card p {
-    font-size: 1rem;
-    color: #2b6cb0;
-    font-weight: 600;
-    margin-top: 0.5rem;
-  }
-  
-  /* Hover effects */
-  .home_recommendedItems .item-card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  }
-  
-  /* Fade-in animation */
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+  .home_recommendedItems {
+    padding: 0 1rem;
+    & .item-card {
+      padding: 0.8rem;
     }
   }
-  
-  /* Media queries for responsiveness */
-  @media (max-width: 1024px) {
-    .home_recommendedItems .grid {
-      grid-template-columns: repeat(4, 1fr);
+  .home_recommendedItems .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .home_recommendedItems .item-card {
+    & > div {
+      height: 60%;
+    }
+    & > h3{
+      margin-top: .5rem;
+      font-size: 1.2rem;
     }
   }
-  
-  @media (max-width: 768px) {
-    .home_recommendedItems .grid {
-      grid-template-columns: repeat(3, 1fr);
-    }
+}
+
+@media (max-width: 480px) {
+  .home_recommendedItems .grid {
+    grid-template-columns: repeat(2, 1fr);
   }
-  
-  @media (max-width: 480px) {
-    .home_recommendedItems .grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-  
+}

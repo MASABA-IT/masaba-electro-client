@@ -3,11 +3,10 @@
   display: flex;
   justify-content: flex-start;
   background-color: #fff;
-
   border-radius: 10px;
-  
+
   width: 100%;
-  &:not(:last-child){
+  &:not(:last-child) {
     margin-bottom: 3rem;
   }
 }
@@ -33,7 +32,7 @@ p {
 }
 
 .collection-right {
-  width: 80%; /* Right side for the items */
+  width: 100%; /* Right side for the items */
   display: flex;
   flex-direction: column; /* Stack rows vertically */
 }
@@ -91,4 +90,20 @@ h4 {
   border-radius: 15px;
   font-size: 1rem;
   color: #e74c3c;
+}
+@media (max-width: 768px) {
+  .collection-section {
+    flex-direction: column-reverse;
+  }
+  .collection-right {
+    flex-direction: row;
+    overflow-x: auto;
+  }
+  .collection-item {
+     display: flex;
+  
+    min-width: 120px;
+    max-width: 120px;
+    height: 150px;
+  }
 }

@@ -1,0 +1,308 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "title": "GoPro HERO6 4K Action",
+      "subtitle": "Camera - Black",
+      "image": "/src/assets/imgs/p1.png",
+      "color": "Black",
+      "price": 399.99,
+      "discountPrice": 299.99,
+      "description": "Capture stunning 4K videos with the GoPro HERO6, Black edition.",
+      "specifications": {
+        "sensor": "12MP",
+        "resolution": "4K",
+        "waterproof": "Yes",
+        "batteryLife": "2 hours",
+        "connectivity": "Wi-Fi, Bluetooth"
+      },
+      "rating": 4.5,
+      "views": 1200
+    },
+    {
+      "id": 2,
+      "title": "GoPro HERO6 4K Action",
+      "subtitle": "Camera - White",
+      "image": "/src/assets/imgs/p2.png",
+      "color": "White",
+      "price": 399.99,
+      "discountPrice": 299.99,
+      "description": "Capture stunning 4K videos with the GoPro HERO6, White edition.",
+      "specifications": {
+        "sensor": "12MP",
+        "resolution": "4K",
+        "waterproof": "Yes",
+        "batteryLife": "2 hours",
+        "connectivity": "Wi-Fi, Bluetooth"
+      },
+      "rating": 4.2,
+      "views": 1100
+    },
+    {
+      "id": 3,
+      "title": "GoPro HERO6 4K Action",
+      "subtitle": "Camera - Black (2nd Edition)",
+      "image": "/src/assets/imgs/p3.png",
+      "color": "Black",
+      "price": 379.99,
+      "discountPrice": 269.99,
+      "description": "GoPro HERO6 4K Action Camera, 2nd edition, in Black color.",
+      "specifications": {
+        "sensor": "12MP",
+        "resolution": "4K",
+        "waterproof": "Yes",
+        "batteryLife": "2 hours",
+        "connectivity": "Wi-Fi, Bluetooth"
+      },
+      "rating": 4.3,
+      "views": 1500
+    },
+    {
+      "id": 4,
+      "title": "GoPro HERO6 4K Action",
+      "subtitle": "Camera - White (2nd Edition)",
+      "image": "/src/assets/imgs/p4.png",
+      "color": "White",
+      "price": 379.99,
+      "discountPrice": 269.99,
+      "description": "GoPro HERO6 4K Action Camera, 2nd edition, in White color.",
+      "specifications": {
+        "sensor": "12MP",
+        "resolution": "4K",
+        "waterproof": "Yes",
+        "batteryLife": "2 hours",
+        "connectivity": "Wi-Fi, Bluetooth"
+      },
+      "rating": 4.1,
+      "views": 950
+    },
+    {
+      "id": 5,
+      "title": "Canon EOS Rebel T7",
+      "subtitle": "Camera - Black",
+      "image": "/src/assets/imgs/p5.png",
+      "color": "Black",
+      "price": 599.99,
+      "discountPrice": 499.99,
+      "description": "Capture stunning photos with the Canon EOS Rebel T7, Black edition.",
+      "specifications": {
+        "sensor": "24.1MP",
+        "resolution": "1080p",
+        "waterproof": "No",
+        "batteryLife": "1.5 hours",
+        "connectivity": "Wi-Fi, Bluetooth"
+      },
+      "rating": 4.7,
+      "views": 2200
+    },
+    {
+      "id": 6,
+      "title": "Canon EOS Rebel T7",
+      "subtitle": "Camera - White",
+      "image": "/src/assets/imgs/p6.png",
+      "color": "White",
+      "price": 599.99,
+      "discountPrice": 499.99,
+      "description": "Capture stunning photos with the Canon EOS Rebel T7, White edition.",
+      "specifications": {
+        "sensor": "24.1MP",
+        "resolution": "1080p",
+        "waterproof": "No",
+        "batteryLife": "1.5 hours",
+        "connectivity": "Wi-Fi, Bluetooth"
+      },
+      "rating": 2.4,
+      "views": 1800
+    },
+    {
+      "id": 7,
+      "title": "Nikon D3500",
+      "subtitle": "Camera - Black",
+      "image": "/src/assets/imgs/p7.png",
+      "color": "Black",
+      "price": 499.99,
+      "discountPrice": 399.99,
+      "description": "Capture stunning photos with the Nikon D3500, Black edition.",
+      "specifications": {
+        "sensor": "24.2MP",
+        "resolution": "1080p",
+        "waterproof": "No",
+        "batteryLife": "1.5 hours",
+        "connectivity": "Wi-Fi, Bluetooth"
+      },
+      "rating": 3.6,
+      "views": 1300
+    },
+    {
+      "id": 8,
+      "title": "Nikon D3500",
+      "subtitle": "Camera - White",
+      "image": "/src/assets/imgs/p1.png",
+      "color": "White",
+      "price": 499.99,
+      "discountPrice": 399.99,
+      "description": "Capture stunning photos with the Nikon D3500, White edition.",
+      "specifications": {
+        "sensor": "24.2MP",
+        "resolution": "1080p",
+        "waterproof": "No",
+        "batteryLife": "1.5 hours",
+        "connectivity": "Wi-Fi, Bluetooth"
+      },
+      "rating": 4.3,
+      "views": 1100
+    },
+    {
+      "id": 9,
+      "title": "Sony Alpha A7 III",
+      "subtitle": "Camera - Black",
+      "image": "/src/assets/imgs/p2.png",
+      "color": "Black",
+      "price": 1799.99,
+      "discountPrice": 1599.99,
+      "description": "Professional mirrorless camera with 4K video capabilities.",
+      "specifications": {
+        "sensor": "24.2MP",
+        "resolution": "4K",
+        "waterproof": "Yes",
+        "batteryLife": "2 hours",
+        "connectivity": "Wi-Fi, Bluetooth"
+      },
+      "rating": 3.8,
+      "views": 5000
+    },
+    {
+      "id": 10,
+      "title": "Sony Alpha A7 III",
+      "subtitle": "Camera - White",
+      "image": "/src/assets/imgs/p3.png",
+      "color": "White",
+      "price": 1799.99,
+      "discountPrice": 1599.99,
+      "description": "Professional mirrorless camera with 4K video capabilities.",
+      "specifications": {
+        "sensor": "24.2MP",
+        "resolution": "4K",
+        "waterproof": "Yes",
+        "batteryLife": "2 hours",
+        "connectivity": "Wi-Fi, Bluetooth"
+      },
+      "rating": 4.9,
+      "views": 5500
+    },
+    {
+      "id": 11,
+      "title": "Panasonic Lumix G85",
+      "subtitle": "Camera - Black",
+      "image": "/src/assets/imgs/p4.png",
+      "color": "Black",
+      "price": 799.99,
+      "discountPrice": 699.99,
+      "description": "A reliable mirrorless camera with 4K video recording.",
+      "specifications": {
+        "sensor": "16MP",
+        "resolution": "4K",
+        "waterproof": "Yes",
+        "batteryLife": "2 hours",
+        "connectivity": "Wi-Fi, Bluetooth"
+      },
+      "rating": 4.3,
+      "views": 1200
+    },
+    {
+      "id": 12,
+      "title": "Panasonic Lumix G85",
+      "subtitle": "Camera - White",
+      "image": "/src/assets/imgs/p4.png",
+      "color": "White",
+      "price": 799.99,
+      "discountPrice": 699.99,
+      "description": "A reliable mirrorless camera with 4K video recording.",
+      "specifications": {
+        "sensor": "16MP",
+        "resolution": "4K",
+        "waterproof": "Yes",
+        "batteryLife": "2 hours",
+        "connectivity": "Wi-Fi, Bluetooth"
+      },
+      "rating": 4.2,
+      "views": 1100
+    },
+    {
+      "id": 13,
+      "title": "Fujifilm X-T30",
+      "subtitle": "Camera - Black",
+      "image": "/src/assets/imgs/p5.png",
+      "color": "Black",
+      "price": 899.99,
+      "discountPrice": 799.99,
+      "description": "Capture fast action shots with the Fujifilm X-T30.",
+      "specifications": {
+        "sensor": "26.1MP",
+        "resolution": "4K",
+        "waterproof": "No",
+        "batteryLife": "1.5 hours",
+        "connectivity": "Wi-Fi, Bluetooth"
+      },
+      "rating": 4.6,
+      "views": 1500
+    },
+    {
+      "id": 14,
+      "title": "Fujifilm X-T30",
+      "subtitle": "Camera - White",
+      "image": "/src/assets/imgs/p6.png",
+      "color": "White",
+      "price": 899.99,
+      "discountPrice": 799.99,
+      "description": "Capture fast action shots with the Fujifilm X-T30.",
+      "specifications": {
+        "sensor": "26.1MP",
+        "resolution": "4K",
+        "waterproof": "No",
+        "batteryLife": "1.5 hours",
+        "connectivity": "Wi-Fi, Bluetooth"
+      },
+      "rating": 4.4,
+      "views": 1400
+    },
+    {
+      "id": 15,
+      "title": "Olympus OM-D E-M10 Mark IV",
+      "subtitle": "Camera - Black",
+      "image": "/src/assets/imgs/p7.png",
+      "color": "Black",
+      "price": 699.99,
+      "discountPrice": 599.99,
+      "description": "Olympus OM-D E-M10 Mark IV with 4K video recording.",
+      "specifications": {
+        "sensor": "20.3MP",
+        "resolution": "4K",
+        "waterproof": "No",
+        "batteryLife": "2 hours",
+        "connectivity": "Wi-Fi, Bluetooth"
+      },
+      "rating": 4.7,
+      "views": 1600
+    },
+    {
+      "id": 16,
+      "title": "Olympus OM-D E-M10 Mark IV",
+      "subtitle": "Camera - White",
+      "image": "/src/assets/imgs/p8.png",
+      "color": "White",
+      "price": 699.99,
+      "discountPrice": 599.99,
+      "description": "Olympus OM-D E-M10 Mark IV with 4K video recording.",
+      "specifications": {
+        "sensor": "20.3MP",
+        "resolution": "4K",
+        "waterproof": "No",
+        "batteryLife": "2 hours",
+        "connectivity": "Wi-Fi, Bluetooth"
+      },
+      "rating": 4.5,
+      "views": 1300
+    }
+  ]
+}

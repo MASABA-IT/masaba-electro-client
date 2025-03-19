@@ -28,8 +28,12 @@
 }
 @media (max-width: 768px) {
   .navbar_content {
+    & div > a {
+      color: $color-secondary !important;
+      background-color: $color-grey-light-1;
+    }
     & div > button {
-      color: $color-secondary-light-1 !important;
+      color: $color-secondary !important;
       background-color: $color-grey-light-1;
     }
   }

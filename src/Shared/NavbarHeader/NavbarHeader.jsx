@@ -11,13 +11,12 @@ const NavbarHeader = () => {
     { text: "Gift Boxes", link: "/gift-boxes" },
     { text: "Projects", link: "/projects" },
     { text: "Menu Item", link: "/menu-item" },
-    { text: "Help", link: "/help" },
   ];
 
   return (
     <div className="navbar_header">
       <div className="navbar_content flex justify-between px-2 overflow-x-auto lg:overflow-visible text-sm">
-        <div className="flex justify-between items-center gap-x-4">
+        <div className="flex justify-between items-center gap-x-4 mr-4">
           <button className="hidden lg:flex">
             <IoMdMenu />
           </button>
@@ -27,25 +26,27 @@ const NavbarHeader = () => {
             <Link
               key={index}
               to={button.link}
-              className="text-gray-700 hover:text-blue-600 transition-all duration-300"
+              className="whitespace-nowrap   hover:text-blue-600 transition-all duration-300"
             >
               {button.text}
             </Link>
           ))}
 
           {/* Help button with dropdown */}
-          <button className="flex items-center">
-            <span>Help</span> <MdOutlineKeyboardArrowDown />
+          <button className="flex items-center ">
+            <span className="text-gray-700">Help</span>{" "}
+            <MdOutlineKeyboardArrowDown />
           </button>
         </div>
 
         <div className="flex gap-x-4 items-center">
           <button className="flex items-center">
-            <span>English, USD</span> <MdOutlineKeyboardArrowDown />
+            <span className="whitespace-nowrap">English, USD</span>{" "}
+            <MdOutlineKeyboardArrowDown />
           </button>
 
           <button className="flex items-center">
-            <span>Ship to</span>
+            <span className="whitespace-nowrap">Ship to</span>
             <img
               className="w-10 mx-2 aspect-square"
               src="/src/assets/imgs/flag-1.png"

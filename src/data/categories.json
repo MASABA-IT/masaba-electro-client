@@ -1,0 +1,48 @@
+[
+  {
+    "name": "Category",
+    "children": [
+      "Mobile Accessory",
+      "Electronics",
+      "Smart Phones",
+      "Modern Tech",
+      "Modern Tech1",
+      "Modern Tech2"
+    ]
+  },
+  {
+    "name": "Brands",
+    "children": [
+      "Samsung",
+      "Apple",
+      "Huawei",
+      "Pocco",
+      "Lenevo",
+      "Nokia",
+      "Xiaomi"
+    ]
+  },
+  {
+    "name": "Features",
+    "children": [
+      "Metalic",
+      "Plastic Cover",
+      "8GB Ram",
+      "Super Power",
+      "Large Memory",
+      "Large Memory1"
+    ]
+  },
+  {
+    "name": "Price Range",
+    "children": []
+  },
+  {
+    "name": "Condition",
+    "children": ["Any", "Refurbished", "Brand new", "Old items"]
+  },
+  {
+    "name": "Ratings",
+    "children": [5, 4, 3, 2, 1]
+  }
+]

@@ -25,7 +25,7 @@ const Hero = () => {
         animate={{ opacity: 1, x: 0 }} // Animate to original position
         transition={{ duration: 0.6, ease: "easeOut" }}
       >
-        <ul className="flex flex-col text-2xl text-gray-500 gap-y-2 p-4 overflow-y-auto">
+        <ul className="flex flex-col text-sm md:text-2xl text-gray-500 gap-y-2 p-4 overflow-y-auto">
           {categories.map((category, index) => (
             <motion.li
               key={index}

@@ -1,48 +1,760 @@
-[
-  {
-    "name": "Category",
-    "children": [
-      "Mobile Accessory",
-      "Electronics",
-      "Smart Phones",
-      "Modern Tech",
-      "Modern Tech1",
-      "Modern Tech2"
-    ]
-  },
-  {
-    "name": "Brands",
-    "children": [
-      "Samsung",
-      "Apple",
-      "Huawei",
-      "Pocco",
-      "Lenevo",
-      "Nokia",
-      "Xiaomi"
-    ]
-  },
-  {
-    "name": "Features",
-    "children": [
-      "Metalic",
-      "Plastic Cover",
-      "8GB Ram",
-      "Super Power",
-      "Large Memory",
-      "Large Memory1"
-    ]
-  },
-  {
-    "name": "Price Range",
-    "children": []
-  },
-  {
-    "name": "Condition",
-    "children": ["Any", "Refurbished", "Brand new", "Old items"]
-  },
-  {
-    "name": "Ratings",
-    "children": [5, 4, 3, 2, 1]
-  }
-]
+{
+  "filters": [
+    {
+      "name": "Category",
+      "children": [
+        "Mobile Accessory",
+        "Electronics",
+        "Smart Phones",
+        "Modern Tech",
+        "Modern Tech1",
+        "Modern Tech2"
+      ]
+    },
+    {
+      "name": "Brands",
+      "children": [
+        "Samsung",
+        "Apple",
+        "Huawei",
+        "Pocco",
+        "Lenevo",
+        "Nokia",
+        "Xiaomi",
+        "GoPro",
+        "Canon",
+        "Sony"
+      ]
+    },
+    {
+      "name": "Features",
+      "children": [
+        "Metalic",
+        "Plastic Cover",
+        "8GB Ram",
+        "4G",
+        "4GB Ram",
+        "Super Power",
+        "Large Memory",
+        "Large Memory1",
+        "Wi-Fi",
+        "Bluetooth",
+        "4K",
+        "1080p",
+        "Mirrorless",
+        "5G",
+        "High-Res Camera",
+        "Pro Camera System"
+      ]
+    },
+    {
+      "name": "Price Range",
+      "children": [
+        { "min": 0, "max": 100 },
+        { "min": 101, "max": 500 },
+        { "min": 501, "max": 1000 },
+        { "min": 1001, "max": 2000 }
+      ]
+    },
+    {
+      "name": "Condition",
+      "children": ["Any", "Refurbished", "Brand new", "Old items"]
+    },
+    {
+      "name": "Ratings",
+      "children": [5, 4, 3, 2, 1]
+    }
+  ],
+  "products": [
+    {
+      "id": 1,
+      "title": "GoPro HERO6 4K Action Camera",
+      "subtitle": "Black Edition",
+      "image": "/src/assets/imgs/p1.png",
+      "color": "Black",
+      "price": 399.99,
+      "discountPrice": 299.99,
+      "description": "Capture stunning 4K videos with the GoPro HERO6.",
+      "specifications": {
+        "sensor": "12MP",
+        "resolution": "4K",
+        "waterproof": "Yes",
+        "batteryLife": "2 hours",
+        "connectivity": "Wi-Fi, Bluetooth"
+      },
+      "rating": 4.5,
+      "views": 1200,
+      "brand": "GoPro",
+      "category": "Electronics",
+      "condition": "Brand new",
+      "features": ["Wi-Fi", "Bluetooth", "4K"]
+    },
+    {
+      "id": 2,
+      "title": "Samsung Galaxy S21",
+      "subtitle": "Smart Phone - Phantom Black",
+      "image": "/src/assets/imgs/p1.png",
+      "color": "Phantom Black",
+      "price": 999.99,
+      "discountPrice": 899.99,
+      "description": "Experience next-level smartphone performance with the Samsung Galaxy S21.",
+      "specifications": {
+        "processor": "Exynos 2100",
+        "ram": "8GB",
+        "camera": "108MP",
+        "battery": "4000mAh",
+        "connectivity": "5G, Wi-Fi 6"
+      },
+      "rating": 4.5,
+      "views": 3200,
+      "brand": "Samsung",
+      "category": "Smart Phones",
+      "condition": "Brand new",
+      "features": ["4G", "8GB Ram", "High-Res Camera"]
+    },
+    {
+      "id": 3,
+      "title": "Samsung Galaxy S21",
+      "subtitle": "Smart Phone - Phantom Black",
+      "image": "/src/assets/imgs/p4.png",
+      "color": "Phantom Black",
+      "price": 999.99,
+      "discountPrice": 899.99,
+      "description": "Experience next-level smartphone performance with the Samsung Galaxy S21.",
+      "specifications": {
+        "processor": "Exynos 2100",
+        "ram": "8GB",
+        "camera": "108MP",
+        "battery": "4000mAh",
+        "connectivity": "5G, Wi-Fi 6"
+      },
+      "rating": 4.8,
+      "views": 3200,
+      "brand": "Samsung",
+      "category": "Smart Phones",
+      "condition": "Brand new",
+      "features": ["4G", "8GB Ram", "High-Res Camera"]
+    },
+    {
+      "id": 4,
+      "title": "Canon EOS Rebel T7",
+      "subtitle": "Camera - White",
+      "image": "/src/assets/imgs/p6.png",
+      "color": "White",
+      "price": 599.99,
+      "discountPrice": 499.99,
+      "description": "Capture stunning photos with the Canon EOS Rebel T7, White edition.",
+      "specifications": {
+        "sensor": "24.1MP",
+        "resolution": "1080p",
+        "waterproof": "No",
+        "batteryLife": "1.5 hours",
+        "connectivity": "Wi-Fi, Bluetooth"
+      },
+      "rating": 4,
+      "views": 1800,
+      "brand": "Canon",
+      "category": "Electronics",
+      "condition": "Brand new",
+      "features": ["Wi-Fi", "Bluetooth", "1080p"]
+    },
+    {
+      "id": 5,
+      "title": "Samsung Galaxy S21",
+      "subtitle": "Smart Phone - Phantom Black",
+      "image": "/src/assets/imgs/p8.png",
+      "color": "Phantom Black",
+      "price": 999.99,
+      "discountPrice": 899.99,
+      "description": "Experience next-level smartphone performance with the Samsung Galaxy S21.",
+      "specifications": {
+        "processor": "Exynos 2100",
+        "ram": "8GB",
+        "camera": "108MP",
+        "battery": "4000mAh",
+        "connectivity": "5G, Wi-Fi 6"
+      },
+      "rating": 4.8,
+      "views": 3200,
+      "brand": "Samsung",
+      "category": "Smart Phones",
+      "condition": "Brand new",
+      "features": ["Wi-Fi", "8GB Ram", "High-Res Camera"]
+    },
+    {
+      "id": 6,
+      "title": "Huawei P40 Pro",
+      "subtitle": "Smart Phone - Silver",
+      "image": "/src/assets/imgs/p1.png",
+      "color": "Silver",
+      "price": 899.99,
+      "discountPrice": 799.99,
+      "description": "The Huawei P40 Pro offers cutting-edge technology and design.",
+      "specifications": {
+        "processor": "Kirin 990",
+        "ram": "8GB",
+        "camera": "50MP",
+        "battery": "4200mAh",
+        "connectivity": "5G, Wi-Fi 6"
+      },
+      "rating": 4.7,
+      "views": 2800,
+      "brand": "Huawei",
+      "category": "Smart Phones",
+      "condition": "Brand new",
+      "features": ["5G", "8GB Ram", "High-Res Camera"]
+    },
+    {
+      "id": 7,
+      "title": "Xiaomi Mi 11",
+      "subtitle": "Smart Phone - Blue",
+      "image": "/src/assets/imgs/p4.png",
+      "color": "Blue",
+      "price": 799.99,
+      "discountPrice": 699.99,
+      "description": "The Xiaomi Mi 11 is a powerhouse of performance and features.",
+      "specifications": {
+        "processor": "Snapdragon 888",
+        "ram": "8GB",
+        "camera": "108MP",
+        "battery": "4600mAh",
+        "connectivity": "5G, Wi-Fi 6"
+      },
+      "rating": 4.6,
+      "views": 2500,
+      "brand": "Xiaomi",
+      "category": "Smart Phones",
+      "condition": "Brand new",
+      "features": ["5G", "8GB Ram", "High-Res Camera"]
+    },
+    {
+      "id": 8,
+      "title": "Nokia 8.3 5G",
+      "subtitle": "Smart Phone - Blue",
+      "image": "/src/assets/imgs/p5.png",
+      "color": "Blue",
+      "price": 699.99,
+      "discountPrice": 599.99,
+      "description": "The Nokia 8.3 5G offers a pure Android experience with 5G connectivity.",
+      "specifications": {
+        "processor": "Snapdragon 765G",
+        "ram": "6GB",
+        "camera": "64MP",
+        "battery": "4500mAh",
+        "connectivity": "5G, Wi-Fi 6"
+      },
+      "rating": 4.5,
+      "views": 2200,
+      "brand": "Nokia",
+      "category": "Smart Phones",
+      "condition": "Brand new",
+      "features": ["5G", "6GB Ram", "High-Res Camera"]
+    },
+    {
+      "id": 9,
+      "title": "Lenevo Legion Phone Duel",
+      "subtitle": "Smart Phone - Black",
+      "image": "/src/assets/imgs/p6.png",
+      "color": "Black",
+      "price": 899.99,
+      "discountPrice": 799.99,
+      "description": "The Lenevo Legion Phone Duel is designed for gamers with top-notch performance.",
+      "specifications": {
+        "processor": "Snapdragon 865+",
+        "ram": "12GB",
+        "camera": "64MP",
+        "battery": "5000mAh",
+        "connectivity": "5G, Wi-Fi 6"
+      },
+      "rating": 4.8,
+      "views": 3000,
+      "brand": "Lenevo",
+      "category": "Smart Phones",
+      "condition": "Brand new",
+      "features": ["5G", "12GB Ram", "High-Res Camera"]
+    },
+    {
+      "id": 10,
+      "title": "Pocco X3 Pro",
+      "subtitle": "Smart Phone - Blue",
+      "image": "/src/assets/imgs/p7.png",
+      "color": "Blue",
+      "price": 299.99,
+      "discountPrice": 249.99,
+      "description": "The Pocco X3 Pro offers great performance at an affordable price.",
+      "specifications": {
+        "processor": "Snapdragon 860",
+        "ram": "6GB",
+        "camera": "48MP",
+        "battery": "5160mAh",
+        "connectivity": "4G, Wi-Fi 5"
+      },
+      "rating": 4.4,
+      "views": 2000,
+      "brand": "Pocco",
+      "category": "Smart Phones",
+      "condition": "Brand new",
+      "features": ["4G", "6GB Ram", "High-Res Camera"]
+    },
+    {
+      "id": 11,
+      "title": "Apple iPhone 12 Pro",
+      "subtitle": "Smart Phone - Pacific Blue",
+      "image": "/src/assets/imgs/p4.png",
+      "color": "Pacific Blue",
+      "price": 999.99,
+      "discountPrice": 899.99,
+      "description": "The Apple iPhone 12 Pro offers a premium experience with advanced camera features.",
+      "specifications": {
+        "processor": "A14 Bionic",
+        "ram": "6GB",
+        "camera": "12MP Pro System",
+        "battery": "2815mAh",
+        "connectivity": "5G, Wi-Fi 6"
+      },
+      "rating": 4.8,
+      "views": 3000,
+      "brand": "Apple",
+      "category": "Smart Phones",
+      "condition": "Brand new",
+      "features": ["5G", "6GB Ram", "Pro Camera System"]
+    },
+    {
+      "id": 12,
+      "title": "Apple iPhone 12 Pro",
+      "subtitle": "Smart Phone - Pacific Blue",
+      "image": "/src/assets/imgs/p9.png",
+      "color": "Pacific Blue",
+      "price": 999.99,
+      "discountPrice": 899.99,
+      "description": "The Apple iPhone 12 Pro offers a premium experience with advanced camera features.",
+      "specifications": {
+        "processor": "A14 Bionic",
+        "ram": "6GB",
+        "camera": "12MP Pro System",
+        "battery": "2815mAh",
+        "connectivity": "5G, Wi-Fi 6"
+      },
+      "rating": 4.8,
+      "views": 3000,
+      "brand": "Apple",
+      "category": "Smart Phones",
+      "condition": "Brand new",
+      "features": ["5G", "6GB Ram", "Pro Camera System"]
+    },
+    {
+      "id": 13,
+      "title": "Nokia 5.4",
+      "subtitle": "Smart Phone - Blue",
+      "image": "/src/assets/imgs/p6.png",
+      "color": "Blue",
+      "price": 199.99,
+      "discountPrice": 179.99,
+      "description": "The Nokia 5.4 offers a reliable performance with a clean Android experience.",
+      "specifications": {
+        "processor": "Snapdragon 662",
+        "ram": "4GB",
+        "camera": "48MP",
+        "battery": "4000mAh",
+        "connectivity": "4G, Wi-Fi 5"
+      },
+      "rating": 4.3,
+      "views": 1800,
+      "brand": "Nokia",
+      "category": "Smart Phones",
+      "condition": "Brand new",
+      "features": ["4G", "4GB Ram", "High-Res Camera"]
+    },
+    {
+      "id": 14,
+      "title": "Xiaomi Redmi Note 10 Pro",
+      "subtitle": "Smart Phone - Gradient Bronze",
+      "image": "/src/assets/imgs/p1.png",
+      "color": "Gradient Bronze",
+      "price": 299.99,
+      "discountPrice": 249.99,
+      "description": "The Xiaomi Redmi Note 10 Pro offers great value with its features and performance.",
+      "specifications": {
+        "processor": "Snapdragon 732G",
+        "ram": "6GB",
+        "camera": "108MP",
+        "battery": "5020mAh",
+        "connectivity": "4G, Wi-Fi 5"
+      },
+      "rating": 4.5,
+      "views": 2300,
+      "brand": "Xiaomi",
+      "category": "Smart Phones",
+      "condition": "Brand new",
+      "features": ["4G", "6GB Ram", "High-Res Camera"]
+    },
+    {
+      "id": 15,
+      "title": "Nokia 5.4",
+      "subtitle": "Smart Phone - Blue",
+      "image": "/src/assets/imgs/p6.png",
+      "color": "Blue",
+      "price": 199.99,
+      "discountPrice": 179.99,
+      "description": "The Nokia 5.4 offers a reliable performance with a clean Android experience.",
+      "specifications": {
+        "processor": "Snapdragon 662",
+        "ram": "4GB",
+        "camera": "48MP",
+        "battery": "4000mAh",
+        "connectivity": "4G, Wi-Fi 5"
+      },
+      "rating": 4.3,
+      "views": 1800,
+      "brand": "Nokia",
+      "category": "Smart Phones",
+      "condition": "Brand new",
+      "features": ["4G", "4GB Ram", "High-Res Camera"]
+    },
+    {
+      "id": 16,
+      "title": "Lenevo K12 Note",
+      "subtitle": "Smart Phone - Blue",
+      "image": "/src/assets/imgs/p3.png",
+      "color": "Blue",
+      "price": 149.99,
+      "discountPrice": 129.99,
+      "description": "The Lenevo K12 Note offers a great balance of performance and affordability.",
+      "specifications": {
+        "processor": "Helio P22",
+        "ram": "4GB",
+        "camera": "48MP",
+        "battery": "5000mAh",
+        "connectivity": "4G, Wi-Fi 5"
+      },
+      "rating": 4.2,
+      "views": 1600,
+      "brand": "Lenevo",
+      "category": "Smart Phones",
+      "condition": "Brand new",
+      "features": ["4G", "4GB Ram", "High-Res Camera"]
+    },
+    {
+      "id": 17,
+      "title": "Pocco M3 Pro",
+      "subtitle": "Smart Phone - Black",
+      "image": "/src/assets/imgs/p4.png",
+      "color": "Black",
+      "price": 199.99,
+      "discountPrice": 179.99,
+      "description": "The Pocco M3 Pro offers great performance at an affordable price.",
+      "specifications": {
+        "processor": "Helio G80",
+        "ram": "4GB",
+        "camera": "48MP",
+        "battery": "6000mAh",
+        "connectivity": "4G, Wi-Fi 5"
+      },
+      "rating": 4.4,
+      "views": 1900,
+      "brand": "Pocco",
+      "category": "Smart Phones",
+      "condition": "Brand new",
+      "features": ["4G", "4GB Ram", "High-Res Camera"]
+    },
+    {
+      "id": 18,
+      "title": "Samsung Galaxy A52",
+      "subtitle": "Smart Phone - Awesome Blue",
+      "image": "/src/assets/imgs/p2.png",
+      "color": "Awesome Blue",
+      "price": 399.99,
+      "discountPrice": 349.99,
+      "description": "The Samsung Galaxy A52 offers a great balance of features and performance.",
+      "specifications": {
+        "processor": "Snapdragon 720G",
+        "ram": "6GB",
+        "camera": "64MP",
+        "battery": "4500mAh",
+        "connectivity": "4G, Wi-Fi 5"
+      },
+      "rating": 4.6,
+      "views": 2400,
+      "brand": "Samsung",
+      "category": "Smart Phones",
+      "condition": "Brand new",
+      "features": ["4G", "6GB Ram", "High-Res Camera"]
+    },
+    {
+      "id": 19,
+      "title": "Apple iPhone SE (2020)",
+      "subtitle": "Smart Phone - White",
+      "image": "/src/assets/imgs/p6.png",
+      "color": "White",
+      "price": 399.99,
+      "discountPrice": 349.99,
+      "description": "The Apple iPhone SE (2020) offers the power of iPhone in a compact design.",
+      "specifications": {
+        "processor": "A13 Bionic",
+        "ram": "3GB",
+        "camera": "12MP",
+        "battery": "1821mAh",
+        "connectivity": "4G, Wi-Fi 5"
+      },
+      "rating": 4.5,
+      "views": 2200,
+      "brand": "Apple",
+      "category": "Smart Phones",
+      "condition": "Brand new",
+      "features": ["4G", "3GB Ram", "High-Res Camera"]
+    },
+    {
+      "id": 20,
+      "title": "Huawei P30 Pro",
+      "subtitle": "Smart Phone - Aurora",
+      "image": "/src/assets/imgs/p2.png",
+      "color": "Aurora",
+      "price": 599.99,
+      "discountPrice": 499.99,
+      "description": "The Huawei P30 Pro offers a great camera and performance.",
+      "specifications": {
+        "processor": "Kirin 980",
+        "ram": "8GB",
+        "camera": "40MP",
+        "battery": "4200mAh",
+        "connectivity": "4G, Wi-Fi 5"
+      },
+      "rating": 4.7,
+      "views": 2600,
+      "brand": "Huawei",
+      "category": "Smart Phones",
+      "condition": "Brand new",
+      "features": ["4G", "8GB Ram", "High-Res Camera"]
+    },
+    {
+      "id": 21,
+      "title": "Xiaomi Mi 10T Pro",
+      "subtitle": "Smart Phone - Lunar Silver",
+      "image": "/src/assets/imgs/p8.png",
+      "color": "Lunar Silver",
+      "price": 499.99,
+      "discountPrice": 449.99,
+      "description": "The Xiaomi Mi 10T Pro offers great performance and features at a competitive price.",
+      "specifications": {
+        "processor": "Snapdragon 865",
+        "ram": "8GB",
+        "camera": "108MP",
+        "battery": "5000mAh",
+        "connectivity": "5G, Wi-Fi 6"
+      },
+      "rating": 4.6,
+      "views": 2500,
+      "brand": "Xiaomi",
+      "category": "Smart Phones",
+      "condition": "Brand new",
+      "features": ["5G", "8GB Ram", "High-Res Camera"]
+    },
+    {
+      "id": 22,
+      "title": "Nokia 7.2",
+      "subtitle": "Smart Phone - Cyan Green",
+      "image": "/src/assets/imgs/p2.png",
+      "color": "Cyan Green",
+      "price": 349.99,
+      "discountPrice": 299.99,
+      "description": "The Nokia 7.2 offers a pure Android experience with a great camera.",
+      "specifications": {
+        "processor": "Snapdragon 660",
+        "ram": "6GB",
+        "camera": "48MP",
+        "battery": "3500mAh",
+        "connectivity": "4G, Wi-Fi 5"
+      },
+      "rating": 4.4,
+      "views": 2100,
+      "brand": "Nokia",
+      "category": "Smart Phones",
+      "condition": "Brand new",
+      "features": ["4G", "6GB Ram", "High-Res Camera"]
+    },
+    {
+      "id": 23,
+      "title": "Lenevo Z6 Pro",
+      "subtitle": "Smart Phone - Red",
+      "image": "/src/assets/imgs/p5.png",
+      "color": "Red",
+      "price": 499.99,
+      "discountPrice": 449.99,
+      "description": "The Lenevo Z6 Pro offers great performance and features at a competitive price.",
+      "specifications": {
+        "processor": "Snapdragon 855",
+        "ram": "8GB",
+        "camera": "48MP",
+        "battery": "4000mAh",
+        "connectivity": "4G, Wi-Fi 5"
+      },
+      "rating": 4.5,
+      "views": 2300,
+      "brand": "Lenevo",
+      "category": "Smart Phones",
+      "condition": "Brand new",
+      "features": ["4G", "8GB Ram", "High-Res Camera"]
+    },
+    {
+      "id": 24,
+      "title": "Pocco X2",
+      "subtitle": "Smart Phone - Blue",
+      "image": "/src/assets/imgs/p5.png",
+      "color": "Blue",
+      "price": 249.99,
+      "discountPrice": 199.99,
+      "description": "The Pocco X2 offers great performance at an affordable price.",
+      "specifications": {
+        "processor": "Snapdragon 730G",
+        "ram": "6GB",
+        "camera": "64MP",
+        "battery": "4500mAh",
+        "connectivity": "4G, Wi-Fi 5"
+      },
+      "rating": 4.3,
+      "views": 2000,
+      "brand": "Pocco",
+      "category": "Smart Phones",
+      "condition": "Brand new",
+      "features": ["4G", "6GB Ram", "High-Res Camera"]
+    },
+    {
+      "id": 25,
+      "title": "Samsung Galaxy M51",
+      "subtitle": "Smart Phone - Black",
+      "image": "/src/assets/imgs/p3.png",
+      "color": "Black",
+      "price": 349.99,
+      "discountPrice": 299.99,
+      "description": "The Samsung Galaxy M51 offers a great battery life and performance.",
+      "specifications": {
+        "processor": "Snapdragon 730G",
+        "ram": "6GB",
+        "camera": "64MP",
+        "battery": "7000mAh",
+        "connectivity": "4G, Wi-Fi 5"
+      },
+      "rating": 4.5,
+      "views": 2200,
+      "brand": "Samsung",
+      "category": "Smart Phones",
+      "condition": "Brand new",
+      "features": ["4G", "6GB Ram", "High-Res Camera"]
+    },
+    {
+      "id": 26,
+      "title": "Apple iPhone 11",
+      "subtitle": "Smart Phone - Purple",
+      "image": "/src/assets/imgs/p3.png",
+      "color": "Purple",
+      "price": 599.99,
+      "discountPrice": 549.99,
+      "description": "The Apple iPhone 11 offers great performance and camera features.",
+      "specifications": {
+        "processor": "A13 Bionic",
+        "ram": "4GB",
+        "camera": "12MP",
+        "battery": "3110mAh",
+        "connectivity": "4G, Wi-Fi 5"
+      },
+      "rating": 4.7,
+      "views": 2800,
+      "brand": "Apple",
+      "category": "Smart Phones",
+      "condition": "Brand new",
+      "features": ["4G", "4GB Ram", "High-Res Camera"]
+    },
+    {
+      "id": 27,
+      "title": "Huawei P40 Lite",
+      "subtitle": "Smart Phone - Black",
+      "image": "/src/assets/imgs/p8.png",
+      "color": "Black",
+      "price": 299.99,
+      "discountPrice": 249.99,
+      "description": "The Huawei P40 Lite offers great performance at an affordable price.",
+      "specifications": {
+        "processor": "Kirin 810",
+        "ram": "6GB",
+        "camera": "48MP",
+        "battery": "4200mAh",
+        "connectivity": "4G, Wi-Fi 5"
+      },
+      "rating": 4.4,
+      "views": 2100,
+      "brand": "Huawei",
+      "category": "Smart Phones",
+      "condition": "Brand new",
+      "features": ["4G", "6GB Ram", "High-Res Camera"]
+    },
+    {
+      "id": 28,
+      "title": "Xiaomi Redmi Note 9 Pro",
+      "subtitle": "Smart Phone - Aurora Blue",
+      "image": "/src/assets/imgs/p5.png",
+      "color": "Aurora Blue",
+      "price": 249.99,
+      "discountPrice": 199.99,
+      "description": "The Xiaomi Redmi Note 9 Pro offers great value with its features and performance.",
+      "specifications": {
+        "processor": "Snapdragon 720G",
+        "ram": "6GB",
+        "camera": "64MP",
+        "battery": "5020mAh",
+        "connectivity": "4G, Wi-Fi 5"
+      },
+      "rating": 4.5,
+      "views": 2300,
+      "brand": "Xiaomi",
+      "category": "Smart Phones",
+      "condition": "Brand new",
+      "features": ["4G", "6GB Ram", "High-Res Camera"]
+    },
+    {
+      "id": 29,
+      "title": "Nokia 6.2",
+      "subtitle": "Smart Phone - Ceramic Black",
+      "image": "/src/assets/imgs/p6.png",
+      "color": "Ceramic Black",
+      "price": 299.99,
+      "discountPrice": 249.99,
+      "description": "The Nokia 6.2 offers a pure Android experience with a great camera.",
+      "specifications": {
+        "processor": "Snapdragon 636",
+        "ram": "4GB",
+        "camera": "16MP",
+        "battery": "3500mAh",
+        "connectivity": "4G, Wi-Fi 5"
+      },
+      "rating": 4.3,
+      "views": 2000,
+      "brand": "Nokia",
+      "category": "Smart Phones",
+      "condition": "Brand new",
+      "features": ["4G", "4GB Ram", "High-Res Camera"]
+    },
+    {
+      "id": 30,
+      "title": "Lenevo K10 Note",
+      "subtitle": "Smart Phone - Black",
+      "image": "/src/assets/imgs/p7.png",
+      "color": "Black",
+      "price": 199.99,
+      "discountPrice": 179.99,
+      "description": "The Lenevo K10 Note offers a great balance of performance and affordability.",
+      "specifications": {
+        "processor": "Snapdragon 710",
+        "ram": "4GB",
+        "camera": "16MP",
+        "battery": "4050mAh",
+        "connectivity": "4G, Wi-Fi 5"
+      },
+      "rating": 4.2,
+      "views": 1800,
+      "brand": "Lenevo",
+      "category": "Smart Phones",
+      "condition": "Brand new",
+      "features": ["4G", "4GB Ram", "High-Res Camera"]
+    }
+  ]
+}

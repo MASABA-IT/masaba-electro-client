@@ -1,3 +1,14 @@
+@use "../utils/variables" as *;
+
 .categories_list {
+  border-top: 1px solid $color-grey-light-4;
   grid-column: full-start / col-start 2;
+
+  & > ul > li:not(:last-child) {
+    border-bottom: 1px solid $color-grey-light-4;
+  }
+
+  @media (max-width: 768px) {
+    display: none;
+  }
 }

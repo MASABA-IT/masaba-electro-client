@@ -1,3 +1,11 @@
 .categoriesbrand_filter {
   grid-column: col-start 2 / full-end;
 }
+
+.custom-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.custom-scrollbar {
+  overflow-x: auto; /* Enable horizontal scrolling */
+}

@@ -2,6 +2,7 @@
 .product-card {
   display: flex;
   flex-direction: column;
+
   height: auto;
   background-color: $color-white;
 }
@@ -36,10 +37,18 @@
 
   .product-info {
     padding: 1rem;
-    height: 30%; /* Info section will take the remaining 30% of the card */
+    height: min-content; /* Info section will take the remaining 30% of the card */
     overflow: hidden; /* Prevent content from overflowing */
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+  }
+}
+
+@media (max-width: 320px) {
+  .custom-button {
+    position: absolute;
+    top: -3rem !important;
+     
   }
 }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Breadcrumb from "../../components/Breadcrumb/Breadcrumb";
 import CategoryList from "../../components/CategoryList/CategoryList";
 import CategoriesItems from "../../components/CategoriesItems/CategoriesItems";
@@ -8,27 +8,73 @@ const AllCateGories = () => {
     { label: "Home", link: "/" },
     { label: "Category", link: "/categories" },
   ];
+  const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [selectedFeatures, setSelectedFeatures] = useState([]);
   const [selectedRatings, setSelectedRatings] = useState([]);
   const [selectedCondition, setSelectedCondition] = useState(null);
-  const [selectedPriceRange, setSelectedPriceRange] = useState("");
+  const [selectedPriceRange, setSelectedPriceRange] = useState({
+    min: 0,
+    max: 5000,
+  });
+
+  ///////////
+  ///////main data
+  const [allData, setAllData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [reset, setReset] = useState(false);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch("/src/data/categories.json");
+        const data = await response.json();
+
+        setAllData(data);
+      } catch (error) {
+        console.error("Error fetching categories data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
   return (
     <section className="allcategories_content">
       <Breadcrumb items={breadcrumbItems} />
       <CategoryList
+        selectedCategories={selectedCategories}
         selectedBrands={selectedBrands}
         selectedFeatures={selectedFeatures}
         selectedRatings={selectedRatings}
-        selectedCondition={selectedCondition}
         selectedPriceRange={selectedPriceRange}
+        selectedCondition={selectedCondition}
+        setSelectedCategories={setSelectedCategories}
         setSelectedBrands={setSelectedBrands}
         setSelectedFeatures={setSelectedFeatures}
         setSelectedRatings={setSelectedRatings}
         setSelectedCondition={setSelectedCondition}
         setSelectedPriceRange={setSelectedPriceRange}
+        reset={reset}
+        setReset={setReset}
+        allData={allData}
       />
-      <CategoriesItems/>
+      {loading ? (
+        <div>Loading categories...</div>
+      ) : (
+        <CategoriesItems
+          allData={allData}
+          selectedCategories={selectedCategories}
+          selectedBrands={selectedBrands}
+          selectedFeatures={selectedFeatures}
+          selectedRatings={selectedRatings}
+          selectedPriceRange={selectedPriceRange}
+          selectedCondition={selectedCondition}
+          setReset={setReset}
+        />
+      )}
     </section>
   );
 };

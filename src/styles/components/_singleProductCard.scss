@@ -8,7 +8,6 @@
 }
 
 .product-info {
-  height: 40%;
 
   flex-grow: 1;
   display: flex;
@@ -45,10 +44,15 @@
   }
 }
 
+@media (max-width: 425px) {
+  .custom-button {
+    position: absolute;
+    top: 1rem !important;
+  }
+}
 @media (max-width: 320px) {
   .custom-button {
     position: absolute;
-    top: -3rem !important;
-     
+    top: 1rem !important;
   }
 }

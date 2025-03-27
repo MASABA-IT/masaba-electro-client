@@ -9,6 +9,7 @@ import PaginationsBtn from "../PaginationsBtn/PaginationsBtn";
 import { useIsMobile } from "../../hooks/useIsMobile";
 import { MdOutlineSort } from "react-icons/md";
 import { CiFilter } from "react-icons/ci";
+import { iconButtonClasses } from "@mui/material";
 
 const CategoriesItems = ({
   allData,
@@ -144,6 +145,16 @@ const CategoriesItems = ({
     setShowDropdown((prev) => !prev);
   };
   const isMobile = useIsMobile();
+
+  // //////////change columns
+  const [isGridView, setIsGridView] = useState(true);
+  const handleGridView = () => {
+    if (!isGridView) setIsGridView(true);
+  };
+
+  const handleListView = () => {
+    if (isGridView) setIsGridView(false);
+  };
   return (
     <div className="categoriesitems_content">
       {isMobile ? (
@@ -197,10 +208,24 @@ const CategoriesItems = ({
             </div>
 
             <div className="box-container flex items-center space-x-2">
-              <button className="bg-[#f0f0f0]">
+              <button
+                className={`p-2 rounded ${
+                  isGridView
+                    ? "bg-blue-500 text-sky-50 rounded-lg"
+                    : "bg-gray-100"
+                }`}
+                onClick={handleGridView}
+              >
                 <PiGridFourFill />
               </button>
-              <button>
+              <button
+                className={`p-2 rounded ${
+                  !isGridView
+                    ? "bg-blue-500 text-sky-50 rounded-lg"
+                    : "bg-gray-100"
+                }`}
+                onClick={handleListView}
+              >
                 <IoReorderFourSharp />
               </button>
             </div>
@@ -221,9 +246,17 @@ const CategoriesItems = ({
       {loading ? (
         <div className="text-center py-5">Loading...</div>
       ) : filteredProducts.length > 0 ? (
-        <div className="product-list grid  md:grid-cols-4 gap-4 mt-4">
+        <div
+          className={`product-list grid  grid-cols-1 md:grid-cols-${
+            isGridView ? 3 : 1
+          } lg:grid-cols-${isGridView ? 4 : 1} gap-4 mt-4`}
+        >
           {currentProducts.map((product) => (
-            <SingleProductCard key={product.id} product={product} />
+            <SingleProductCard
+              key={product.id}
+              product={product}
+              isGridView={isGridView}
+            />
           ))}
         </div>
       ) : (

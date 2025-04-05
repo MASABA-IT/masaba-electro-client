@@ -1,57 +1,12 @@
 import React, { useState } from "react";
 import { FaEye, FaRegHeart, FaRegStar } from "react-icons/fa"; // Eye icon from react-icons
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import StarRating from "../StarRating/StarRating";
 
 const SingleProductCard = ({ product, isGridView }) => {
   const [isLiked, setIsLiked] = useState(false);
-  const renderStars = (rating) => {
-    const fullStars = Math.floor(rating);
-    const decimalPart = rating % 1;
-    const stars = [];
+  const navigate = useNavigate();
 
-    // Add full stars
-    for (let i = 0; i < fullStars; i++) {
-      stars.push(
-        <span key={`full-${i}`} className="text-orange-400">
-          ★
-        </span>
-      );
-    }
-
-    // Add partial star if there's a decimal part
-    if (decimalPart > 0) {
-      // Calculate the percentage of the star that should be filled
-      const fillPercentage = decimalPart * 100;
-
-      stars.push(
-        <span key="partial" className="relative inline-block">
-          {/* Empty star background */}
-          <span className="text-gray-300">★</span>
-          {/* Filled portion of the star */}
-          <span
-            className="text-orange-400 absolute left-0 top-0 overflow-hidden"
-            style={{ width: `${fillPercentage}%` }}
-          >
-            ★
-          </span>
-        </span>
-      );
-    }
-
-    // Add empty stars to make up to 5
-    const remainingStars = 5 - Math.ceil(rating);
-    for (let i = 0; i < remainingStars; i++) {
-      stars.push(
-        <span key={`empty-${i}`} className="text-gray-300">
-          ★
-        </span>
-      );
-    }
-
-    return stars;
-  };
-
-  // Function to format the views number to smart format (e.g., 1.2k)
   const formatViews = (views) => {
     if (views >= 1000000) {
       return (views / 1000000).toFixed(1) + "M";
@@ -61,12 +16,20 @@ const SingleProductCard = ({ product, isGridView }) => {
       return views.toString();
     }
   };
-// /categories/product/:id
+  ////////////////////
+  ///// Navigate to the product details page with id, category, color, and condition as URL parameters
+  // /categories/product/:id
+  const handleProductClick = () => {
+    navigate(
+      `/categories/product/${product.category}/${product.condition}/${product.id}`
+    );
+  };
   return (
     <div
-      className={`product-card relative border rounded-lg overflow-hidden flex  flex-row  md:flex-${
+      className={`product-card relative border rounded-lg overflow-hidden flex  flex-col  md:flex-${
         isGridView ? "col" : "row"
       } h-72 ${isGridView ? "md:h-full" : "md:h-[200px]"}`}
+      onClick={handleProductClick}
     >
       <div
         className={`w-[35%] sm:w-[40%]   flex justify-center items-center py-1rem  md:py-[2rem] mx-auto ${
@@ -86,7 +49,7 @@ const SingleProductCard = ({ product, isGridView }) => {
       {/* Info */}
       {!isGridView ? (
         // single column
-        <div className="product-info relative p-4   justify-between my-auto h-[55%]   md:h-[95%]" >
+        <div className="product-info relative p-4   justify-between my-auto h-[55%]   md:h-[95%]">
           <h3 className="text-2xl md:text-3xl  text-gray-700 ">
             {product.title}
           </h3>
@@ -104,8 +67,7 @@ const SingleProductCard = ({ product, isGridView }) => {
             <div className="flex gap-x-4 mt-1">
               {/* Rating */}
               <div className="text-3xl flex items-center text-gray-400 ">
-                {renderStars(product.rating)}
-                {/* <span style={{ fontSize: "14px" }}>{`(${product.rating})`}</span> */}
+                <StarRating rating={product.rating} />
               </div>
 
               {/* Views */}
@@ -165,8 +127,7 @@ const SingleProductCard = ({ product, isGridView }) => {
           <div className="flex gap-x-4 mt-1">
             {/* Rating */}
             <div className="text-3xl flex items-center text-gray-400 ">
-              {renderStars(product.rating)}
-              {/* <span style={{ fontSize: "14px" }}>{`(${product.rating})`}</span> */}
+              <StarRating rating={product.rating} />
             </div>
 
             {/* Views */}
@@ -185,7 +146,7 @@ const SingleProductCard = ({ product, isGridView }) => {
       <button
         className={`custom-button absolute xl:right-3 right-2 md:right-2 ${
           isGridView ? "md:bottom-28  xl:bottom-34 md:right-2" : "top-4"
-        } border-2 p-3 rounded-lg text-2xl group hover:shadow-md`}
+        } border-2 p-3 rounded-lg text-2xl group hover:shadow-sm`}
         onClick={() => setIsLiked(!isLiked)}
       >
         <FaRegHeart className={isLiked ? "text-red-500" : "text-blue-400"} />

@@ -158,7 +158,7 @@ const CategoriesItems = ({
   return (
     <div className="categoriesitems_content">
       {isMobile ? (
-        <div className="w-full flex  justify-between gap-x-3 items-center text-xl md:text-2xl   py-3">
+        <div className="w-full flex  justify-between gap-x-3 items-center text-xl md:text-2xl py-3">
           <div className="  flex  items-center space-x-2">
             <button className=" border py-3 px-2 flex  gap-x-4 items-center  ">
               Sort&nbsp;Newest
@@ -260,22 +260,26 @@ const CategoriesItems = ({
           ))}
         </div>
       ) : (
-        <div className="text-center py-5 text-gray-500">
+        <div className="text-center text-2xl py-5 text-gray-500">
           No products available.
         </div>
       )}
 
       {/* Pagination */}
-      <PaginationsBtn
-        currentPage={currentPage}
-        totalPages={totalPages}
-        itemsPerPage={itemsPerPage}
-        showDropdown={showDropdown}
-        onToggleDropdown={handleToggleDropdown}
-        onItemsPerPageChange={handleItemsPerPageChange}
-        onPrevPage={handlePrevPage}
-        onNextPage={handleNextPage}
-      />
+      {filteredProducts.length > 0 ? (
+        <PaginationsBtn
+          currentPage={currentPage}
+          totalPages={totalPages}
+          itemsPerPage={itemsPerPage}
+          showDropdown={showDropdown}
+          onToggleDropdown={handleToggleDropdown}
+          onItemsPerPageChange={handleItemsPerPageChange}
+          onPrevPage={handlePrevPage}
+          onNextPage={handleNextPage}
+        />
+      ) : (
+        <></>
+      )}
     </div>
   );
 };

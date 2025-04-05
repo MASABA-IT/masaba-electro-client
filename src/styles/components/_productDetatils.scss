@@ -1,0 +1,32 @@
+@use "/src/styles/utils/variables" as *;
+@use "/src/styles/layouts/grid" as *;
+.product_content {
+  max-width: 140rem;
+  width: 100%;
+  margin: 0 auto;
+  padding: 5px 20px;
+}
+.grid {
+  display: grid;
+  grid-template-rows: min-content repeat(7, min-content);
+  grid-template-columns:
+    [full-start] minmax(6rem, 1fr) repeat(
+      8,
+      [col-start] minmax(min-content, 14rem) [col-end]
+    )
+    minmax(6rem, 1fr) [full-end];
+
+  row-gap: 2rem;
+}
+.main-image img {
+  width: 100%;
+}
+.product_img {
+  grid-column: full-start / col-end 2;
+}
+.product_info {
+  grid-column: col-start 3 / col-end 6;
+}
+.product_supplier {
+  grid-column: col-start 7 / full-end;
+}

@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Breadcrumb from "../../components/Breadcrumb/Breadcrumb";
 import CategoryList from "../../components/CategoryList/CategoryList";
 import CategoriesItems from "../../components/CategoriesItems/CategoriesItems";
+import { useProductStore } from "../../providers/AppProviders";
 
 const AllCateGories = () => {
-  const breadcrumbItems = [
-    { label: "Home", link: "/" },
-    { label: "Category", link: "/categories" },
-  ];
+  const { allData, loading } = useProductStore();
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [selectedFeatures, setSelectedFeatures] = useState([]);
@@ -18,28 +16,11 @@ const AllCateGories = () => {
     max: 5000,
   });
 
-  ///////////
-  ///////main data
-  const [allData, setAllData] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [reset, setReset] = useState(false);
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await fetch("/src/data/categories.json");
-        const data = await response.json();
-
-        setAllData(data);
-      } catch (error) {
-        console.error("Error fetching categories data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCategories();
-  }, []);
+  const breadcrumbItems = [
+    { label: "Home", link: "/" },
+    { label: "Category", link: "/categories" },
+  ];
 
   return (
     <section className="allcategories_content">

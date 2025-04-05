@@ -8,9 +8,13 @@ const Breadcrumb = ({ items }) => {
       <p className="breadcrumb-text">
         {items.map((item, index) => (
           <span key={index} className="breadcrumb-item text-2xl">
-            <Link to={item.link} className="breadcrumb-link">
-              {item.label}
-            </Link>
+            {item.link ? (
+              <Link to={item.link} className="breadcrumb-link">
+                {item.label}
+              </Link>
+            ) : (
+              <span>{item.label}</span>
+            )}
             {index < items.length - 1 && (
               <IoIosArrowForward className="breadcrumb-arrow" />
             )}

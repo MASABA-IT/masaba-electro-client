@@ -20,7 +20,7 @@ const AppRoutes = () => {
           element: <AllCateGories />,
         },
         {
-          path: "/categories/product/:id",
+          path: "/categories/product/:category/:condition/:id",
           element: <ProductDetails />,
         },
       ],

@@ -256,6 +256,7 @@ const CategoriesItems = ({
               key={product.id}
               product={product}
               isGridView={isGridView}
+            
             />
           ))}
         </div>

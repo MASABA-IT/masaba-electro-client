@@ -1,0 +1,180 @@
+$active-color: #cdd0d8;
+$border-color: #ddd;
+$font-size: 16px;
+
+// General Styles
+.productInfoSwitch {
+  grid-column: full-start / col-end 7;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  // Tabs container
+  .tabs {
+    display: flex;
+    gap: 10px;
+
+    button {
+      padding: 10px 20px;
+      background-color: transparent;
+      //   border: 2px solid $border-color;
+      //   border-radius: 5px;
+      cursor: pointer;
+      font-size: $font-size;
+      transition: background-color 0.3s, border-color 0.3s;
+
+      &.active {
+        color: rgb(121, 58, 58);
+        border-bottom: 2px solid rgb(130, 130, 231);
+      }
+
+      &:hover {
+        background-color: $active-color;
+        border-color: $active-color;
+        color: rgb(39, 39, 39);
+      }
+    }
+  }
+
+  // Content area
+  .content {
+    width: 100%;
+    height: auto; /* Dynamic height based on content */
+    min-height: 200px;
+    padding: 4px 10px;
+    transition: opacity 0.3s;
+
+    // When content is changing, fade it out and in
+    &.hidden {
+      opacity: 0;
+    }
+
+    &.visible {
+      opacity: 1;
+    }
+  }
+
+  // Table Section
+
+  .table-section {
+    margin-top: 20px;
+    width: 100%;
+    .flex-row {
+      display: flex;
+      width: 100%;
+      border: 1px solid rgb(221, 211, 211);
+    }
+
+    .flex-row > .column {
+      padding: 10px;
+    }
+
+    // Left Column
+    .left-column {
+      background-color: #e2e8f0;
+      width: 33.3333%;
+      border-right: 1px solid #c2bfbf;
+    }
+
+    // Right Column
+    .right-column {
+      width: 66.6667%;
+    }
+  }
+
+  // Right Click Section (example for additional feature)
+  .right-click {
+    padding: 10px;
+
+    .list-container {
+      list-style-type: none; // Remove default list styling
+      padding: 0;
+      margin: 0;
+
+      .flex-row {
+        display: flex;
+
+        align-items: center;
+        padding: 8px 0;
+
+        .text {
+          font-size: 16px;
+
+          padding-left: 14px;
+        }
+
+        &:last-child {
+          border-bottom: none;
+        }
+      }
+    }
+  }
+}
+.youMightLike {
+  grid-column: col-end 7 / full-end;
+}
+// add
+.video-carousel-container {
+  max-width: 100%;
+  margin: 0 auto;
+  position: relative;
+}
+
+.video-carousel-container .slick-slide {
+  padding: 10px;
+}
+
+.video-carousel-container .video-slide {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Default to 300px height for mobile */
+.video-carousel-container video {
+  width: 100%;
+  height: auto;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+/* For screens larger than 768px (typically PC/Laptop) */
+@media (min-width: 768px) {
+  .video-carousel-container video {
+    height: 400px; /* Fixed height for PC/Laptop */
+    object-fit: cover;
+  }
+}
+
+/* Optional: If you want a different height on very large screens (e.g., desktops) */
+@media (min-width: 1200px) {
+  .video-carousel-container video {
+    height: 500px; /* You can adjust the height for larger screens */
+  }
+}
+
+/* Ensure the next/prev buttons are visible on top of the video */
+.slick-prev,
+.slick-next {
+  z-index: 1; /* So the navigation arrows are visible on top of the videos */
+}
+
+.slick-prev {
+  left: 10px;
+}
+
+.slick-next {
+  right: 10px;
+}
+
+//
+@media (min-width: 768px) {
+  /* For tablets and above (laptop/PC) */
+  .content {
+    max-width: 80%;
+    min-height: 250px;
+  }
+  .table-section {
+    max-width: 50%;
+  }
+}

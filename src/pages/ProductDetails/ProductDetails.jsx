@@ -10,26 +10,40 @@ import { CgComment } from "react-icons/cg";
 import { MdOutlineShoppingBasket } from "react-icons/md";
 import { GoDotFill, GoShieldCheck } from "react-icons/go";
 import { AiOutlineGlobal } from "react-icons/ai";
+import ImageGallery from "../../components/ImageGallery/ImageGallery";
+import { CiHeart } from "react-icons/ci";
+import ProductDetailsInfo from "../../components/ProductDetailsInfo/ProductDetailsInfo";
+import ProductDetailsRelated from "../../components/ProductDetailsRelated/ProductDetailsRelated";
+import ProductDetailsDiscount from "../../components/ProductDetailsDiscount/ProductDetailsDiscount";
 
 const ProductDetails = () => {
   const { filterSingleProduct, allData, loading } = useProductStore();
   const { category, condition, id } = useParams();
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [productTitle, setProductTitle] = useState(""); // State to store the product title
+  const [mainImage, setMainImage] = useState(filteredProducts[0]?.image || "");
+  const [saved, setSaved] = useState(false);
 
+  useEffect(() => {
+    if (filteredProducts[0]?.image) {
+      setMainImage(filteredProducts[0].image);
+    }
+  }, [filteredProducts]);
+
+  // //////////////////////
   const breadcrumbItems = [
     { label: "Home", link: "/" },
     { label: "Category", link: "/categories" },
     { label: category || "Unknown Category", p: "" }, // Show the category name
-    { label: productTitle || `Product ID: ${id}`, p: "" }, // Show the product title if available, otherwise show the product ID
+    { label: productTitle || `${filteredProducts[0]?.title}`, p: "" }, // Show the product title if available, otherwise show the product ID
   ];
   const smallImages = [
-    "/src/assets/imgs/imgF1.png",
-    "/src/assets/imgs/imgF2.png",
-    "/src/assets/imgs/imgF3.png",
-    "/src/assets/imgs/imgF4.png",
-    "/src/assets/imgs/imgF5.png",
-    "/src/assets/imgs/imgF6.png",
+    "/src/assets/imgs/imgw-1.jpg",
+    "/src/assets/imgs/imgw-2.jpg",
+    "/src/assets/imgs/imgm-3.webp",
+    "/src/assets/imgs/imgm-4.webp",
+    "/src/assets/imgs/imgm-5.jpeg",
+    "/src/assets/imgs/imgm-6.webp",
   ];
   console.log(allData);
   useEffect(() => {
@@ -64,32 +78,24 @@ const ProductDetails = () => {
   if (filteredProducts.length === 0) {
     return <p>No products found matching the selected filters.</p>;
   }
+
+  const handleClick = () => {
+    setSaved(!saved); // Toggle heart state
+  };
   console.log(filteredProducts);
   return (
     <div className="product_content">
       <Breadcrumb items={breadcrumbItems} />
-      <div className="grid bg-white p-6">
-        <div className="product_img">
-          <div className="main-image border-2   rounded-lg">
-            <img
-              src={`${filteredProducts[0].image}`}
-              alt="Main Product"
-              className="w-full h-auto"
-            />
-          </div>
-          {/* Small Images (Dynamic Grid) */}
-          <div className="small-images grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 mt-4  ">
-            {smallImages.map((image, index) => (
-              <div key={index} className="small-img border-2   ">
-                <img
-                  src={image}
-                  alt={`Small Image ${index + 1}`}
-                  className="w-28 h-20 object-cover p-1"
-                />
-              </div>
-            ))}
-          </div>
-        </div>
+      {/* 1st Column */}
+      <div className="grid bg-white p-6 shadow-sm">
+        {/* IMG GALLERY */}
+        <ImageGallery
+          smallImages={smallImages}
+          initialMainImage={mainImage}
+          autoSlideInterval={4000}
+        />
+
+        {/* END */}
         <div className="product_info px-10 py-2">
           <p className="flex justify-start items-center text-xl">
             {filteredProducts[0]?.quantity > 0 ? (
@@ -113,11 +119,13 @@ const ProductDetails = () => {
             ))}
           </h2>
           {/* Rating/reviews */}
-          <div className="text-3xl flex flex-wrap gap-x-4 items-center text-gray-600">
+          <div className="text-2xl flex flex-wrap gap-x-4 items-center text-gray-600">
             {/* Rating */}
             <div className="flex items-center gap-x-1">
               <StarRating rating={filteredProducts[0]?.rating} />
-              <span className="">{filteredProducts[0]?.rating}</span>
+              <span className="text-orange-300">
+                {filteredProducts[0]?.rating}
+              </span>
             </div>
             <GoDotFill className="text-gray-300 text-xl" />
 
@@ -150,7 +158,7 @@ const ProductDetails = () => {
             </div>
           </div>
           {/*  */}
-          <div className="px-4 py-5 text-[1.8rem] ">
+          <div className="px-4 py-5 text-[1.6rem] ">
             <div className="flex  border-b pb-2 py-4">
               <span className="w-1/2 text-gray-500  font-medium">Price:</span>
               <span className="text-gray-800 ">Negotiable</span>
@@ -164,13 +172,17 @@ const ProductDetails = () => {
                 Material:
               </span>
               <span className="text-gray-800 ">
-                {filteredProducts[0]?.product_material}
+                {filteredProducts[0]?.product_material
+                  ? filteredProducts[0]?.product_material
+                  : "Empty"}
               </span>
             </div>
             <div className="flex  border-b pb-2 py-4">
               <span className="w-1/2 text-gray-500  font-medium">Design:</span>
               <span className="text-gray-800 ">
-                {filteredProducts[0]?.design}
+                {filteredProducts[0]?.design
+                  ? filteredProducts[0]?.design
+                  : "Empty"}
               </span>
             </div>
             <div className="flex  pb-2 py-4">
@@ -179,14 +191,18 @@ const ProductDetails = () => {
               </span>
               <span className="text-gray-800 ">
                 {" "}
-                {filteredProducts[0]?.condition}
+                {filteredProducts[0]?.conditions
+                  ? filteredProducts[0]?.conditions
+                  : "Empty"}
               </span>
             </div>
             <div className="flex  pb-2">
               <span className="w-1/2 text-gray-500 font-medium">warranty:</span>
               <span className="text-gray-800 ">
                 {" "}
-                {filteredProducts[0]?.warranty}
+                {filteredProducts[0]?.warranty
+                  ? filteredProducts[0]?.warranty
+                  : "Empty"}
               </span>
             </div>
           </div>
@@ -201,7 +217,7 @@ const ProductDetails = () => {
                   R
                 </span>
               </div>
-              <div className="text-3xl text-gray-700">
+              <div className="text-2xl text-gray-700">
                 <h3>Supplier</h3>
                 <h3>Guanjoi Trading LLC</h3>
               </div>
@@ -213,34 +229,49 @@ const ProductDetails = () => {
                 <div className="w-[17%] flex justify-center items-center ">
                   <img src="/src/assets/imgs/imgF1.png" alt="" />
                 </div>
-                <span className="text-3xl text-gray-400">Germany, Berlin</span>
+                <span className="text-2xl text-gray-400">Germany, Berlin</span>
               </div>
               {/* Second row */}
               <div className="flex items-center gap-2">
                 <GoShieldCheck className="text-4xl w-[17%]" />
 
-                <span className="text-3xl text-gray-400">Verified Seller</span>
+                <span className="text-2xl text-gray-400">Verified Seller</span>
               </div>
               {/* Third row */}
               <div className="flex items-center gap-2">
                 <AiOutlineGlobal className="text-4xl w-[17%]" />
 
-                <span className="text-3xl text-gray-400">
+                <span className="text-2xl text-gray-400">
                   Worldwide shipping
                 </span>
               </div>
             </div>
             {/* 3 */}
-            <button className="text-3xl bg-blue-500 rounded-lg py-4 my-2 w-[95%] mx-auto text-white">
+            <button className="text-2xl bg-blue-500 rounded-lg py-4 my-2 w-[95%] mx-auto text-white">
               Send inquiry
             </button>
-            <button className="text-3xl  border rounded-lg py-4 my-2 w-[95%] mx-auto">
+            <button className="text-2xl  border rounded-lg py-4 my-2 w-[95%] mx-auto">
               Seller's profile
             </button>
           </div>
-          <button></button>
+          {/* save */}
+          <button
+            onClick={handleClick}
+            className="flex justify-center items-center w-full py-2 text-2xl gap-x-3 hover:shadow-md border rounded-lg border-blue-100 hover:border duration-75 my-10"
+          >
+            <CiHeart
+              className={`text-5xl ${saved ? "text-red-500" : "text-blue-500"}`}
+            />
+            <span>{saved ? "Saved" : "Save for later"}</span>
+          </button>
         </div>
       </div>
+      {/* 2nd Column */}
+      <ProductDetailsInfo />
+      {/* 3rd Column */}
+      <ProductDetailsRelated />
+      {/* 4th column */}
+      <ProductDetailsDiscount />
     </div>
   );
 };

@@ -26,7 +26,7 @@ const SingleProductCard = ({ product, isGridView }) => {
   };
   return (
     <div
-      className={`product-card relative border rounded-lg overflow-hidden flex  flex-col  md:flex-${
+      className={` product-card relative border rounded-lg overflow-hidden flex  flex-col cursor-pointer hover:shadow-md duration-100   md:flex-${
         isGridView ? "col" : "row"
       } h-72 ${isGridView ? "md:h-full" : "md:h-[200px]"}`}
       onClick={handleProductClick}

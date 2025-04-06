@@ -15,7 +15,7 @@ const Footer = () => {
   return (
     <footer className="footer ">
       {/* First Section: Subscribe */}
-      <div className="w-full bg-[#eef2f5]" >
+      <div className="w-full bg-[#eef2f5]">
         <div className="footer_content py-10  flex flex-col gap-y-2 text-center mb-8 text-gray-600 text-2xl">
           <h2 className="text-3xl font-semibold mb-2  ">
             Subscribe on Our Newsletter
@@ -64,29 +64,45 @@ const Footer = () => {
               Best information about the company gies here but now lorem ipsum
               is
             </p>
-            <ul className="social-links  flex lg:justify-start items-center sm:gap-x-4 lg:gap-x-10">
-              <li>
-                <a href="#" className="hover:text-blue-400">
+            <ul className="social-links flex lg:justify-start items-center sm:gap-x-4 lg:gap-x-10">
+              <li className="group hover:cursor-pointer">
+                <a
+                  href="#"
+                  className="text-gray-500 group-hover:text-blue-400 duration-100"
+                >
                   <FaFacebookF />
                 </a>
               </li>
-              <li>
-                <a href="#" className="hover:text-blue-400">
+              <li className="group hover:cursor-pointer">
+                <a
+                  href="#"
+                  className="text-gray-500 group-hover:text-blue-400 duration-100"
+                >
                   <FaTwitter />
                 </a>
               </li>
-              <li>
-                <a href="#" className="hover:text-blue-400">
+              <li className="group hover:cursor-pointer">
+                <a
+                  href="#"
+                  className="text-gray-500 group-hover:text-blue-400 duration-100"
+                >
                   <FaLinkedinIn />
                 </a>
               </li>
-              <li>
-                <a href="#" className="hover:text-red-400">
+              <li className="group hover:cursor-pointer">
+                <a
+                  href="#"
+                  className="text-gray-500 group-hover:text-red-400 duration-100"
+                >
                   <FaInstagram />
                 </a>
               </li>
-              <li>
-                <a href="#" className="hover:text-red-400">
+              <li className="group hover:cursor-pointer">
+                <a
+                  href="#"
+                  className="text-gray-500 group-hover:text-red-400"
+                  duration-100
+                >
                   <IoLogoYoutube />
                 </a>
               </li>

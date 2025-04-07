@@ -1,5 +1,4 @@
 .product-details-related {
-  padding: 20px;
 }
 
 .product-grid {
@@ -10,11 +9,11 @@
 
 .related_product-card {
   background-color: white;
+  padding: 10px  4px;
   border-radius: 10px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   transition: transform 0.3s ease;
-  max-width: 200px; /* Set the max width of each card */
 }
 
 .related_product-card:hover {
@@ -45,12 +44,15 @@
 }
 
 /* Responsive styling for small devices */
+@media (max-width: 1200px) {
+  .product-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+  }
+}
 @media (max-width: 768px) {
   .product-grid {
-    grid-template-columns: repeat(
-      2,
-      1fr
-    ); /* 2 cards in a row on smaller screens */
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .product-card {
@@ -60,6 +62,6 @@
 
 @media (max-width: 480px) {
   .product-grid {
-    grid-template-columns: 1fr; /* 1 card in a row on very small screens */
+    grid-template-columns: repeat(2, 1fr);
   }
 }

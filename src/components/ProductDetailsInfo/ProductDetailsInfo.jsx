@@ -92,10 +92,11 @@ const ProductDetailsInfo = () => {
     fade: true, // Apply fade effect between slides
   };
   return (
-    <div className="grid  mt-8 rounded-lg shadow-sm">
-      <div className="productInfoSwitch mr-4 p-6 bg-white">
+    <div className="productDetailsInfo mt-8 rounded-lg shadow-sm">
+      {/* Content Data Daynamically set  */}
+      <div className="productInfoSwitch mr-4 md:p-6 bg-white">
         {/* Buttons to Switch Content */}
-        <div className="tabs border-b-2">
+        <div className="tabs border-b-2 overflow-x-auto whitespace-nowrap scrollbar-hide">
           <button
             onClick={() => setActiveTab(1)}
             className={activeTab === 1 ? "active" : ""}
@@ -203,7 +204,6 @@ const ProductDetailsInfo = () => {
             </div>
           ))}
         </div>
-
         {/* Right Click Section (example for additional feature) */}
         <div className="right-click">
           <ul className="list-container">
@@ -220,7 +220,7 @@ const ProductDetailsInfo = () => {
         </div>
       </div>
       {/* you may like */}
-      <div className="youMightLike bg-white ml-4 flex flex-col gap-y-2  ">
+      <div className="youMightLike bg-white xl:ml-4 flex flex-col gap-y-2 mt-4 ">
         <h3 className="text-2xl py-4 px-8 flex items-center gap-x-4">
           You may like{" "}
           <motion.div

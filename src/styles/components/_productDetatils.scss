@@ -15,8 +15,9 @@
       [col-start] minmax(min-content, 14rem) [col-end]
     )
     minmax(6rem, 1fr) [full-end];
-
- 
+}
+.main-image img {
+  width: 100%;
 }
 .main-image img {
   width: 100%;
@@ -24,6 +25,7 @@
 .product_img {
   grid-column: full-start / col-end 3;
 }
+
 .product_info {
   grid-column: col-start 4 / col-end 7;
 }
@@ -38,6 +40,60 @@
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none; /* Chrome/Safari */
+}
+/* For screens 1200px and below */
+@media (max-width: 1200px) {
+  .product_img {
+    grid-column: full-start / col-end 4; /* Adjust as needed */
+    width: 100%; /* Or specific width */
+  }
+  .product_info {
+    grid-column: col-start 5 / col-end 7;
+  }
+  .product_supplier {
+    grid-column: col-start 8 / full-end;
+  }
+}
+
+/* For screens 768px and below */
+@media (max-width: 768px) {
+  .product_img {
+    grid-column: full-start / col-end 4; /* Adjust as needed */
+    width: 100%; /* Or specific width */
+  }
+  .product_info {
+    grid-column: col-start 5 / full-end;
+  }
+  .product_supplier {
+    grid-column: col-start / col-end 9;
+  }
+}
+
+/* For screens 420px and below */
+@media (max-width: 425px) {
+  .product_img {
+    grid-column: full-start / full-end;
+    width: 100%; /* Or specific width */
+  }
+  .product_info {
+    grid-column: full-start / full-end;
+  }
+  .product_supplier {
+    grid-column: full-start / full-end;
+  }
+}
+
+/* For screens 380px and below */
+@media (max-width: 380px) {
+  .product_img {
+    grid-column: full-start / full-end;
+  }
+  .product_info {
+    grid-column: full-start / full-end;
+  }
+  .product_content {
+    padding: 5px 10px;
+  }
 }
 /*import React, { useEffect, useState } from "react";
 import Breadcrumb from "../../components/Breadcrumb/Breadcrumb";

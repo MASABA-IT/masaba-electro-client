@@ -59,7 +59,7 @@ const ImageGallery = ({
   return (
     <div className="product_img">
       {/* Main Image with Animation */}
-      <div className="main-image border-2 rounded-lg overflow-hidden h-[500px] flex items-center justify-center relative">
+      <div className="main-image border-2 rounded-lg overflow-hidden h-[350px] xl:h-[500px] flex items-center justify-center relative">
         <AnimatePresence mode="wait">
           <motion.img
             key={mainImage}

@@ -1,7 +1,16 @@
 $active-color: #cdd0d8;
 $border-color: #ddd;
 $font-size: 16px;
+.productDetailsInfo {
+  display: grid;
 
+  grid-template-columns:
+    [full-start] minmax(6rem, 1fr) repeat(
+      8,
+      [col-start] minmax(min-content, 14rem) [col-end]
+    )
+    minmax(6rem, 1fr) [full-end];
+}
 // General Styles
 .productInfoSwitch {
   grid-column: full-start / col-end 7;
@@ -12,7 +21,7 @@ $font-size: 16px;
   // Tabs container
   .tabs {
     display: flex;
-    gap: 10px;
+    gap: 5px;
 
     button {
       padding: 10px 20px;
@@ -138,21 +147,6 @@ $font-size: 16px;
   border-radius: 10px;
 }
 
-/* For screens larger than 768px (typically PC/Laptop) */
-@media (min-width: 768px) {
-  .video-carousel-container video {
-    height: 400px; /* Fixed height for PC/Laptop */
-    object-fit: cover;
-  }
-}
-
-/* Optional: If you want a different height on very large screens (e.g., desktops) */
-@media (min-width: 1200px) {
-  .video-carousel-container video {
-    height: 500px; /* You can adjust the height for larger screens */
-  }
-}
-
 /* Ensure the next/prev buttons are visible on top of the video */
 .slick-prev,
 .slick-next {
@@ -167,14 +161,59 @@ $font-size: 16px;
   right: 10px;
 }
 
-//
+/* Medium-sized mobile phones and down (up to 420px) */
+@media (max-width: 425px) {
+  .productInfoSwitch {
+    grid-column: full-start / full-end;
+  }
+  .youMightLike {
+    grid-column: full-start / full-end;
+  }
+  .content {
+  }
+  .tabs {
+    display: flex;
+    gap: 5px;
+
+    button {
+      padding: 4px 10px !important;
+      // background-color: transparent;
+
+      cursor: pointer;
+      font-size: 14px !important;
+      transition: background-color 0.3s, border-color 0.3s;
+
+      &.active {
+        color: rgb(121, 58, 58);
+        border-bottom: 2px solid rgb(130, 130, 231);
+      }
+
+      &:hover {
+        background-color: $active-color;
+        border-color: $active-color;
+        color: rgb(39, 39, 39);
+      }
+    }
+  }
+}
+/* For screens larger than 768px (typically PC/Laptop) */
 @media (min-width: 768px) {
-  /* For tablets and above (laptop/PC) */
+  .video-carousel-container video {
+    height: 400px; /* Fixed height for PC/Laptop */
+    object-fit: cover;
+  }
   .content {
     max-width: 80%;
     min-height: 250px;
   }
   .table-section {
     max-width: 50%;
+  }
+}
+
+/* Optional: If you want a different height on very large screens (e.g., desktops) */
+@media (min-width: 1200px) {
+  .video-carousel-container video {
+    height: 500px; /* You can adjust the height for larger screens */
   }
 }

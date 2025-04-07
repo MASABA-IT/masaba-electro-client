@@ -1,11 +1,12 @@
 .breadcrumb-container {
-  grid-column: full-start/col-start 3;
+  grid-column: full-start/col-start 4;
   padding: 1rem 0;
   font-size: 14px;
   color: #555;
 
   .breadcrumb-text {
     display: flex;
+    flex-wrap: wrap;
     gap: 2px;
     align-items: center;
   }
@@ -26,5 +27,13 @@
   .breadcrumb-arrow {
     margin-left: 8px;
     margin-right: 8px;
+  }
+}
+@media (max-width: 425px) {
+  .breadcrumb-container {
+  }
+  .breadcrumb-arrow {
+    margin-left: 4px;
+    margin-right: 4px;
   }
 }

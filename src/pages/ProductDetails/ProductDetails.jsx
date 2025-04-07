@@ -96,7 +96,7 @@ const ProductDetails = () => {
         />
 
         {/* END */}
-        <div className="product_info px-10 py-2">
+        <div className="product_info md:px-4 xl:px-10 py-2 mt-10 md:mt-0 xl:mt-0">
           <p className="flex justify-start items-center text-xl">
             {filteredProducts[0]?.quantity > 0 ? (
               <>
@@ -111,7 +111,7 @@ const ProductDetails = () => {
             )}
           </p>
 
-          <h2 className="text-3xl font-medium font-sans ">
+          <h2 className="text-2xl xl:text-3xl font-medium font-sans ">
             <span>{filteredProducts[0]?.title}</span>,&nbsp;
             <span>{filteredProducts[0]?.subtitle}</span> <br />
             {filteredProducts[0]?.features.map((feature) => (
@@ -143,17 +143,17 @@ const ProductDetails = () => {
             </div>
           </div>
           {/* price-box */}
-          <div className="flex items-center   gap-x-4 py-6 px-4 bg-orange-100 ">
-            <div className="flex flex-col border-r-2 border-neutral-300 p-4 pr-16 ">
-              <p className="text-3xl font-bold text-red-500">$98.00</p>
+          <div className="flex items-center   gap-x-4 py-6 px-4 bg-orange-100 mt-4  ">
+            <div className="flex flex-col border-r-2 border-neutral-300 p-4 md:pr-10 xl:pr-16 ">
+              <p className="text-2xl xl:text-3xl font-bold text-red-500">$98.00</p>
               <span className="text-2xl">50-100 pcs</span>
             </div>
             <div className="flex flex-col border-r-2 border-neutral-300 p-4 pr-16">
-              <p className="text-3xl font-bold">$90.00</p>
+              <p className="text-2xl xl:text-3xl font-bold">$90.00</p>
               <span className="text-2xl">100-700 pcs</span>
             </div>
             <div className="flex flex-col">
-              <p className="text-3xl font-bold">$78.00</p>
+              <p className="text-2xl xl:text-3xl font-bold">$78.00</p>
               <span className="text-2xl">700+ pcs</span>
             </div>
           </div>
@@ -212,12 +212,12 @@ const ProductDetails = () => {
           <div className="flex flex-col border-2">
             {/* 1 */}
             <div className="flex  items-center">
-              <div className=" h-24 flex justify-center items-center p-10   ">
-                <span className="text-6xl font-bold w-[50px] h-[50px] flex justify-center items-center bg-[#c5f3f2] text-[#85c4c1]">
+              <div className="  lg:h-16 xl:h-24 flex justify-center items-center p-2 md:p-4 lg:p-2  xl:p-10   ">
+                <span className="text-6xl md:text-5xl lg:text-4xl xl:text-6xl font-bold w-[50px] md:w-[50px] lg:w-[30px] xl:w-[50px] h-[50px] md:h-[44px] lg:h-[30px] xl:h-[50px] flex justify-center items-center bg-[#c5f3f2] text-[#85c4c1]">
                   R
                 </span>
               </div>
-              <div className="text-2xl text-gray-700">
+              <div className="text-2xl md:text-2xl lg:text-xl xl:text-2xl text-gray-700">
                 <h3>Supplier</h3>
                 <h3>Guanjoi Trading LLC</h3>
               </div>
@@ -225,23 +225,31 @@ const ProductDetails = () => {
             {/* 2 */}
             <div className="flex flex-col gap-4 py-4">
               {/* First row */}
-              <div className="flex items-center gap-2 ">
-                <div className="w-[17%] flex justify-center items-center ">
-                  <img src="/src/assets/imgs/imgF1.png" alt="" />
+              <div className="flex items-center gap-5 ml-4 xl:ml-1">
+                <div className=" md:w-[6%]  xl:w-[10%] xl:ml-7 flex justify-center items-center ">
+                  <img
+                    src="/src/assets/imgs/imgF1.png"
+                    alt=""
+                    className="w-full"
+                  />
                 </div>
-                <span className="text-2xl text-gray-400">Germany, Berlin</span>
+                <span className="text-2xl lg:text-lg xl:text-2xl text-gray-400">
+                  Germany, Berlin
+                </span>
               </div>
               {/* Second row */}
               <div className="flex items-center gap-2">
-                <GoShieldCheck className="text-4xl w-[17%]" />
+                <GoShieldCheck className="text-4xl ml-5  xl:w-[17%]" />
 
-                <span className="text-2xl text-gray-400">Verified Seller</span>
+                <span className="text-2xl lg:text-lg xl:text-2xl text-gray-400">
+                  Verified Seller
+                </span>
               </div>
               {/* Third row */}
               <div className="flex items-center gap-2">
-                <AiOutlineGlobal className="text-4xl w-[17%]" />
+                <AiOutlineGlobal className="text-4xl ml-5  xl:w-[17%]" />
 
-                <span className="text-2xl text-gray-400">
+                <span className="text-2xl lg:text-lg xl:text-2xl text-gray-400">
                   Worldwide shipping
                 </span>
               </div>

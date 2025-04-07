@@ -7,7 +7,7 @@ const Breadcrumb = ({ items }) => {
     <div className="breadcrumb-container">
       <p className="breadcrumb-text">
         {items.map((item, index) => (
-          <span key={index} className="breadcrumb-item text-2xl">
+          <span key={index} className="breadcrumb-item text-xl xl:text-2xl">
             {item.link ? (
               <Link to={item.link} className="breadcrumb-link">
                 {item.label}

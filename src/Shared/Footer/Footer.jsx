@@ -100,8 +100,7 @@ const Footer = () => {
               <li className="group hover:cursor-pointer">
                 <a
                   href="#"
-                  className="text-gray-500 group-hover:text-red-400"
-                  duration-100
+                  className="text-gray-500 group-hover:text-red-400 duration-100"
                 >
                   <IoLogoYoutube />
                 </a>

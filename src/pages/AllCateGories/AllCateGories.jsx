@@ -4,7 +4,7 @@ import CategoryList from "../../components/CategoryList/CategoryList";
 import CategoriesItems from "../../components/CategoriesItems/CategoriesItems";
 import { useProductStore } from "../../providers/AppProviders";
 
-const AllCateGories = () => {
+const AllCategories = () => {
   const { allData, loading } = useProductStore();
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedBrands, setSelectedBrands] = useState([]);
@@ -60,4 +60,4 @@ const AllCateGories = () => {
   );
 };
 
-export default AllCateGories;
+export default AllCategories;

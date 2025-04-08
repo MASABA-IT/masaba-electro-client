@@ -4,7 +4,7 @@ import { HiMiniShoppingCart } from "react-icons/hi2";
 
 import { IoIosSearch, IoMdMenu } from "react-icons/io";
 import { MdMessage } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 const Navbar = ({ showSidebar, setShowSidebar }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [category, setCategory] = useState("All");
@@ -12,6 +12,7 @@ const Navbar = ({ showSidebar, setShowSidebar }) => {
   const handleSearch = () => {
     console.log("Searching for:", searchTerm, "in category:", category);
   };
+  const navigate = useNavigate();
   return (
     <nav className="navbar shadow-sm">
       {/* Desktop View */}
@@ -80,7 +81,10 @@ const Navbar = ({ showSidebar, setShowSidebar }) => {
               <FaHeart className=" " />
               <span className="text-sm">Orders</span>
             </button>
-            <button className="flex flex-col items-center gap-y-3">
+            <button
+              className="flex flex-col items-center gap-y-3"
+              onClick={() => navigate("/cart")}
+            >
               <HiMiniShoppingCart className=" " />
               <span className="text-sm">My Cart</span>
             </button>

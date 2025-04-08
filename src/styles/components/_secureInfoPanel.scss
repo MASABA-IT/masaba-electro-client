@@ -1,0 +1,12 @@
+.secureInfoPanel {
+  grid-column: full-start / col-end 6;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem; /* optional spacing */
+}
+
+@media (max-width: 768px) {
+  .secureInfoPanel {
+    grid-template-columns: 1fr;
+  }
+}

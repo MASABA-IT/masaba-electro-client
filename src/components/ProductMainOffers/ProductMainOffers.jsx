@@ -70,10 +70,10 @@ const MainOffer = ({ offer }) => (
       </h2>
       <p className="text-xl md:text-2xl">{offer?.subtitle}</p>
     </div>
-    <div className="countdown-timer">
+    {/* <div className="countdown-timer">
       <h3 className="text-xl font-semibold">Time Left for Offer:</h3>
       <CountdownTimer endDate={offer?.countdownEndDate} />
-    </div>
+    </div> */}
   </motion.div>
 );
 

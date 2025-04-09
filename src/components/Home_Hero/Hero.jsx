@@ -1,18 +1,9 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion"; // Import framer-motion
+import { useProductStore } from "../../providers/AppProviders";
 
 const Hero = () => {
-  const categories = [
-    "Automobiles",
-    "Clothes and wear",
-    "Home interiors",
-    "Computer and tech",
-    "Tools, equipments",
-    "Sports and outdoor",
-    "Animal and pets",
-    "Machinery Tools",
-    "More Category",
-  ];
+  const { categories } = useProductStore();
 
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -21,23 +12,24 @@ const Hero = () => {
       {/* Category list with animation */}
       <motion.div
         className="item-1 p-4"
-        initial={{ opacity: 0, x: -100 }} // Start off-screen to the left
+        initial={{ opacity: 0, x: -100 }}
         animate={{ opacity: 1, x: 0 }} // Animate to original position
         transition={{ duration: 0.6, ease: "easeOut" }}
       >
         <ul className="flex flex-col text-sm md:text-2xl text-gray-500 gap-y-2 p-4 overflow-y-auto">
-          {categories.map((category, index) => (
+          {categories?.map((category, index) => (
             <motion.li
-              key={index}
+              key={category.id}
               onClick={() => setActiveIndex(index)}
-              className={`item-1 ${
+              role="button"
+              className={`item-1 cursor-pointer ${
                 activeIndex === index ? "active" : ""
               } transition-all duration-300 ease-in-out`}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: index * 0.1, duration: 0.4 }} // Delay for each list item
+              transition={{ delay: index * 0.1, duration: 0.4 }}
             >
-              {category}
+              {category.title}
             </motion.li>
           ))}
         </ul>

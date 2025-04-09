@@ -1,3 +1,17 @@
 .cartLetterSave {
   grid-column: full-start / full-end;
 }
+@media (max-width: 425px) {
+  .btn_group {
+    row-gap: 1rem;
+    flex-direction: column;
+  }
+}
+@media (max-width: 380px) {
+  .cartLetterSave > .grid {
+    grid-template-columns: 1fr;
+  }
+  .btn_group {
+    flex-direction: row;
+  }
+}

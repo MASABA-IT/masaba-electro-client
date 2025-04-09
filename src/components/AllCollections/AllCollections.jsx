@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { FaArrowRight } from "react-icons/fa";
+import { useProductStore } from "../../providers/AppProviders";
 
 // CollectionItem Component (each item in a collection)
 const CollectionItem = ({ item }) => (
   <div key={item.id} className="collection-item relative ">
     <div className="item-info">
       <h4 className="text-xl md:text-3xl">{item.title}</h4>
-      <p className="price">From USD {item.price}</p>
+      <p className="price">BD {item.price} ৳</p>
     </div>
     <div className="item-image absolute right-2 bottom-6">
       <img src={item.imageUrl} alt={item.title} />
@@ -15,10 +16,10 @@ const CollectionItem = ({ item }) => (
 );
 const Collection = ({ collection }) => {
   // Group the items into two rows, each containing 4 items
-  const rows = [];
-  for (let i = 0; i < collection.items.length; i += 4) {
-    rows.push(collection.items.slice(i, i + 4));
-  }
+  // const rows = [];
+  // for (let i = 0; i < collection.items.length; i += 4) {
+  //   rows.push(collection.items.slice(i, i + 4));
+  // }
 
   return (
     <div key={collection.id} className="collection-section shadow-sm">
@@ -43,14 +44,14 @@ const Collection = ({ collection }) => {
 
       <div className="collection-right">
         {/* Render rows */}
-        {rows.map((row, rowIndex) => (
+        {/* {rows.map((row, rowIndex) => (
           <div key={rowIndex} className="collection-row">
-            {/* Render items in each row */}
+            
             {row.map((item) => (
               <CollectionItem key={item.id} item={item} />
             ))}
           </div>
-        ))}
+        ))} */}
       </div>
     </div>
   );
@@ -58,8 +59,9 @@ const Collection = ({ collection }) => {
 
 // Main AllCollections Component
 const AllCollections = () => {
+  const { collections, loading } = useProductStore();
   const [collectionsData, setCollectionsData] = useState([]);
-
+  console.log(collections?.collectionWithAllProducts);
   useEffect(() => {
     // Example data, replace with your actual API data
     setCollectionsData([
@@ -178,7 +180,7 @@ const AllCollections = () => {
 
   return (
     <div className="all-collections">
-      {collectionsData.map((collection) => (
+      {collections?.collectionWithAllProducts?.map((collection) => (
         <Collection key={collection.id} collection={collection} />
       ))}
     </div>

@@ -34,12 +34,6 @@
 }
 /* For screen ≤ 1024px (laptop/tablet) */
 @media (max-width: 1024px) {
-  .carts_present {
-    grid-column: full-start / col-end 8;
-  }
-  .carts_totalAmount {
-    grid-column: col-start 9 / full-end;
-  }
 }
 
 /* For screen ≤ 768px (tablet) */
@@ -55,6 +49,9 @@
 
 /* For screen ≤ 425px (small mobile) */
 @media (max-width: 425px) {
+  .carts {
+    padding: 5px 10px;
+  }
   .notification {
     font-size: 1rem;
   }

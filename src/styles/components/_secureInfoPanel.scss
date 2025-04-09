@@ -2,11 +2,20 @@
   grid-column: full-start / col-end 6;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1rem; /* optional spacing */
+  gap: 1rem;
 }
 
 @media (max-width: 768px) {
   .secureInfoPanel {
+    grid-column: full-start / full-end;
+
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (max-width: 425px) {
+  .secureInfoPanel {
+    grid-column: full-start / full-end;
+
     grid-template-columns: 1fr;
   }
 }

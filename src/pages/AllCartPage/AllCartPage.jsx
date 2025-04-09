@@ -125,7 +125,7 @@ const AllCartPage = () => {
   };
   return (
     <div className="carts">
-      <h2 className="carts_count xl:text-4xl py-4 px-6 font-semibold">
+      <h2 className="carts_count text-2xl xl:text-4xl py-4 px-6 font-semibold text-gray-600">
         My cart <span>&#40;{cartData.length}&#41;</span>
       </h2>
 
@@ -161,15 +161,15 @@ const AllCartPage = () => {
         <div className="flex justify-between px-6 py-4">
           <button
             onClick={goToShop}
-            className="flex justify-center items-center gap-4 text-[1.6rem] bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 duration-75"
+            className="flex justify-center items-center gap-4 text-xl xl:text-[1.6rem] bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 duration-75"
           >
             <LuArrowLeft className="text-4xl" />
-            Back to shop!
+            Back to shop
           </button>
           <button
             onClick={clearAll}
             disabled={cartData.length === 0} // Disable button if cart is empty
-            className={`text-[1.6rem] ${
+            className={`text-xl xl:text-[1.6rem] ${
               cartData.length === 0
                 ? "bg-zinc-100 text-gray-300 cursor-not-allowed"
                 : "bg-zinc-100 text-red-400 hover:bg-gray-200 hover:text-red-500"
@@ -192,7 +192,7 @@ const AllCartPage = () => {
         paymentOptions={paymentOptions}
       />
       <SecureInfoPanel />
-      <CartLetterSave />
+      <CartLett erSave />
       <div className="cart_discount">
         <ProductDetailsDiscount />
       </div>

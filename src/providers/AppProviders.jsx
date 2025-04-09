@@ -1,12 +1,65 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useEffect, useState } from "react";
 
+// ✅ Import API Base URL from .env
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const AppContext = createContext();
 export const AppProvider = ({ children }) => {
+  //fake data next remove
   const [allData, setAllData] = useState([]);
+
+  //1 GLOBAL STATES
+  const [categories, setCategories] = useState([]);
+  const [collections, setCollections] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  //1.1 Categories
+  //loading, error
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch(`${BASE_URL}/api/categories`);
+        if (!res.ok) {
+          throw new Error("Failed to fetch categories");
+        }
+        const data = await res.json();
+        setCategories(data.categories);
+      } catch (err) {
+        setError(err.message);
+        console.error("Error fetching categories:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+  //1.2 Categories
+  useEffect(() => {
+    const fetchCollections = async () => {
+      try {
+        const res = await fetch(`${BASE_URL}/api/collection/with/all-products`);
+        if (!res.ok) {
+          throw new Error("Failed to fetch collections");
+        }
+        const data = await res.json();
+        setCollections(data);
+      } catch (err) {
+        setError(err.message);
+        console.error("Error fetching collections:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCollections();
+  }, []);
+
+  //  end
   ///////////////
   ///////ALL DATA
+
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -28,7 +81,6 @@ export const AppProvider = ({ children }) => {
   ////FILTER SINGLE PRODUCT VIEWS
   // Filter function that accepts only ID, category (single string), and condition
   function filterSingleProduct(allData, selectedFilters) {
-    
     const { products } = allData;
     const { id, category, condition } = selectedFilters;
 
@@ -52,7 +104,13 @@ export const AppProvider = ({ children }) => {
     });
   }
 
-  const appInfo = { allData, loading, filterSingleProduct };
+  const appInfo = {
+    allData,
+    loading,
+    filterSingleProduct,
+    categories,
+    collections,
+  };
   return <AppContext.Provider value={appInfo}>{children}</AppContext.Provider>;
 };
 export const useProductStore = () => useContext(AppContext);

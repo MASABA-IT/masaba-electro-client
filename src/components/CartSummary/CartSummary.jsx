@@ -75,7 +75,7 @@ const CartSummary = ({
               </tr>
               <tr>
                 <td className="text-2xl font-semibold py-2">Total</td>
-                <td className="text-3xl font-semibold py-2 text-right">
+                <td className="text-2xl xl:text-3xl font-semibold py-2 text-right">
                   ${total}
                 </td>
               </tr>
@@ -95,9 +95,9 @@ const CartSummary = ({
         </div>
 
         {/* Payment Methods */}
-        <div className="payment-method-section bg-white p-6">
+        <div className="payment-method-section bg-white p-4 xl:p-6">
           <h2 className="text-2xl font-semibold mb-4">Your Payment Options</h2>
-          <div className="flex justify-center gap-6 flex-wrap">
+          <div className="flex justify-center gap-x-3 xl:gap-6 flex-wrap">
             {paymentOptions.map((option, i) => (
               <div
                 key={option.id + `${i}`}

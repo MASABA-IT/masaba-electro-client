@@ -4,8 +4,9 @@ import { LuArrowLeft } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 import CartSummary from "../../components/CartSummary/CartSummary";
 import SecureInfoPanel from "../../components/SecureInfoPanel/SecureInfoPanel";
-import CartLetterSave from "../../components/CartLetterSave/CartLetterSave";
+// import CartLetterSave from "../../components/CartLetterSave/CartLetterSave";
 import ProductDetailsDiscount from "../../components/ProductDetailsDiscount/ProductDetailsDiscount";
+import CartLetterSave from "../../components/CartLetterSave/CartLetterSave";
 
 const AllCartPage = () => {
   const [couponCode, setCouponCode] = useState("");
@@ -192,7 +193,7 @@ const AllCartPage = () => {
         paymentOptions={paymentOptions}
       />
       <SecureInfoPanel />
-      <CartLett erSave />
+      <CartLetterSave />
       <div className="cart_discount">
         <ProductDetailsDiscount />
       </div>

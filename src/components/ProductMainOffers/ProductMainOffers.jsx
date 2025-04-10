@@ -86,7 +86,7 @@ const OfferItem = ({ item }) => (
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.6, ease: "easeOut" }}
   >
-    <div className="offer-image">
+    <div className="offer-image ">
       <img src={item.imageUrl} alt={item.title} />
     </div>
     <div className="offer-details flex flex-col justify-center items-center">

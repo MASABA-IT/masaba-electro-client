@@ -16,7 +16,6 @@ export const AppProvider = ({ children }) => {
 
   //1.1 Categories
   //loading, error
-
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -36,11 +35,13 @@ export const AppProvider = ({ children }) => {
 
     fetchCategories();
   }, []);
+
   //1.2 Categories
   useEffect(() => {
     const fetchCollections = async () => {
       try {
         const res = await fetch(`${BASE_URL}/api/collection/with/all-products`);
+
         if (!res.ok) {
           throw new Error("Failed to fetch collections");
         }
@@ -105,6 +106,7 @@ export const AppProvider = ({ children }) => {
   }
 
   const appInfo = {
+    BASE_URL,
     allData,
     loading,
     filterSingleProduct,

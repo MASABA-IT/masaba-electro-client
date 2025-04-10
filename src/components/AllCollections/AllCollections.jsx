@@ -1,34 +1,46 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { FaArrowRight } from "react-icons/fa";
 import { useProductStore } from "../../providers/AppProviders";
 
 // CollectionItem Component (each item in a collection)
-const CollectionItem = ({ item }) => (
-  <div key={item.id} className="collection-item relative ">
-    <div className="item-info">
-      <h4 className="text-xl md:text-3xl">{item.title}</h4>
-      <p className="price">BD {item.price} ৳</p>
-    </div>
-    <div className="item-image absolute right-2 bottom-6">
-      <img src={item.imageUrl} alt={item.title} />
-    </div>
-  </div>
-);
-const Collection = ({ collection }) => {
-  // Group the items into two rows, each containing 4 items
-  // const rows = [];
-  // for (let i = 0; i < collection.items.length; i += 4) {
-  //   rows.push(collection.items.slice(i, i + 4));
-  // }
+const CollectionItem = ({ item }) => {
+  const { BASE_URL } = useProductStore();
 
   return (
-    <div key={collection.id} className="collection-section shadow-sm">
+    <div key={item.id} className="collection-item relative ">
+      <div className="item-info">
+        <h4 className="text-xl md:text-3xl">{item.title}</h4>
+        <p className="price">BD {item.price} ৳</p>
+      </div>
+      <div className="item-image absolute right-2 bottom-6 overflow-hidden">
+        <img src={`${BASE_URL}/${item.thumbnail}`} alt={item.title} />
+      </div>
+    </div>
+  );
+};
+const Collection = ({ collection }) => {
+  const { BASE_URL } = useProductStore();
+
+  // Group the items into two rows, each containing 4 items
+  const rows = [];
+  for (let i = 0; i < collection?.limited_products.length; i += 4) {
+    rows.push(collection?.limited_products.slice(i, i + 4));
+  }
+
+  return (
+    <div key={collection.id} className="collection-section shadow-sm ">
+      <div className="block md:hidden p-4 bg-white">
+        <h2 className="text-xl font-semibold">{collection.title}</h2>
+      </div>
       <div
         className="collection-left hidden md:block"
         style={{
-          backgroundImage: `url(${collection.bgImg})`,
-          backgroundSize: "100% 100%",
+          backgroundImage: `url(${BASE_URL}/${collection?.thumbnail})`,
+          backgroundSize: "cover", // use cover for full coverage while maintaining aspect ratio
           backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          width: "100%",
+          height: "100%",
         }}
       >
         <h2 className="text-2xl md:text-4xl font-semibold">
@@ -38,21 +50,30 @@ const Collection = ({ collection }) => {
           Source Now
         </button>
       </div>
-      <button className="w-60  flex justify-center items-center gap-2 md:hidden   px-8 py-4 rounded-lg text-xl font-semibold text-blue-500 transition duration-300 ease-in-out hover:shadow-md hover:-translate-y-1 hover:scale-105 active:scale-95">
-        Source Now <FaArrowRight />
-      </button>
 
       <div className="collection-right">
-        {/* Render rows */}
-        {/* {rows.map((row, rowIndex) => (
-          <div key={rowIndex} className="collection-row">
-            
-            {row.map((item) => (
+        {/* MOBILE FOR 1 ROW */}
+        {window.innerWidth < 768 ? (
+          <div className="collection-row">
+            {collection?.limited_products.map((item) => (
               <CollectionItem key={item.id} item={item} />
             ))}
           </div>
-        ))} */}
+        ) : (
+          // DESKTOP FOR 4 CARDS
+          rows.map((row, rowIndex) => (
+            <div key={rowIndex} className="collection-row">
+              {row.map((item) => (
+                <CollectionItem key={item.id} item={item} />
+              ))}
+            </div>
+          ))
+        )}
       </div>
+
+      <button className="w-60  flex justify-center items-center gap-2 md:hidden   px-8 py-4 rounded-lg text-xl font-semibold text-blue-500 transition duration-300 ease-in-out hover:shadow-md hover:-translate-y-1 hover:scale-105 active:scale-95">
+        Source Now <FaArrowRight />
+      </button>
     </div>
   );
 };
@@ -60,123 +81,6 @@ const Collection = ({ collection }) => {
 // Main AllCollections Component
 const AllCollections = () => {
   const { collections, loading } = useProductStore();
-  const [collectionsData, setCollectionsData] = useState([]);
-  console.log(collections?.collectionWithAllProducts);
-  useEffect(() => {
-    // Example data, replace with your actual API data
-    setCollectionsData([
-      {
-        id: 1,
-        title: "Home and Outdoor",
-        bgImg: "/src/assets/imgs/bgImgOne.png",
-        items: [
-          {
-            id: 1,
-            title: "Winter Coat",
-            price: 49.99,
-            imageUrl: "/src/assets/imgs/item1.png",
-          },
-          {
-            id: 2,
-            title: "Snow Boots",
-            price: 39.99,
-            imageUrl: "/src/assets/imgs/item2.png",
-          },
-          {
-            id: 3,
-            title: "Scarf",
-            price: 19.99,
-            imageUrl: "/src/assets/imgs/item3.png",
-          },
-          {
-            id: 4,
-            title: "Gloves",
-            price: 14.99,
-            imageUrl: "/src/assets/imgs/item4.png",
-          },
-          {
-            id: 5,
-            title: "Winter Coat",
-            price: 49.99,
-            imageUrl: "/src/assets/imgs/item5.png",
-          },
-          {
-            id: 6,
-            title: "Snow Boots",
-            price: 39.99,
-            imageUrl: "/src/assets/imgs/item6.png",
-          },
-          {
-            id: 7,
-            title: "Scarf",
-            price: 19.99,
-            imageUrl: "/src/assets/imgs/item7.png",
-          },
-          {
-            id: 8,
-            title: "Gloves",
-            price: 14.99,
-            imageUrl: "/src/assets/imgs/item8.png",
-          },
-        ],
-      },
-      {
-        id: 2,
-        title: "Consumer electronics and gadgets",
-        bgImg: "/src/assets/imgs/bgImgTwo.png",
-        items: [
-          {
-            id: 9,
-            title: "Sunglasses",
-            price: 29.99,
-            imageUrl: "/src/assets/imgs/item9.png",
-          },
-          {
-            id: 10,
-            title: "Beach Hat",
-            price: 19.99,
-            imageUrl: "/src/assets/imgs/item10.png",
-          },
-          {
-            id: 11,
-            title: "Flip Flops",
-            price: 14.99,
-            imageUrl: "/src/assets/imgs/item11.png",
-          },
-          {
-            id: 12,
-            title: "Towel",
-            price: 24.99,
-            imageUrl: "/src/assets/imgs/item12.png",
-          },
-          {
-            id: 13,
-            title: "Sunglasses",
-            price: 29.99,
-            imageUrl: "/src/assets/imgs/item13.png",
-          },
-          {
-            id: 14,
-            title: "Beach Hat",
-            price: 19.99,
-            imageUrl: "/src/assets/imgs/item14.png",
-          },
-          {
-            id: 15,
-            title: "Flip Flops",
-            price: 14.99,
-            imageUrl: "/src/assets/imgs/item15.png",
-          },
-          {
-            id: 16,
-            title: "Towel",
-            price: 24.99,
-            imageUrl: "/src/assets/imgs/item6.png",
-          },
-        ],
-      },
-    ]);
-  }, []);
 
   return (
     <div className="all-collections">

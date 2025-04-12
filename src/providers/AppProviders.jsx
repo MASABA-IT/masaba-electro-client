@@ -11,6 +11,7 @@ export const AppProvider = ({ children }) => {
   //1 GLOBAL STATES
   const [categories, setCategories] = useState([]);
   const [collections, setCollections] = useState(null);
+  const [dealsOffers, setDealsOffers] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -55,6 +56,27 @@ export const AppProvider = ({ children }) => {
       }
     };
     fetchCollections();
+  }, []);
+  //1.3 Deals Offers
+  useEffect(() => {
+    const fetchDealsOffers = async () => {
+      try {
+        const res = await fetch(`${BASE_URL}/api/deals-offers`);
+
+        if (!res.ok) {
+          throw new Error("Failed to fetch DealsOffers");
+        }
+        const data = await res.json();
+        console.log(data);
+        setDealsOffers(data?.dealsOffers);
+      } catch (err) {
+        setError(err.message);
+        console.error("Error fetching DealsOffers:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchDealsOffers();
   }, []);
 
   //  end
@@ -112,6 +134,7 @@ export const AppProvider = ({ children }) => {
     filterSingleProduct,
     categories,
     collections,
+    dealsOffers,
   };
   return <AppContext.Provider value={appInfo}>{children}</AppContext.Provider>;
 };

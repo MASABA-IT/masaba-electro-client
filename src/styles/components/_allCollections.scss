@@ -53,7 +53,7 @@ p {
   display: flex;
 
   & > .item-info {
-    width: 70%;
+    width: 100%;
   }
   & > .item-image {
     width: 1fr;
@@ -90,7 +90,7 @@ h4 {
 
 .price {
   font-size: 1.2rem;
-  color: #ce4839;
+
   font-weight: bold;
 }
 
@@ -149,6 +149,7 @@ h4 {
     align-items: center;
   }
   .collection-item {
+    padding: 10px;
     justify-content: center;
   }
 }

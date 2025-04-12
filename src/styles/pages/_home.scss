@@ -2,10 +2,11 @@
 .home_content {
   max-width: 140rem;
   width: 100%;
+  height: auto;
   margin: 0 auto;
   padding: 5px 20px;
   display: grid;
-  grid-template-rows: 45vh repeat(7, min-content);
+  grid-template-rows: minmax(45vh, auto) repeat(7, min-content);
   grid-template-columns:
     [full-start] minmax(6rem, 1fr) repeat(
       8,

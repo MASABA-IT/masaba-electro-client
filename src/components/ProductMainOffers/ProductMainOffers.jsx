@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion"; // Import framer-motion
+import { useProductStore } from "../../providers/AppProviders";
 
 // CountdownTimer Component
 const CountdownTimer = ({ endDate }) => {
   const [timeRemaining, setTimeRemaining] = useState(null);
 
-  // Function to update the countdown every second
   const updateCountdown = () => {
     const now = new Date();
-    const timeDiff = endDate ? endDate - now : 0;
+    const end = new Date(endDate); // Make sure endDate is a proper Date
+    const timeDiff = end - now;
 
     if (timeDiff <= 0) {
       setTimeRemaining("Offer has ended!");
@@ -25,32 +26,32 @@ const CountdownTimer = ({ endDate }) => {
   };
 
   useEffect(() => {
-    updateCountdown(); // Initial countdown
-    const interval = setInterval(updateCountdown, 1000); // Update countdown every second
-    return () => clearInterval(interval); // Cleanup interval on unmount
+    updateCountdown();
+    const interval = setInterval(updateCountdown, 1000);
+    return () => clearInterval(interval);
   }, [endDate]);
 
   if (timeRemaining === "Offer has ended!") {
-    return <div>{timeRemaining}</div>;
+    return <div className="text-red-500 font-medium">{timeRemaining}</div>;
   }
 
   return (
-    <div className="countdown">
-      <div className="countdown-box">
-        <p>{timeRemaining?.days}</p>
-        <span>Days</span>
+    <div className="countdown flex gap-3 mt-2">
+      <div className="countdown-box text-center">
+        <p className="text-2xl font-bold">{timeRemaining?.days}</p>
+        <span className="text-xs text-gray-300">Days</span>
       </div>
-      <div className="countdown-box">
-        <p>{timeRemaining?.hours}</p>
-        <span>Hour</span>
+      <div className="countdown-box text-center">
+        <p className="text-2xl font-bold">{timeRemaining?.hours}</p>
+        <span className="text-xs text-gray-300">Hours</span>
       </div>
-      <div className="countdown-box">
-        <p>{timeRemaining?.minutes}</p>
-        <span>Min</span>
+      <div className="countdown-box text-center">
+        <p className="text-2xl font-bold">{timeRemaining?.minutes}</p>
+        <span className="text-xs text-gray-300">Min</span>
       </div>
-      <div className="countdown-box">
-        <p>{timeRemaining?.seconds}</p>
-        <span>Sec</span>
+      <div className="countdown-box text-center">
+        <p className="text-2xl font-bold">{timeRemaining?.seconds}</p>
+        <span className="text-xs text-gray-300">Sec</span>
       </div>
     </div>
   );
@@ -65,102 +66,89 @@ const MainOffer = ({ offer }) => (
     transition={{ duration: 0.8, ease: "easeOut" }}
   >
     <div>
-      <h2 className="text-2xl md:text-4xl font-bold text-gray-800">
-        {offer?.title}
+      <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
+        Deals and Offers
       </h2>
+      <p className="text-xl md:text-2xl text-gray-600">{offer?.title}</p>
       <p className="text-xl md:text-2xl">{offer?.subtitle}</p>
     </div>
-    {/* <div className="countdown-timer">
-      <h3 className="text-xl font-semibold">Time Left for Offer:</h3>
-      <CountdownTimer endDate={offer?.countdownEndDate} />
-    </div> */}
+    <div className="countdown-timer">
+      <h3 className="text-xl font-semibold text-gray-600">
+        Time Left for Offer:
+      </h3>
+      <CountdownTimer endDate={offer?.expire} />
+    </div>
   </motion.div>
 );
 
 // OfferItem Component
-const OfferItem = ({ item }) => (
-  <motion.div
-    key={item.id}
-    className="offer-box"
-    initial={{ opacity: 0, y: 50 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.6, ease: "easeOut" }}
-  >
-    <div className="offer-image ">
-      <img src={item.imageUrl} alt={item.title} />
-    </div>
-    <div className="offer-details flex flex-col justify-center items-center">
-      <h4 className="text-2xl font-medium">{item.title}</h4>
-      <p className="bg-red-100 w-24 px-3 rounded-full">-{item.discount}</p>
-    </div>
-  </motion.div>
-);
+const OfferItem = ({ item }) => {
+  const { BASE_URL } = useProductStore();
+  const base = parseFloat(item.product.base_price);
+  const discount = parseFloat(item.product.discount_price);
+  const discountPercent = ((base - discount) / base) * 100;
 
-// Main ProductMainOffers Component
-const ProductMainOffers = () => {
-  const [offersData, setOffersData] = useState([]);
-
-  useEffect(() => {
-    setOffersData([
-      {
-        id: 1,
-        title: "Deals and Offers",
-        subtitle: "Hygiene equipments",
-        countdownEndDate: new Date("2025-03-20T00:00:00"), // Example end date
-        items: [
-          {
-            id: 1,
-            title: "New Collection",
-            discount: "10%",
-            imageUrl: "../../src/assets/imgs/img.png",
-          },
-          {
-            id: 2,
-            title: "Winter Sale",
-            discount: "15%",
-            imageUrl: "../../src/assets/imgs/img1.png",
-          },
-          {
-            id: 3,
-            title: "Summer Essentials",
-            discount: "25%",
-            imageUrl: "../../src/assets/imgs/img2.png",
-          },
-          {
-            id: 4,
-            title: "Summer Essentials",
-            discount: "25%",
-            imageUrl: "../../src/assets/imgs/img3.png",
-          },
-          {
-            id: 5,
-            title: "Summer Essentials",
-            discount: "25%",
-            imageUrl: "../../src/assets/imgs/img4.png",
-          },
-          {
-            id: 6,
-            title: "Summer Essentials",
-            discount: "25%",
-            imageUrl: "../../src/assets/imgs/img4.png",
-          },
-        ],
-      },
-    ]);
-  }, []);
+  // State to track when the image has finished loading
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   return (
     <motion.div
-      className="product-main-offers shadow-sm"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 1 }}
+      key={item.id}
+      className="offer-box p-4 bg-white rounded"
+      initial={{ opacity: 0, y: 50 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
     >
-      {/* Display the first offer and its countdown */}
-      <MainOffer offer={offersData[0]} />
+      <div className="offer-image relative overflow-hidden w-full h-48 rounded">
+        {/* Skeleton loader overlay for the image */}
+        {!imageLoaded && (
+          <div className="absolute  inset-0 bg-gray-300 animate-pulse" />
+        )}
+        <img
+          src={`${BASE_URL}/${item.product.thumbnail}`}
+          alt={item.product.title}
+          onLoad={() => setImageLoaded(true)}
+          className={`transition duration-700 ease-in-out w-full h-full object-cover ${
+            !imageLoaded ? "opacity-0" : "opacity-100"
+          }`}
+        />
+      </div>
+      <div className="offer-details flex flex-col justify-center items-center mt-4">
+        {/* Conditional rendering for text placeholder */}
+        {!imageLoaded ? (
+          <div className="w-full flex flex-col items-center">
+            <div className="bg-gray-300 h-6 w-3/4 my-2 animate-pulse rounded"></div>
+            <div className="bg-gray-300 h-4 w-1/2 my-2 animate-pulse rounded"></div>
+          </div>
+        ) : (
+          <>
+            <h4 className="text-2xl font-medium text-gray-800">
+              {item.product.title}
+            </h4>
+            <p className="bg-red-100 min-w-28 py-3 px-10 flex justify-center items-center rounded-full text-red-500 font-bold text-sm text-center">
+              {discountPercent.toFixed(0)}%
+              <span className="text-sm text-zinc-700 xl:mt-4">&nbsp;OFF</span>
+            </p>
+          </>
+        )}
+      </div>
+    </motion.div>
+  );
+};
 
+// Main ProductMainOffers Component
+const ProductMainOffers = () => {
+  const { dealsOffers } = useProductStore();
+
+  if (!dealsOffers || !dealsOffers.deals_offers_products) {
+    return <div className="min-h-[300px]"></div>;
+  }
+
+  return (
+    <motion.div className="product-main-offers">
+      <MainOffer offer={dealsOffers} />
       <div className="main-offer-right">
-        {offersData[0]?.items.map((item) => (
+        {dealsOffers?.deals_offers_products.slice(0, 5).map((item) => (
           <OfferItem key={item.id} item={item} />
         ))}
       </div>

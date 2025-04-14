@@ -11,6 +11,7 @@ export const AppProvider = ({ children }) => {
   //1 GLOBAL STATES
   const [categories, setCategories] = useState([]);
   const [collections, setCollections] = useState(null);
+  const [navCollections, setNavCollections] = useState(null);
   const [dealsOffers, setDealsOffers] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -78,6 +79,27 @@ export const AppProvider = ({ children }) => {
     };
     fetchDealsOffers();
   }, []);
+  //1.4 NavCollection
+  useEffect(() => {
+    const fetchNavCategories = async () => {
+      try {
+        const res = await fetch(`${BASE_URL}/api/collections`);
+
+        if (!res.ok) {
+          throw new Error("Failed to fetch DealsOffers");
+        }
+        const data = await res.json();
+
+        setNavCollections(data);
+      } catch (err) {
+        setError(err.message);
+        console.error("Error fetching DealsOffers:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchNavCategories();
+  }, []);
 
   //  end
   ///////////////
@@ -135,6 +157,7 @@ export const AppProvider = ({ children }) => {
     categories,
     collections,
     dealsOffers,
+    navCollections,
   };
   return <AppContext.Provider value={appInfo}>{children}</AppContext.Provider>;
 };

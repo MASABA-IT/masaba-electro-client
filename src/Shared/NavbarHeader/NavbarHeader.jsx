@@ -1,18 +1,21 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { IoMdMenu } from "react-icons/io";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
 import { Link } from "react-router-dom"; // Import Link from react-router-dom
+import { useProductStore } from "../../providers/AppProviders";
 
 const NavbarHeader = () => {
-  // Array of button data, you can add links and other data here
-  const buttonData = [
-    { text: "All Category", link: "/categories" },
-    { text: "Hot Offers", link: "/offers" },
-    { text: "Gift Boxes", link: "/gift-boxes" },
-    { text: "Projects", link: "/projects" },
-    { text: "Menu Item", link: "/menu-item" },
-  ];
+  const { navCollections = [], loading } = useProductStore();
+  const [waitCollections, setWaitCollections] = useState(true);
 
+  // Optional: Add artificial delay to simulate loading (if needed)
+  useEffect(() => {
+    if (!loading && navCollections?.collections?.length > 0) {
+      setWaitCollections(false);
+    }
+  }, [loading, navCollections]);
+
+  const isLoading = loading || waitCollections;
   return (
     <div className="navbar_header">
       <div className="navbar_content flex justify-between px-2 overflow-x-auto lg:overflow-visible text-sm">
@@ -20,23 +23,39 @@ const NavbarHeader = () => {
           <button className="hidden lg:flex">
             <IoMdMenu />
           </button>
-
+          <Link
+            to="/categories"
+            className="whitespace-nowrap   hover:text-blue-600 transition-all duration-300"
+          >
+            All Category
+          </Link>
           {/* Map through buttonData and render each button as a link */}
-          {buttonData.map((button, index) => (
-            <Link
-              key={index}
-              to={button.link}
-              className="whitespace-nowrap   hover:text-blue-600 transition-all duration-300"
-            >
-              {button.text}
-            </Link>
-          ))}
+          {isLoading || waitCollections
+            ? // Show placeholder skeletons when loading
+              Array.from({ length: 5 }).map((_, index) => (
+                <div
+                  key={index}
+                  className="h-4 w-24 bg-gray-300 rounded animate-pulse mr-4"
+                />
+              ))
+            : navCollections?.collections
+                ?.slice()
+                .reverse()
+                .map((collection, index) => (
+                  <Link
+                    key={index}
+                    to="/"
+                    className="whitespace-nowrap hover:text-blue-600 transition-all duration-300"
+                  >
+                    {collection.title}
+                  </Link>
+                ))}
 
           {/* Help button with dropdown */}
-          <button className="flex items-center ">
+          {/* <button className="flex items-center ">
             <span className="text-gray-700">Help</span>{" "}
             <MdOutlineKeyboardArrowDown />
-          </button>
+          </button> */}
         </div>
 
         <div className="flex gap-x-4 items-center">

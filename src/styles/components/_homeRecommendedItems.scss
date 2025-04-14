@@ -17,6 +17,7 @@
 .home_recommendedItems .grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: auto;
   gap: 1.5rem;
   padding: 1rem 0;
 }

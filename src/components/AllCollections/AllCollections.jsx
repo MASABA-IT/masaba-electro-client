@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaArrowRight } from "react-icons/fa";
 import { useProductStore } from "../../providers/AppProviders";
 
@@ -12,7 +12,7 @@ const CollectionItem = ({ item }) => {
     parseFloat(item.discount_price) < parseFloat(item.base_price);
 
   return (
-    <div className="collection-item relative p-4 bg-white rounded shadow min-h-[130px]">
+    <div className="collection-item relative p-4 bg-white rounded  min-h-[130px]">
       {/* Always render image to let it load */}
       <img
         src={`${BASE_URL}/${item.thumbnail}`}
@@ -75,7 +75,17 @@ const Collection = ({ collection }) => {
   for (let i = 0; i < collection?.limited_products.length; i += 4) {
     rows.push(collection?.limited_products.slice(i, i + 4));
   }
+  // screen change layout
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth > 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
   return (
     <div key={collection.id} className="collection-section shadow-sm ">
       <div className="block md:hidden p-4 bg-white">
@@ -102,21 +112,18 @@ const Collection = ({ collection }) => {
 
       <div className="collection-right">
         {/* MOBILE FOR 1 ROW */}
-        {window.innerWidth < 768 ? (
-          <div className="collection-row">
+        {!isMobile ? (
+          <div className="collection-row ">
             {collection?.limited_products.map((item) => (
               <CollectionItem key={item.id} item={item} />
             ))}
           </div>
         ) : (
-          // DESKTOP FOR 4 CARDS
-          rows.map((row, rowIndex) => (
-            <div key={rowIndex} className="collection-row">
-              {row.map((item) => (
-                <CollectionItem key={item.id} item={item} />
-              ))}
-            </div>
-          ))
+          <div className="collection-row  ">
+            {collection?.limited_products.map((item) => (
+              <CollectionItem key={item.id} item={item} />
+            ))}
+          </div>
         )}
       </div>
 
@@ -130,12 +137,43 @@ const Collection = ({ collection }) => {
 // Main AllCollections Component
 const AllCollections = () => {
   const { collections, loading } = useProductStore();
+  const [initialLoading, setInitialLoading] = useState(true);
 
+  useEffect(() => {
+    // Set a timeout to simulate the initial loading time (e.g., 500ms to 1 second)
+    const timer = setTimeout(() => {
+      setInitialLoading(false);
+    }, 500); // Adjust this delay to your preference (in milliseconds)
+
+    return () => clearTimeout(timer); // Cleanup the timeout on component unmount
+  }, []);
   return (
     <div className="all-collections">
-      {collections?.collectionWithAllProducts?.map((collection) => (
-        <Collection key={collection.id} collection={collection} />
-      ))}
+      {initialLoading || loading
+        ? // 🔄 Show loading skeletons instead of flashing nothing
+          Array.from({ length: 3 }).map((_, index) => (
+            <div
+              key={index}
+              className="collection-section shadow-sm p-4 mb-6 bg-white animate-pulse"
+            >
+              <div className="h-6 bg-gray-300 rounded w-1/3 mb-4" />
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="p-4 bg-gray-100 rounded min-h-[130px]"
+                  >
+                    <div className="h-6 bg-gray-300 rounded w-3/4 mb-2" />
+                    <div className="h-5 bg-gray-200 rounded w-1/2 mb-2" />
+                    <div className="h-20 w-20 ml-auto bg-gray-200 rounded mt-4" />
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))
+        : collections?.collectionWithAllProducts?.map((collection) => (
+            <Collection key={collection.id} collection={collection} />
+          ))}
     </div>
   );
 };

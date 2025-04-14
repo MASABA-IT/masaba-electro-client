@@ -2,7 +2,6 @@
 .product-main-offers {
   display: grid;
   grid-template-columns: 20% 80%;
-  min-height: 300px !important;
 }
 
 .main-offer-left {
@@ -11,7 +10,7 @@
 }
 .main-offer-right {
   display: grid;
-  grid-template-columns: repeat(5, 1fr); 
+  grid-template-columns: repeat(5, 1fr);
 }
 .countdown-timer {
   margin-top: 20px;
@@ -45,6 +44,7 @@
   flex-direction: column;
   justify-content: center;
   transition: box-shadow 0.3s ease;
+  min-height: 240px;
 }
 
 .offer-box:hover {

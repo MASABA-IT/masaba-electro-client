@@ -15,7 +15,7 @@ const Home = () => {
       <HomeEmail />
       <HomeRecommendedItems />
       <HomeExtraServices />
-      <HomeSuppliers />
+      {/* <HomeSuppliers /> */}
     </div>
   );
 };

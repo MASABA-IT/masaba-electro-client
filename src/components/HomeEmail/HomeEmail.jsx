@@ -21,14 +21,14 @@ const HomeEmail = () => {
           backgroundImage: `url(${bgImg})`,
         }}
       ></div>
-      <div className="absolute inset-0 bg-gradient-to-r from-[#2C7CF1]/80 to-[#00D1FF]/80"></div>
+      <div className="absolute  inset-0 bg-gradient-to-r from-[#2C7CF1]/80 to-[#00D1FF]/80"></div>
 
       {/* Left Side - Heading */}
-      <div className="relative w-full md:w-1/3 text-left md:p-6 z-10 self-start mt-10">
-        <h2 className="text-3xl md:text-5xl font-semibold text-white mb-4">
+      <div className="relative w-full md:w-1/2 text-left md:p-6 z-10 self-start mt-10">
+        <h2 className="text-2xl md:text-3xl font-semibold text-white mb-4">
           An easy way to send requests to all suppliers
         </h2>
-        <p className="hidden md:block md:text-lg text-gray-200">
+        <p className="hidden md:block md:text-2xl text-gray-200">
           Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
           eiusmod tempor incididunt.
         </p>
@@ -43,7 +43,7 @@ const HomeEmail = () => {
 
       {/* Right Side - Form (PC view) */}
       <div
-        className={`hidden md:flex h-[75%] relative w-full md:w-1/3 bg-white p-6 rounded-lg shadow-md z-10 flex-col gap-y-4`}
+        className={`hidden md:flex h-auto relative w-full md:w-1/2 bg-[#f2f2f2] p-6 rounded-lg shadow-md z-10 flex-col gap-y-4`}
       >
         <h2 className="text-3xl font-semibold text-black">
           Send Quote to Suppliers

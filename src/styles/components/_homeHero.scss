@@ -74,7 +74,6 @@
 @media (max-width: 768px) {
   .item-1 {
     grid-column: full-start / col-end 4;
-    background-color: rgb(107, 156, 92) !important;
   }
   .item-2 {
     grid-column: col-start 5 / col-end 7;
@@ -89,6 +88,6 @@
     display: none !important;
   }
   .item-2 {
-    grid-column: item-1-start/item-3-end !important;
+    grid-column: full-start/full-end !important;
   }
 }

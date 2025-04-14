@@ -64,7 +64,7 @@ const recommendedItems = [
 ];
 const HomeRecommendedItems = () => {
   const [visibleItems, setVisibleItems] = useState([]);
-
+  const [loading, setLoading] = useState(true);
   const handleIntersection = (entries, observer) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {

@@ -1,11 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Breadcrumb from "../../components/Breadcrumb/Breadcrumb";
 import CategoryList from "../../components/CategoryList/CategoryList";
 import CategoriesItems from "../../components/CategoriesItems/CategoriesItems";
 import { useProductStore } from "../../providers/AppProviders";
+import { useParams } from "react-router-dom";
 
 const AllCategories = () => {
-  const { allData, loading } = useProductStore();
+  const {
+    allData,
+    loading,
+    categories,
+    fetchSearchProducts,
+    searchCategories,
+  } = useProductStore();
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [selectedFeatures, setSelectedFeatures] = useState([]);
@@ -21,6 +28,19 @@ const AllCategories = () => {
     { label: "Home", link: "/" },
     { label: "Category", link: "/categories" },
   ];
+  //next
+  const { id } = useParams();
+  //-------------------------------------------------------------
+  useEffect(() => {
+    fetchSearchProducts({
+      // title: "Pariatur Nihil volu",
+      category_id: parseInt(id),
+      // collection_id: [25, 28],
+      // min_price: 5000,
+      // max_price: 20000,
+      // sort_price: "desc",
+    });
+  }, []);
 
   return (
     <section className="allcategories_content">
@@ -40,13 +60,16 @@ const AllCategories = () => {
         setSelectedPriceRange={setSelectedPriceRange}
         reset={reset}
         setReset={setReset}
-        allData={allData}
+        // allData={allData}
+        allData={searchCategories?.Products} //main
+        alldata={allData}
       />
       {loading ? (
         <div>Loading categories...</div>
       ) : (
         <CategoriesItems
-          allData={allData}
+          allData={searchCategories?.Products?.data} //main
+          alldata={allData}
           selectedCategories={selectedCategories}
           selectedBrands={selectedBrands}
           selectedFeatures={selectedFeatures}

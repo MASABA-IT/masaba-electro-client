@@ -76,7 +76,7 @@ const CategoriesBrandFilter = ({
   };
 
   return (
-    <div className="categoriesbrand_filter flex justify-start items-center py-4">
+    <div className="categoriesbrand_filter flex justify-start items-center   my-2">
       <div
         ref={scrollContainerRef}
         onMouseDown={handleMouseDown}
@@ -121,7 +121,7 @@ const CategoriesBrandFilter = ({
         className="text-2xl"
         style={{
           color: selectedItems.length === 0 ? "red" : "#007BFF",
-          padding: "10px 20px",
+          padding: "5px 20px",
           border: "none",
           borderRadius: "5px",
           cursor: selectedItems.length === 0 ? "not-allowed" : "pointer",

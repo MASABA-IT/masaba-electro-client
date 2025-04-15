@@ -20,6 +20,8 @@ const CategoriesItems = ({
   selectedPriceRange,
   selectedCondition,
   setReset,
+  ///
+  alldata,
 }) => {
   const [allProducts, setAllProducts] = useState([]); // All product data
   const [loading, setLoading] = useState(true);
@@ -29,20 +31,20 @@ const CategoriesItems = ({
 
   useEffect(() => {
     setLoading(true);
-    if (!allData.products || allData.products.length === 0) {
+    if (!allData || allData.length === 0) {
       console.error("Categories data is empty or undefined.");
       setLoading(false);
       return;
     }
 
-    if (allData?.products) {
-      setAllProducts(allData.products || []);
+    if (allData) {
+      setAllProducts(allData || []);
     } else {
       console.warn("Products category not found in the provided data.");
       setAllProducts([]);
     }
     setLoading(false);
-  }, [allData.products]);
+  }, [allData]);
 
   // Filtering the products based on selected filters
   const filteredProducts = allProducts
@@ -155,6 +157,7 @@ const CategoriesItems = ({
   const handleListView = () => {
     if (isGridView) setIsGridView(false);
   };
+  console.log(allData);
   return (
     <div className="categoriesitems_content">
       {isMobile ? (
@@ -196,7 +199,7 @@ const CategoriesItems = ({
               </button>
             </div>
           )}
-          <div className="sub_container flex flex-wrap items-center justify-between mt-4">
+          <div className="sub_container flex flex-wrap items-center justify-between ">
             <div className="verified-checkbox">
               <input type="checkbox" id="verified" />
               <label htmlFor="verified">Verified only</label>
@@ -245,18 +248,17 @@ const CategoriesItems = ({
 
       {loading ? (
         <div className="text-center py-5">Loading...</div>
-      ) : filteredProducts.length > 0 ? (
+      ) : allData?.length > 0 ? (
         <div
           className={`product-list grid  grid-cols-1 md:grid-cols-${
             isGridView ? 3 : 1
-          } lg:grid-cols-${isGridView ? 4 : 1} gap-4 mt-4`}
+          } lg:grid-cols-${isGridView ? 4 : 1} gap-4  `} //mt-4
         >
-          {currentProducts.map((product) => (
+          {allData.map((product) => (
             <SingleProductCard
               key={product.id}
               product={product}
               isGridView={isGridView}
-            
             />
           ))}
         </div>
@@ -267,7 +269,7 @@ const CategoriesItems = ({
       )}
 
       {/* Pagination */}
-      {filteredProducts.length > 0 ? (
+      {allData?.length > 0 ? (
         <PaginationsBtn
           currentPage={currentPage}
           totalPages={totalPages}

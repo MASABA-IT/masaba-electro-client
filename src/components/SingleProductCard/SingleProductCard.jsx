@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import { FaEye, FaRegHeart, FaRegStar } from "react-icons/fa"; // Eye icon from react-icons
 import { Link, useNavigate } from "react-router-dom";
 import StarRating from "../StarRating/StarRating";
+import { useProductStore } from "../../providers/AppProviders";
 
 const SingleProductCard = ({ product, isGridView }) => {
+  const { BASE_URL } = useProductStore();
+
   const [isLiked, setIsLiked] = useState(false);
   const navigate = useNavigate();
 
@@ -13,12 +16,13 @@ const SingleProductCard = ({ product, isGridView }) => {
     } else if (views >= 1000) {
       return (views / 1000).toFixed(1) + "k";
     } else {
-      return views.toString();
+      return views?.toString();
     }
   };
   ////////////////////
   ///// Navigate to the product details page with id, category, color, and condition as URL parameters
   // /categories/product/:id
+
   const handleProductClick = () => {
     navigate(
       `/categories/product/${product.category}/${product.condition}/${product.id}`
@@ -28,7 +32,7 @@ const SingleProductCard = ({ product, isGridView }) => {
     <div
       className={` product-card relative border rounded-lg overflow-hidden flex  flex-col cursor-pointer hover:shadow-md duration-100   md:flex-${
         isGridView ? "col" : "row"
-      } h-72 ${isGridView ? "md:h-full" : "md:h-[200px]"}`}
+      } h-72 ${isGridView ? "md:min-h-[326px] md:h-full" : "md:h-[200px]"}`}
       onClick={handleProductClick}
     >
       <div
@@ -40,8 +44,8 @@ const SingleProductCard = ({ product, isGridView }) => {
         // style={{ width: "80%", height: "65%" }}
       >
         <img
-          src={product.image}
-          alt={product.title}
+          src={`${BASE_URL}/${product?.thumbnail}`}
+          alt={product?.title}
           className="sm:h-[70%] md:h-full w-[90%]"
         />
       </div>
@@ -57,23 +61,23 @@ const SingleProductCard = ({ product, isGridView }) => {
           <div className="  h-[70%]">
             <div className="price-info md:mt-2">
               <span className="text-xl md:text-3xl font-bold text-gray-600">
-                ${product.discountPrice}
+                ${product?.discount_price}
               </span>
               <span className="text-xl line-through text-gray-400 ml-2">
-                ${product.price}
+                ${product?.base_price}
               </span>
             </div>
             {/* Rating and Views */}
             <div className="flex gap-x-4 mt-1">
               {/* Rating */}
               <div className="text-3xl flex items-center text-gray-400 ">
-                <StarRating rating={product.rating} />
+                <StarRating rating={product?.average_rating} />
               </div>
 
               {/* Views */}
               <div className="text-2xl flex items-center text-gray-500">
                 <FaEye className="mr-2" />
-                <span>{formatViews(product.views)}</span>
+                <span>{formatViews(product?.review_count)}</span>
               </div>
               {/* order */}
               <div className="hidden md:flex gap-x-4 ">
@@ -115,39 +119,49 @@ const SingleProductCard = ({ product, isGridView }) => {
           <h3 className=" md:text-2xl text-gray-500 block md:hidden">
             {product.title}
           </h3>
-          <div className="price-info mt-2">
+          {/* price */}
+          {product?.discount_price ? (
+            <div className="price-info mt-2">
+              <span className="text-3xl font-bold text-gray-600">
+                ৳{parseFloat(product?.discount_price)}
+              </span>
+              <span className="text-xl line-through text-gray-400 ml-2">
+                ৳{parseFloat(product?.base_price)}
+              </span>
+            </div>
+          ) : (
             <span className="text-3xl font-bold text-gray-600">
-              ${product.discountPrice}
+              ৳{parseFloat(product?.base_price)}
             </span>
-            <span className="text-xl line-through text-gray-400 ml-2">
-              ${product.price}
-            </span>
-          </div>
+          )}
           {/* Rating and Views */}
           <div className="flex gap-x-4 mt-1">
             {/* Rating */}
             <div className="text-3xl flex items-center text-gray-400 ">
-              <StarRating rating={product.rating} />
+              <StarRating rating={product?.average_rating} />
             </div>
 
             {/* Views */}
             <div className="text-2xl flex items-center text-gray-500">
               <FaEye className="mr-2" />
-              <span>{formatViews(product.views)}</span>
+              <span>{formatViews(product?.review_count)}</span>
             </div>
           </div>
-          <h3 className="text-2xl  text-gray-500 hidden md:block">
-            {product.title}
+          <h3 className="text-[18px]  text-gray-600 hidden md:block font-sans font-normal">
+            {product?.title}
           </h3>
-          <p className="text-xl text-gray-500">{product.subtitle}</p>
+          {/* <p className="text-xl text-gray-500">{product.subtitle}</p> */}
         </div>
       )}
       {/* heart */}
       <button
         className={`custom-button absolute xl:right-3 right-2 md:right-2 ${
-          isGridView ? "md:bottom-28  xl:bottom-34 md:right-2" : "top-4"
+          isGridView ? "md:bottom-20  xl:bottom-34 md:right-2" : "top-4"
         } border-2 p-3 rounded-lg text-2xl group hover:shadow-sm`}
-        onClick={() => setIsLiked(!isLiked)}
+        onClick={(e) => {
+          e.stopPropagation();
+          setIsLiked(!isLiked);
+        }}
       >
         <FaRegHeart className={isLiked ? "text-red-500" : "text-blue-400"} />
       </button>

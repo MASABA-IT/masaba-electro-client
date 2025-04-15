@@ -1,11 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion"; // Import framer-motion
 import { useProductStore } from "../../providers/AppProviders";
+import { useNavigate } from "react-router-dom";
 
 const Hero = () => {
-  const { categories } = useProductStore();
+  const { categories, fetchSearchProducts, searchCategories } =
+    useProductStore();
 
   const [activeIndex, setActiveIndex] = useState(0);
+  const navigate = useNavigate();
+  //-------------------------------------------------------------
 
   return (
     <div className="hero_content shadow-sm ">
@@ -28,7 +32,10 @@ const Hero = () => {
             : categories.map((category, index) => (
                 <motion.li
                   key={category.id}
-                  onClick={() => setActiveIndex(index)}
+                  onClick={() => {
+                    setActiveIndex(index);
+                    navigate(`/categories/${category?.id}`);
+                  }}
                   role="button"
                   className={`item-1 cursor-pointer ${
                     activeIndex === index ? "active" : ""

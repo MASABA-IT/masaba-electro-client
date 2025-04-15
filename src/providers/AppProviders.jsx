@@ -1,5 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useEffect, useState } from "react";
+import { buildSearchQuery } from "../utils/buildSearchQuery";
 
 // ✅ Import API Base URL from .env
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -10,14 +11,14 @@ export const AppProvider = ({ children }) => {
 
   //1 GLOBAL STATES
   const [categories, setCategories] = useState([]);
+  const [searchCategories, setSearchCategories] = useState(null);
   const [collections, setCollections] = useState(null);
   const [navCollections, setNavCollections] = useState(null);
   const [dealsOffers, setDealsOffers] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  //1.1 Categories
-  //loading, error
+  //1Categories
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -38,7 +39,26 @@ export const AppProvider = ({ children }) => {
     fetchCategories();
   }, []);
 
-  //1.2 Categories
+  //1.1 categories search
+  // {{loaclUrl}}/api/product/search?category_id=3
+  const fetchSearchProducts = async (params = {}) => {
+    setLoading(true);
+    try {
+      const query = buildSearchQuery(params);
+      const res = await fetch(`${BASE_URL}/api/product/search?${query}`);
+      if (!res.ok) throw new Error("Search failed");
+
+      const data = await res.json();
+      console.log(data);
+      setSearchCategories(data || data.products || []);
+    } catch (err) {
+      console.error("Search error:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  //2 collections-with-all-products
   useEffect(() => {
     const fetchCollections = async () => {
       try {
@@ -58,17 +78,15 @@ export const AppProvider = ({ children }) => {
     };
     fetchCollections();
   }, []);
-  //1.3 Deals Offers
+  //3 Deals Offers
   useEffect(() => {
     const fetchDealsOffers = async () => {
       try {
         const res = await fetch(`${BASE_URL}/api/deals-offers`);
-
         if (!res.ok) {
           throw new Error("Failed to fetch DealsOffers");
         }
         const data = await res.json();
-        console.log(data);
         setDealsOffers(data?.dealsOffers);
       } catch (err) {
         setError(err.message);
@@ -79,7 +97,7 @@ export const AppProvider = ({ children }) => {
     };
     fetchDealsOffers();
   }, []);
-  //1.4 NavCollection
+  //4 NavCollection
   useEffect(() => {
     const fetchNavCategories = async () => {
       try {
@@ -89,7 +107,6 @@ export const AppProvider = ({ children }) => {
           throw new Error("Failed to fetch DealsOffers");
         }
         const data = await res.json();
-
         setNavCollections(data);
       } catch (err) {
         setError(err.message);
@@ -158,6 +175,8 @@ export const AppProvider = ({ children }) => {
     collections,
     dealsOffers,
     navCollections,
+    fetchSearchProducts,
+    searchCategories,
   };
   return <AppContext.Provider value={appInfo}>{children}</AppContext.Provider>;
 };

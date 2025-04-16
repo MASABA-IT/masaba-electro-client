@@ -157,7 +157,7 @@ const CategoriesItems = ({
   const handleListView = () => {
     if (isGridView) setIsGridView(false);
   };
-  console.log(allData);
+
   return (
     <div className="categoriesitems_content">
       {isMobile ? (

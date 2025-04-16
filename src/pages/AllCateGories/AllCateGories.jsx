@@ -6,13 +6,7 @@ import { useProductStore } from "../../providers/AppProviders";
 import { useParams } from "react-router-dom";
 
 const AllCategories = () => {
-  const {
-    allData,
-    loading,
-    categories,
-    fetchSearchProducts,
-    searchCategories,
-  } = useProductStore();
+  const { loading, fetchSearchProducts, searchCategories } = useProductStore();
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [selectedFeatures, setSelectedFeatures] = useState([]);
@@ -62,14 +56,12 @@ const AllCategories = () => {
         setReset={setReset}
         // allData={allData}
         allData={searchCategories?.Products} //main
-        alldata={allData}
       />
       {loading ? (
         <div>Loading categories...</div>
       ) : (
         <CategoriesItems
-          allData={searchCategories?.Products?.data} //main
-          alldata={allData}
+          allData={searchCategories?.Products?.data}
           selectedCategories={selectedCategories}
           selectedBrands={selectedBrands}
           selectedFeatures={selectedFeatures}

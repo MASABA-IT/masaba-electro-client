@@ -1,6 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useEffect, useState } from "react";
 import { buildSearchQuery } from "../utils/buildSearchQuery";
+import axios from "axios";
 
 // ✅ Import API Base URL from .env
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -11,33 +12,113 @@ export const AppProvider = ({ children }) => {
 
   //1 GLOBAL STATES
   const [categories, setCategories] = useState([]);
+
   const [searchCategories, setSearchCategories] = useState(null);
   const [collections, setCollections] = useState(null);
   const [navCollections, setNavCollections] = useState(null);
   const [dealsOffers, setDealsOffers] = useState(null);
+  const [filters, setFilters] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  //1Categories
+  //1 FILTER DATA MULTI OR SINGLE
   useEffect(() => {
-    const fetchCategories = async () => {
+    const fetchFilterData = async () => {
+      setLoading(true);
+
+      // Local fallback values
+      const fallbackCategories = [];
+      const fallbackBrands = [];
+      const defaultPriceRanges = [
+        { min: 0, max: 100 },
+        { min: 101, max: 500 },
+        { min: 501, max: 1000 },
+        { min: 1001, max: 2000 },
+      ];
+      const defaultRatings = [5, 4, 3, 2, 1];
+      const defaultConditions = ["New", "Used", "Refurbished"];
+
       try {
-        const res = await fetch(`${BASE_URL}/api/categories`);
-        if (!res.ok) {
-          throw new Error("Failed to fetch categories");
-        }
-        const data = await res.json();
-        setCategories(data.categories);
+        const [categoryRes, brandRes] = await Promise.allSettled([
+          axios.get(`${BASE_URL}/api/categories`),
+          axios.get(`${BASE_URL}/api/brand/logo`),
+        ]);
+
+        const categories =
+          categoryRes.status === "fulfilled"
+            ? categoryRes.value.data?.categories || fallbackCategories
+            : fallbackCategories;
+
+        const brands =
+          brandRes.status === "fulfilled"
+            ? brandRes.value.data?.logos || fallbackBrands
+            : fallbackBrands;
+
+        const isAPIData = (data) =>
+          Array.isArray(data) &&
+          typeof data[0] === "object" &&
+          (data[0]?.id || data[0]?.name || data[0]?.title);
+
+        const filterData = [
+          {
+            key: "categories",
+            name: "Categories",
+            type: "list",
+            multiSelect: false,
+            children: { categories },
+            isAPIData: isAPIData(categories),
+            idKey: "id",
+            labelKey: "title",
+          },
+          {
+            key: "brands",
+            name: "Brands",
+            type: "checkbox",
+            multiSelect: true,
+            children: { categories: brands },
+            isAPIData: isAPIData(brands),
+            idKey: "id",
+            labelKey: "name",
+          },
+          {
+            key: "priceRange",
+            name: "Price Range",
+            type: "range",
+            multiSelect: true,
+            children: defaultPriceRanges,
+            isAPIData: false,
+          },
+          {
+            key: "ratings",
+            name: "Ratings",
+            type: "stars",
+            multiSelect: true,
+            children: { categories: defaultRatings },
+            isAPIData: false,
+          },
+          {
+            key: "condition",
+            name: "Condition",
+            type: "radio",
+            multiSelect: false,
+            children: { categories: defaultConditions },
+            isAPIData: false,
+          },
+        ];
+
+        setCategories(categories);
+        setFilters(filterData);
       } catch (err) {
-        setError(err.message);
-        console.error("Error fetching categories:", err);
+        console.error("❌ Unexpected error in filter fetching:", err);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchCategories();
+    fetchFilterData();
   }, []);
+
+  console.log("filters", filters);
 
   //1.1 categories search
   // {{loaclUrl}}/api/product/search?category_id=3
@@ -139,7 +220,6 @@ export const AppProvider = ({ children }) => {
     fetchCategories();
   }, []);
 
-  ////////////
   ////FILTER SINGLE PRODUCT VIEWS
   // Filter function that accepts only ID, category (single string), and condition
   function filterSingleProduct(allData, selectedFilters) {
@@ -171,6 +251,7 @@ export const AppProvider = ({ children }) => {
     allData,
     loading,
     filterSingleProduct,
+    filters,
     categories,
     collections,
     dealsOffers,

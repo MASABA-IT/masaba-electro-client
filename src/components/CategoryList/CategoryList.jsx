@@ -17,18 +17,18 @@ const CategoryList = ({
   setSelectedCondition,
   setSelectedPriceRange,
   selectedCategories,
-  alldata,
-  allData,
+
   reset,
   setReset,
 }) => {
-  const { categories } = useProductStore();
+  const { categories, filters } = useProductStore();
   const [minPrice, setMinPrice] = useState(100);
   const [maxPrice, setMaxPrice] = useState(1000);
   const [openCategories, setOpenCategories] = useState({
-    Category: true,
+    Categories: true,
     Brands: true,
     Features: true,
+    "Price Range": true,
   });
   const [expandedCategory, setExpandedCategory] = useState(null); // To track which category has expanded
   const [showAllCategories, setShowAllCategories] = useState({}); // Track "See All" for each category
@@ -55,10 +55,21 @@ const CategoryList = ({
     }));
   };
 
-  const handleMultiSelect = (item, setSelectedItems, selectedItems) => {
-    setSelectedItems((prev) =>
-      prev.includes(item) ? prev.filter((i) => i !== item) : [...prev, item]
+  const handleMultiSelect = (id, name, setSelectedItems, selectedItems) => {
+    //    handleMultiSelect( item.id, item.name, setSelectedBrands, selectedBrands )
+    console.log(
+      "item, setSelectedItems, selectedItems",
+      id,
+      name,
+      setSelectedItems,
+      selectedItems
     );
+    setSelectedItems((prev) =>
+      prev.includes(name) ? prev.filter((i) => i !== name) : [...prev, name]
+    );
+  };
+  const handleSelectRating = (rating) => {
+    setSelectedRatings((prev) => (prev === rating ? null : rating));
   };
 
   const handlePriceApply = () => {
@@ -85,113 +96,105 @@ const CategoryList = ({
       setReset(false); // Reset the trigger
     }
   }, [reset]);
+  console.log("filters", filters);
   return (
     <div className="categories_list mr-8 ">
-      <ul className="space-y-2">
-        {alldata.filters?.map((category, index) =>
-          category.name === "products" ? null : (
-            <li key={index} className="p-3  ">
-              <button
-                onClick={() => toggleCategory(index, category.name)}
-                className="w-full text-left flex justify-between items-center font-semibold text-2xl text-gray-800"
+      <ul>
+        {filters.map((filter, index) => (
+          <li key={index} className="p-3">
+            <button
+              onClick={() => toggleCategory(index, filter.name)}
+              className="w-full text-left flex justify-between items-center font-semibold text-2xl text-gray-800"
+            >
+              {filter.name}
+              <span
+                className={`transform transition-transform ${
+                  openCategories[filter.name] ? "rotate-180" : ""
+                }`}
               >
-                {category.name}
-                <span
-                  className={`transform transition-transform ${
-                    openCategories[category.name] ? "rotate-180" : ""
-                  }`}
-                >
-                  <IoIosArrowDown />
-                </span>
-              </button>
+                <IoIosArrowDown />
+              </span>
+            </button>
 
-              {openCategories[category.name] && (
-                <ul className="mt-2 ml-4 space-y-1 text-gray-700 text-lg  ">
-                  {category.name === "Brands" ||
-                  category.name === "Features" ||
-                  category.name === "Ratings" ? (
-                    <div className="w-full">
-                      <h3 className="text-xl font-bold mb-2">
-                        Select {category.name}
-                      </h3>
-                      {category.children
-                        .slice(
-                          0,
-                          showAllCategories[category.name]
-                            ? category.children.length
-                            : 5
-                        )
-                        .map((item, itemIndex) => (
-                          <label
-                            key={itemIndex}
-                            className="mb-4 text-gray-600 text-2xl flex items-center space-x-2 cursor-pointer"
-                          >
-                            <input
-                              type="checkbox"
-                              checked={
-                                category.name === "Brands"
-                                  ? selectedBrands.includes(item)
-                                  : category.name === "Features"
-                                  ? selectedFeatures.includes(item)
-                                  : selectedRatings.includes(item)
-                              }
-                              onChange={() =>
-                                handleMultiSelect(
-                                  item,
-                                  category.name === "Brands"
-                                    ? setSelectedBrands
-                                    : category.name === "Features"
-                                    ? setSelectedFeatures
-                                    : setSelectedRatings,
-                                  category.name === "Brands"
-                                    ? selectedBrands
-                                    : category.name === "Features"
-                                    ? selectedFeatures
-                                    : selectedRatings
-                                )
-                              }
-                              className="mr-2"
-                            />
-                            {category.name === "Ratings" ? (
-                              <div className="flex gap-2 my-1 text-orange-500 text-2xl">
-                                {[...Array(5)].map((_, index) =>
-                                  index < item ? (
-                                    <FaStar key={index} />
-                                  ) : (
-                                    <FaRegStar
-                                      key={index}
-                                      className="text-gray-300"
-                                    />
-                                  )
-                                )}
-                              </div>
+            {openCategories[filter.name] && (
+              <ul className="mt-2 ml-4 space-y-1 text-gray-700 text-lg">
+                <div className="w-full">
+                  <h3 className="text-xl font-bold mb-2">
+                    Select {filter.name}
+                  </h3>
+
+                  {/* TYPE: checkbox */}
+                  {filter.type === "checkbox" &&
+                    (filter.children?.categories || []).map((item, idx) => (
+                      <label
+                        key={idx}
+                        className="mb-4 text-gray-600 text-2xl flex items-center space-x-2 cursor-pointer"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={selectedBrands.includes(item.name)}
+                          onChange={() =>
+                            handleMultiSelect(
+                              item.id,
+                              item.name,
+                              setSelectedBrands,
+                              selectedBrands
+                            )
+                          }
+                          className="mr-2"
+                        />
+                        {item[filter.labelKey]}
+                      </label>
+                    ))}
+
+                  {/* TYPE: radio */}
+                  {filter.type === "radio" &&
+                    (filter.children?.categories || []).map((item, idx) => (
+                      <label
+                        key={idx}
+                        className="block cursor-pointer text-2xl text-gray-600"
+                      >
+                        <input
+                          type="radio"
+                          name={filter.key}
+                          value={item}
+                          checked={selectedCondition === item}
+                          onChange={() => handleConditionSelect(item)}
+                          className="mr-2"
+                        />
+                        {item}
+                      </label>
+                    ))}
+
+                  {/* TYPE: stars */}
+                  {filter.type === "stars" &&
+                    (filter.children?.categories || []).map((rating, idx) => (
+                      <label
+                        key={idx}
+                        className="mb-4 text-gray-600 text-2xl flex items-center space-x-2 cursor-pointer"
+                      >
+                        <input
+                          type="radio"
+                          name="rating"
+                          checked={selectedRatings === rating}
+                          onChange={() => handleSelectRating(rating)}
+                          className="mr-2"
+                        />
+                        <div className="flex gap-1 text-orange-500 text-2xl">
+                          {[...Array(5)].map((_, i) =>
+                            i < rating ? (
+                              <FaStar key={i} />
                             ) : (
-                              item
-                            )}
-                          </label>
-                        ))}
-                      {/* See All button */}
-                      {category.children.length > 5 &&
-                        !showAllCategories[category.name] && (
-                          <button
-                            onClick={() => toggleSeeAll(category.name)}
-                            className="text-blue-500 mt-2"
-                          >
-                            See All
-                          </button>
-                        )}
-                      {showAllCategories[category.name] && (
-                        <button
-                          onClick={() => toggleSeeAll(category.name)}
-                          className="text-blue-500 mt-2"
-                        >
-                          See Less
-                        </button>
-                      )}
-                    </div>
-                  ) : category.name === "Price Range" ? (
+                              <FaRegStar key={i} className="text-gray-300" />
+                            )
+                          )}
+                        </div>
+                      </label>
+                    ))}
+
+                  {/* TYPE: range */}
+                  {filter.type === "range" && (
                     <div className="text-2xl flex flex-col justify-center items-center">
-                      <h3 className="font-bold mb-2">Select Price Range</h3>
                       <Slider
                         value={[minPrice, maxPrice]}
                         onChange={(e, newValue) => {
@@ -202,7 +205,7 @@ const CategoryList = ({
                         max={5000}
                         valueLabelDisplay="auto"
                       />
-                      <div className="flex space-x-2 mt-2">
+                      <div className="flex space-x-2 mt-2 w-full">
                         <div className="w-1/2">
                           <label htmlFor="minPrice" className="block text-xl">
                             Min
@@ -212,10 +215,8 @@ const CategoryList = ({
                             id="minPrice"
                             value={minPrice}
                             onChange={(e) => {
-                              const value = Number(e.target.value);
-                              if (value >= 0 && value <= maxPrice) {
-                                setMinPrice(value);
-                              }
+                              const val = Number(e.target.value);
+                              if (val >= 0 && val <= maxPrice) setMinPrice(val);
                             }}
                             className="border outline-none p-2 rounded w-full text-gray-400"
                           />
@@ -229,10 +230,9 @@ const CategoryList = ({
                             id="maxPrice"
                             value={maxPrice}
                             onChange={(e) => {
-                              const value = Number(e.target.value);
-                              if (value <= 5000 && value >= minPrice) {
-                                setMaxPrice(value);
-                              }
+                              const val = Number(e.target.value);
+                              if (val <= 5000 && val >= minPrice)
+                                setMaxPrice(val);
                             }}
                             className="border outline-none p-2 rounded w-full text-gray-400"
                           />
@@ -245,72 +245,45 @@ const CategoryList = ({
                         Apply
                       </button>
                     </div>
-                  ) : category.name === "Condition" ? (
-                    <div className="space-y-3">
-                      {category.children.map((condition, conditionIndex) => (
+                  )}
+
+                  {/* TYPE: list (categories) */}
+                  {filter.type === "list" &&
+                    (filter.children?.categories || [])
+                      .slice(
+                        0,
+                        showAllCategories[filter.name]
+                          ? filter.children.categories.length
+                          : 5
+                      )
+                      .map((cat, idx) => (
                         <label
-                          key={conditionIndex}
-                          className="block cursor-pointer text-2xl text-gray-600"
+                          key={idx}
+                          className={`py-2 block text-gray-500 cursor-pointer text-2xl ${
+                            selectedCategories.includes(cat.id)
+                              ? "bg-blue-100 text-blue-600"
+                              : ""
+                          } hover:text-blue-500 hover:bg-gray-100`}
+                          onClick={() => handleCategorySelect(cat.title)}
                         >
-                          <input
-                            type="radio"
-                            name="condition"
-                            value={condition}
-                            checked={selectedCondition === condition}
-                            onChange={() => handleConditionSelect(condition)}
-                            className="mr-2"
-                          />
-                          {condition}
+                          {cat[filter.labelKey]}
                         </label>
                       ))}
-                    </div>
-                  ) : category.name === "Category" ? (
-                    <div className="mt-4">
-                      {category.children
-                        .slice(
-                          0,
-                          showAllCategories[category.name]
-                            ? category.children.length
-                            : 5
-                        )
-                        .map((child, childIndex) => (
-                          <label
-                            key={childIndex}
-                            className={`py-2 block text-gray-500 cursor-pointer text-2xl ${
-                              selectedCategories.includes(child)
-                                ? "bg-blue-100 text-blue-600"
-                                : ""
-                            } hover:text-blue-500 hover:bg-gray-100`}
-                            onClick={() => handleCategorySelect(child)}
-                          >
-                            {child}
-                          </label>
-                        ))}
-                      {/* See All button */}
-                      {category.children.length > 5 &&
-                        !showAllCategories[category.name] && (
-                          <button
-                            onClick={() => toggleSeeAll(category.name)}
-                            className="text-blue-500 mt-2"
-                          >
-                            See All
-                          </button>
-                        )}
-                      {showAllCategories[category.name] && (
-                        <button
-                          onClick={() => toggleSeeAll(category.name)}
-                          className="text-blue-500 mt-2"
-                        >
-                          See Less
-                        </button>
-                      )}
-                    </div>
-                  ) : null}
-                </ul>
-              )}
-            </li>
-          )
-        )}
+
+                  {/* See All / See Less */}
+                  {filter.children?.categories?.length > 5 && (
+                    <button
+                      onClick={() => toggleSeeAll(filter.name)}
+                      className="text-blue-500 mt-2"
+                    >
+                      {showAllCategories[filter.name] ? "See Less" : "See All"}
+                    </button>
+                  )}
+                </div>
+              </ul>
+            )}
+          </li>
+        ))}
       </ul>
     </div>
   );
@@ -635,3 +608,226 @@ const CategoryList = ({
 
 export default CategoryList;
 */
+/* {alldata.filters?.map((category, index) =>
+          category.name === "products" ? null : (
+            <li key={index} className="p-3  ">
+              <button
+                onClick={() => toggleCategory(index, category.name)}
+                className="w-full text-left flex justify-between items-center font-semibold text-2xl text-gray-800"
+              >
+                {category.name}
+                <span
+                  className={`transform transition-transform ${
+                    openCategories[category.name] ? "rotate-180" : ""
+                  }`}
+                >
+                  <IoIosArrowDown />
+                </span>
+              </button>
+
+              {openCategories[category.name] && (
+                <ul className="mt-2 ml-4 space-y-1 text-gray-700 text-lg  ">
+                  {category.name === "Brands" ||
+                  category.name === "Features" ||
+                  category.name === "Ratings" ? (
+                    <div className="w-full">
+                      <h3 className="text-xl font-bold mb-2">
+                        Select {category.name}
+                      </h3>
+                      {category.children
+                        .slice(
+                          0,
+                          showAllCategories[category.name]
+                            ? category.children.length
+                            : 5
+                        )
+                        .map((item, itemIndex) => (
+                          <label
+                            key={itemIndex}
+                            className="mb-4 text-gray-600 text-2xl flex items-center space-x-2 cursor-pointer"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={
+                                category.name === "Brands"
+                                  ? selectedBrands.includes(item)
+                                  : category.name === "Features"
+                                  ? selectedFeatures.includes(item)
+                                  : selectedRatings.includes(item)
+                              }
+                              onChange={() =>
+                                handleMultiSelect(
+                                  item,
+                                  category.name === "Brands"
+                                    ? setSelectedBrands
+                                    : category.name === "Features"
+                                    ? setSelectedFeatures
+                                    : setSelectedRatings,
+                                  category.name === "Brands"
+                                    ? selectedBrands
+                                    : category.name === "Features"
+                                    ? selectedFeatures
+                                    : selectedRatings
+                                )
+                              }
+                              className="mr-2"
+                            />
+                            {category.name === "Ratings" ? (
+                              <div className="flex gap-2 my-1 text-orange-500 text-2xl">
+                                {[...Array(5)].map((_, index) =>
+                                  index < item ? (
+                                    <FaStar key={index} />
+                                  ) : (
+                                    <FaRegStar
+                                      key={index}
+                                      className="text-gray-300"
+                                    />
+                                  )
+                                )}
+                              </div>
+                            ) : (
+                              item
+                            )}
+                          </label>
+                        ))}
+                      
+                      {category.children.length > 5 &&
+                        !showAllCategories[category.name] && (
+                          <button
+                            onClick={() => toggleSeeAll(category.name)}
+                            className="text-blue-500 mt-2"
+                          >
+                            See All
+                          </button>
+                        )}
+                      {showAllCategories[category.name] && (
+                        <button
+                          onClick={() => toggleSeeAll(category.name)}
+                          className="text-blue-500 mt-2"
+                        >
+                          See Less
+                        </button>
+                      )}
+                    </div>
+                  ) : category.name === "Price Range" ? (
+                    <div className="text-2xl flex flex-col justify-center items-center">
+                      <h3 className="font-bold mb-2">Select Price Range</h3>
+                      <Slider
+                        value={[minPrice, maxPrice]}
+                        onChange={(e, newValue) => {
+                          setMinPrice(newValue[0]);
+                          setMaxPrice(newValue[1]);
+                        }}
+                        min={0}
+                        max={5000}
+                        valueLabelDisplay="auto"
+                      />
+                      <div className="flex space-x-2 mt-2">
+                        <div className="w-1/2">
+                          <label htmlFor="minPrice" className="block text-xl">
+                            Min
+                          </label>
+                          <input
+                            type="number"
+                            id="minPrice"
+                            value={minPrice}
+                            onChange={(e) => {
+                              const value = Number(e.target.value);
+                              if (value >= 0 && value <= maxPrice) {
+                                setMinPrice(value);
+                              }
+                            }}
+                            className="border outline-none p-2 rounded w-full text-gray-400"
+                          />
+                        </div>
+                        <div className="w-1/2">
+                          <label htmlFor="maxPrice" className="block text-xl">
+                            Max
+                          </label>
+                          <input
+                            type="number"
+                            id="maxPrice"
+                            value={maxPrice}
+                            onChange={(e) => {
+                              const value = Number(e.target.value);
+                              if (value <= 5000 && value >= minPrice) {
+                                setMaxPrice(value);
+                              }
+                            }}
+                            className="border outline-none p-2 rounded w-full text-gray-400"
+                          />
+                        </div>
+                      </div>
+                      <button
+                        onClick={handlePriceApply}
+                        className="w-full text-center bg-white text-blue-500 border m-2 p-3 rounded hover:bg-zinc-50"
+                      >
+                        Apply
+                      </button>
+                    </div>
+                  ) : category.name === "Condition" ? (
+                    <div className="space-y-3">
+                      {category.children.map((condition, conditionIndex) => (
+                        <label
+                          key={conditionIndex}
+                          className="block cursor-pointer text-2xl text-gray-600"
+                        >
+                          <input
+                            type="radio"
+                            name="condition"
+                            value={condition}
+                            checked={selectedCondition === condition}
+                            onChange={() => handleConditionSelect(condition)}
+                            className="mr-2"
+                          />
+                          {condition}
+                        </label>
+                      ))}
+                    </div>
+                  ) : category.name === "Category" ? (
+                    <div className="mt-4">
+                      {category.children
+                        .slice(
+                          0,
+                          showAllCategories[category.name]
+                            ? category.children.length
+                            : 5
+                        )
+                        .map((child, childIndex) => (
+                          <label
+                            key={childIndex}
+                            className={`py-2 block text-gray-500 cursor-pointer text-2xl ${
+                              selectedCategories.includes(child)
+                                ? "bg-blue-100 text-blue-600"
+                                : ""
+                            } hover:text-blue-500 hover:bg-gray-100`}
+                            onClick={() => handleCategorySelect(child)}
+                          >
+                            {child}
+                          </label>
+                        ))}
+                   
+                      {category.children.length > 5 &&
+                        !showAllCategories[category.name] && (
+                          <button
+                            onClick={() => toggleSeeAll(category.name)}
+                            className="text-blue-500 mt-2"
+                          >
+                            See All
+                          </button>
+                        )}
+                      {showAllCategories[category.name] && (
+                        <button
+                          onClick={() => toggleSeeAll(category.name)}
+                          className="text-blue-500 mt-2"
+                        >
+                          See Less
+                        </button>
+                      )}
+                    </div>
+                  ) : null}
+                </ul>
+              )}
+            </li>
+          )
+        )}*/

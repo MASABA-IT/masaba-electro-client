@@ -58,28 +58,46 @@ const CountdownTimer = ({ endDate }) => {
 };
 
 // MainOffer Component
-const MainOffer = ({ offer }) => (
-  <motion.div
-    className="main-offer-left"
-    initial={{ opacity: 0, x: -100 }}
-    animate={{ opacity: 1, x: 0 }}
-    transition={{ duration: 0.8, ease: "easeOut" }}
-  >
-    <div>
-      <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
-        Deals and Offers
-      </h2>
-      <p className="text-xl md:text-2xl text-gray-600">{offer?.title}</p>
-      <p className="text-xl md:text-2xl">{offer?.subtitle}</p>
-    </div>
-    <div className="countdown-timer">
-      <h3 className="text-xl font-semibold text-gray-600">
-        Time Left for Offer:
-      </h3>
-      <CountdownTimer endDate={offer?.expire} />
-    </div>
-  </motion.div>
-);
+const MainOffer = ({ offer }) => {
+  const isLoading = !offer;
+  return (
+    <motion.div
+      className="main-offer-left"
+      initial={{ opacity: 0, x: -100 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+    >
+      {isLoading ? (
+        // FAKE
+        <div className="animate-pulse">
+          <div className="h-8 w-1/2 bg-gray-300 rounded mb-3" />
+          <div className="h-6 w-2/3 bg-gray-300 rounded mb-2" />
+          <div className="h-6 w-1/3 bg-gray-300 rounded mb-6" />
+
+          <div className="h-5 w-40 bg-gray-300 rounded mb-2" />
+          <div className="h-8 w-32 bg-gray-300 rounded" />
+        </div>
+      ) : (
+        // ✅ Real
+        <>
+          <div>
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
+              Deals and Offers
+            </h2>
+            <p className="text-xl md:text-2xl text-gray-600">{offer.title}</p>
+            <p className="text-xl md:text-2xl">{offer.subtitle}</p>
+          </div>
+          <div className="countdown-timer mt-4">
+            <h3 className="text-xl font-semibold text-gray-600">
+              Time Left for Offer:
+            </h3>
+            <CountdownTimer endDate={offer.expire} />
+          </div>
+        </>
+      )}
+    </motion.div>
+  );
+};
 
 // OfferItem Component
 const OfferItem = ({ item }) => {
@@ -89,7 +107,7 @@ const OfferItem = ({ item }) => {
   const discountPercent = ((base - discount) / base) * 100;
 
   // State to track when the image has finished loading
-  const [imageLoaded, setImageLoaded] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(!item);
 
   return (
     <motion.div

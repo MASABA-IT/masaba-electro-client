@@ -63,9 +63,9 @@ const CategoriesBrandFilter = ({
     const updatedItems = selectedItems.filter((item) => item !== itemToRemove);
     setSelectedItems(updatedItems);
     // Update selectedBrands only if the item removed is a brand
-    if (selectedBrands.includes(itemToRemove)) {
-      setReset(true);
-    }
+    // if (selectedBrands.includes(itemToRemove)) {
+    //   setReset(true);
+    // }
   };
 
   // Function to clear all selected filters

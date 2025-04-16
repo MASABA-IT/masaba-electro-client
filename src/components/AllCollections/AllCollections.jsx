@@ -137,21 +137,12 @@ const Collection = ({ collection }) => {
 // Main AllCollections Component
 const AllCollections = () => {
   const { collections, loading } = useProductStore();
-  const [initialLoading, setInitialLoading] = useState(true);
 
-  useEffect(() => {
-    // Set a timeout to simulate the initial loading time (e.g., 500ms to 1 second)
-    const timer = setTimeout(() => {
-      setInitialLoading(false);
-    }, 500); // Adjust this delay to your preference (in milliseconds)
-
-    return () => clearTimeout(timer); // Cleanup the timeout on component unmount
-  }, []);
   return (
     <div className="all-collections">
-      {initialLoading || loading
+      {!collections || loading
         ? // 🔄 Show loading skeletons instead of flashing nothing
-          Array.from({ length: 3 }).map((_, index) => (
+          Array.from({ length: 2 }).map((_, index) => (
             <div
               key={index}
               className="collection-section shadow-sm p-4 mb-6 bg-white animate-pulse"

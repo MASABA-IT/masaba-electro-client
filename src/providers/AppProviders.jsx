@@ -66,7 +66,7 @@ export const AppProvider = ({ children }) => {
             type: "list",
             multiSelect: false,
             children: { categories },
-            isAPIData: isAPIData(categories),
+            isAPIData: isAPIData(categories), //before set
             idKey: "id",
             labelKey: "title",
           },
@@ -96,14 +96,14 @@ export const AppProvider = ({ children }) => {
             children: { categories: defaultRatings },
             isAPIData: false,
           },
-          {
-            key: "condition",
-            name: "Condition",
-            type: "radio",
-            multiSelect: false,
-            children: { categories: defaultConditions },
-            isAPIData: false,
-          },
+          // {
+          //   key: "condition",
+          //   name: "Condition",
+          //   type: "radio",
+          //   multiSelect: false,
+          //   children: { categories: defaultConditions },
+          //   isAPIData: false,
+          // },
         ];
 
         setCategories(categories);

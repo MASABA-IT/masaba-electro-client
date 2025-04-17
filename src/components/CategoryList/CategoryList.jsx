@@ -7,7 +7,7 @@ import { li } from "framer-motion/client";
 
 const CategoryList = ({
   selectedBrands,
-  selectedFeatures,
+  // selectedFeatures,
   selectedRatings,
   selectedCondition,
   setSelectedCategories,
@@ -21,7 +21,7 @@ const CategoryList = ({
   reset,
   setReset,
 }) => {
-  const { categories, filters } = useProductStore();
+  const { filters } = useProductStore();
   const [minPrice, setMinPrice] = useState(100);
   const [maxPrice, setMaxPrice] = useState(1000);
   const [openCategories, setOpenCategories] = useState({
@@ -29,9 +29,10 @@ const CategoryList = ({
     Brands: true,
     Features: true,
     "Price Range": true,
+    Ratings: true,
   });
-  const [expandedCategory, setExpandedCategory] = useState(null); // To track which category has expanded
-  const [showAllCategories, setShowAllCategories] = useState({}); // Track "See All" for each category
+  const [expandedCategory, setExpandedCategory] = useState(null);
+  const [showAllCategories, setShowAllCategories] = useState({});
 
   // Update the selected price range when the slider changes
   useEffect(() => {
@@ -40,12 +41,12 @@ const CategoryList = ({
 
   // Update selected categories
   const handleCategorySelect = (category) => {
-    setSelectedCategories([category]); // Replace the previous category with the new one
+    setSelectedCategories([category]);
   };
 
   // Update selected condition
   const handleConditionSelect = (condition) => {
-    setSelectedCondition(condition); // Replace the condition with the new one
+    setSelectedCondition(condition);
   };
   // console.log("categoryList", allData);
   const toggleCategory = (index, categoryName) => {
@@ -55,21 +56,18 @@ const CategoryList = ({
     }));
   };
 
-  const handleMultiSelect = (id, name, setSelectedItems, selectedItems) => {
-    //    handleMultiSelect( item.id, item.name, setSelectedBrands, selectedBrands )
-    console.log(
-      "item, setSelectedItems, selectedItems",
-      id,
-      name,
-      setSelectedItems,
-      selectedItems
-    );
-    setSelectedItems((prev) =>
-      prev.includes(name) ? prev.filter((i) => i !== name) : [...prev, name]
-    );
+  const handleMultiSelect = (item, setSelectedItems, selectedItems) => {
+    const exists = selectedItems.some((i) => i.id === item.id);
+
+    if (exists) {
+      setSelectedItems(selectedItems.filter((i) => i.id !== item.id));
+    } else {
+      setSelectedItems([...selectedItems, item]);
+    }
   };
+
   const handleSelectRating = (rating) => {
-    setSelectedRatings((prev) => (prev === rating ? null : rating));
+    setSelectedRatings(rating);
   };
 
   const handlePriceApply = () => {
@@ -87,7 +85,7 @@ const CategoryList = ({
     if (reset) {
       setSelectedBrands([]);
       setSelectedFeatures([]);
-      setSelectedRatings([]);
+      setSelectedRatings(null);
       setSelectedCondition(null);
       setSelectedCategories([]);
       setSelectedPriceRange({ min: 0, max: 5000 });
@@ -97,6 +95,7 @@ const CategoryList = ({
     }
   }, [reset]);
   console.log("filters", filters);
+
   return (
     <div className="categories_list mr-8 ">
       <ul>
@@ -125,27 +124,35 @@ const CategoryList = ({
 
                   {/* TYPE: checkbox */}
                   {filter.type === "checkbox" &&
-                    (filter.children?.categories || []).map((item, idx) => (
-                      <label
-                        key={idx}
-                        className="mb-4 text-gray-600 text-2xl flex items-center space-x-2 cursor-pointer"
-                      >
-                        <input
-                          type="checkbox"
-                          checked={selectedBrands.includes(item.name)}
-                          onChange={() =>
-                            handleMultiSelect(
-                              item.id,
-                              item.name,
-                              setSelectedBrands,
-                              selectedBrands
-                            )
-                          }
-                          className="mr-2"
-                        />
-                        {item[filter.labelKey]}
-                      </label>
-                    ))}
+                    (filter.children?.categories || [])
+                      .slice(
+                        0,
+                        showAllCategories[filter.name]
+                          ? filter.children.categories.length
+                          : 5
+                      )
+                      .map((item, idx) => (
+                        <label
+                          key={idx}
+                          className="mb-4 text-gray-600 text-2xl flex items-center space-x-2 cursor-pointer"
+                        >
+                          <input
+                            type="checkbox"
+                            checked={selectedBrands.some(
+                              (brand) => brand.id === item.id
+                            )}
+                            onChange={() =>
+                              handleMultiSelect(
+                                item,
+                                setSelectedBrands,
+                                selectedBrands
+                              )
+                            }
+                            className="mr-2"
+                          />
+                          {item[filter.labelKey]}
+                        </label>
+                      ))}
 
                   {/* TYPE: radio */}
                   {filter.type === "radio" &&
@@ -168,7 +175,7 @@ const CategoryList = ({
 
                   {/* TYPE: stars */}
                   {filter.type === "stars" &&
-                    (filter.children?.categories || []).map((rating, idx) => (
+                    (filter.children.categories || []).map((rating, idx) => (
                       <label
                         key={idx}
                         className="mb-4 text-gray-600 text-2xl flex items-center space-x-2 cursor-pointer"

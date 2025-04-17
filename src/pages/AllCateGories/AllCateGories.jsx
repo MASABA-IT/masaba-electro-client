@@ -10,7 +10,7 @@ const AllCategories = () => {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [selectedBrands, setSelectedBrands] = useState([]);
   const [selectedFeatures, setSelectedFeatures] = useState([]);
-  const [selectedRatings, setSelectedRatings] = useState([]);
+  const [selectedRatings, setSelectedRatings] = useState(null);
   const [selectedCondition, setSelectedCondition] = useState(null);
   const [selectedPriceRange, setSelectedPriceRange] = useState({
     min: 0,
@@ -22,6 +22,7 @@ const AllCategories = () => {
     { label: "Home", link: "/" },
     { label: "Category", link: "/categories" },
   ];
+
   //next
   const { id } = useParams();
   //-------------------------------------------------------------

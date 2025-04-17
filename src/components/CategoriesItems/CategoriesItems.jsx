@@ -20,8 +20,7 @@ const CategoriesItems = ({
   selectedPriceRange,
   selectedCondition,
   setReset,
-  ///
-  alldata,
+ 
 }) => {
   const [allProducts, setAllProducts] = useState([]); // All product data
   const [loading, setLoading] = useState(true);

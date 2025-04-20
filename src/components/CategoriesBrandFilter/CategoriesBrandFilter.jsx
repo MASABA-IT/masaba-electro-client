@@ -1,15 +1,23 @@
 import React, { useState, useEffect, useRef } from "react";
-import PropTypes from "prop-types";
+import PropTypes, { number } from "prop-types";
 import { TiInfo } from "react-icons/ti";
 import { FaStar, FaRegStar } from "react-icons/fa";
-const CategoriesBrandFilter = ({
-  selectedBrands = [],
-  selectedFeatures = [],
-  selectedRatings,
-  selectedCondition,
-  setReset,
-}) => {
-  const [selectedItems, setSelectedItems] = useState([]);
+import { useProductStore } from "../../providers/AppProviders";
+const CategoriesBrandFilter = () => {
+  const {
+    selectedBrands,
+    selectedFeatures,
+    selectedCondition,
+    selectedRatings,
+    setReset,
+    selectedItems,
+    setSelectedItems,
+    setSelectedBrands,
+    setSelectedFeatures,
+    setSelectedCondition,
+    setSelectedRatings,
+  } = useProductStore();
+
   const scrollContainerRef = useRef(null);
 
   // Using refs to track the dragging state and starting positions
@@ -28,7 +36,7 @@ const CategoriesBrandFilter = ({
   useEffect(() => {
     // Combine all the selected items into one array
     const allSelectedItems = [
-      ...selectedBrands.map((brand) => brand.name),
+      ...selectedBrands.map((brand) => brand),
 
       ...selectedFeatures,
       selectedRatings ? (
@@ -76,21 +84,51 @@ const CategoriesBrandFilter = ({
   };
 
   // Function to remove a single item from the list
-  console.log("selectedItems", selectedItems);
+
   const removeItem = (itemToRemove) => {
-    console.log("itemRemove", itemToRemove);
-    const updatedItems = selectedItems.filter((item) => item !== itemToRemove);
+    console.log("remove-item", itemToRemove);
+
+    // Remove from selectedItems
+    const updatedItems = selectedItems.filter(
+      (item) => item.id !== itemToRemove.id
+    );
     setSelectedItems(updatedItems);
-    // Update selectedBrands only if the item removed is a brand
-    // if (selectedBrands.includes(itemToRemove)) {
-    //   setReset(true);
-    // }
+
+    // If the item exists in selectedBrands, remove it
+    const isBrand = selectedBrands.some((b) => b.id === itemToRemove.id);
+    if (isBrand) {
+      setSelectedBrands(selectedBrands.filter((b) => b.id !== itemToRemove.id));
+      return;
+    }
+
+    // If the item exists in selectedFeatures, remove it
+    const isFeature = selectedFeatures.some((f) => f.id === itemToRemove.id);
+    if (isFeature) {
+      setSelectedFeatures(
+        selectedFeatures.filter((f) => f.id !== itemToRemove.id)
+      );
+      return;
+    }
+
+    //If it's a rating (React element), remove it by clearing the rating
+    if (Array.isArray(itemToRemove.props?.children)) {
+      setSelectedRatings(null);
+      return;
+    }
+
+    // If it's a condition
+    if (
+      typeof itemToRemove === "object" &&
+      itemToRemove?.props?.className?.includes("text-orange-500")
+    ) {
+      setSelectedCondition(null);
+      return;
+    }
   };
 
   // Function to clear all selected filters
   const clearAllFilters = () => {
     setSelectedItems([]);
-
     setReset(true);
   };
 
@@ -110,14 +148,14 @@ const CategoriesBrandFilter = ({
         {/* Loop through selected items and create a button for each */}
         {selectedItems.map((item) => (
           <div
-            key={item}
+            key={item.id || item}
             className="bg-white py-1 px-2 border border-blue-100 rounded-lg group inline-block relative"
             style={{
               display: "flex",
               alignItems: "center",
             }}
           >
-            <span className="px-4">{item}</span>
+            <span className="px-4">{item.name ? item.name : item}</span>
             <button
               className="absolute -right-2 -top-4 z-10 text-red-500  group-hover:text-red-400 scale-95 duration-75  hover:scale-125 ease"
               style={{
@@ -149,10 +187,7 @@ const CategoriesBrandFilter = ({
         disabled={selectedItems.length === 0}
       >
         {selectedItems.length === 0 ? (
-          <span className="flex text-2xl gap-x-2">
-            <TiInfo className="text-amber-400 " />
-            Please Select Again!
-          </span>
+          <></>
         ) : (
           <span>Clear&nbsp;All&nbsp;Filters</span>
         )}

@@ -20,13 +20,11 @@ const SingleProductCard = ({ product, isGridView }) => {
     }
   };
   ////////////////////
-  ///// Navigate to the product details page with id, category, color, and condition as URL parameters
+  ///// Navigate to the product details page wi th id, category, color, and condition as URL parameters
   // /categories/product/:id
 
   const handleProductClick = () => {
-    navigate(
-      `/categories/product/${product.category}/${product.condition}/${product.id}`
-    );
+    navigate(`/categories/product/${product.id}`);
   };
   return (
     <div

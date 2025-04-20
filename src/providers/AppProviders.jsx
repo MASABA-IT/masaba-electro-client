@@ -20,7 +20,18 @@ export const AppProvider = ({ children }) => {
   const [filters, setFilters] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  //////////////////
+  const [selectedCategories, setSelectedCategories] = useState(null);
+  const [selectedBrands, setSelectedBrands] = useState([]);
+  const [selectedFeatures, setSelectedFeatures] = useState([]);
+  const [selectedRatings, setSelectedRatings] = useState(null);
+  const [selectedCondition, setSelectedCondition] = useState(null);
+  const [selectedPriceRange, setSelectedPriceRange] = useState({
+    min: 0,
+    max: 5000,
+  });
+  const [selectedItems, setSelectedItems] = useState([]);
+  const [reset, setReset] = useState(false);
   //1 FILTER DATA MULTI OR SINGLE
   useEffect(() => {
     const fetchFilterData = async () => {
@@ -118,8 +129,6 @@ export const AppProvider = ({ children }) => {
     fetchFilterData();
   }, []);
 
-  console.log("filters", filters);
-
   //1.1 categories search
   // {{loaclUrl}}/api/product/search?category_id=3
   const fetchSearchProducts = async (params = {}) => {
@@ -130,7 +139,7 @@ export const AppProvider = ({ children }) => {
       if (!res.ok) throw new Error("Search failed");
 
       const data = await res.json();
-      console.log(data);
+
       setSearchCategories(data || data.products || []);
     } catch (err) {
       console.error("Search error:", err);
@@ -204,11 +213,11 @@ export const AppProvider = ({ children }) => {
   ///////ALL DATA
 
   useEffect(() => {
-    const fetchCategories = async () => {
+    const allProducts = async () => {
       try {
-        const response = await fetch("/src/data/categories.json");
+        const response = await fetch(`${BASE_URL}/api/products`);
         const data = await response.json();
-
+        console.log(data.products, "data");
         setAllData(data);
       } catch (error) {
         console.error("Error fetching categories data:", error);
@@ -217,25 +226,45 @@ export const AppProvider = ({ children }) => {
       }
     };
 
-    fetchCategories();
+    allProducts();
   }, []);
+  ///////////////
+  ///////ALL DATA
+
+  // useEffect(() => {
+  //   const fetchCategories = async () => {
+  //     try {
+  //       const response = await fetch("/src/data/categories.json");
+  //       const data = await response.json();
+
+  //       setAllData(data);
+  //     } catch (error) {
+  //       console.error("Error fetching categories data:", error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchCategories();
+  // }, []);
 
   ////FILTER SINGLE PRODUCT VIEWS
   // Filter function that accepts only ID, category (single string), and condition
   function filterSingleProduct(allData, selectedFilters) {
     const { products } = allData;
-    const { id, category, condition } = selectedFilters;
-
+    const { id } = selectedFilters;
+    // const { id, category, condition } = selectedFilters;
+    console.log(products, id);
     return products.filter((product) => {
       // Filter by category (single string match)
-      if (category && product.category !== category) {
-        return false;
-      }
+      // if (category && product.category !== category) {
+      //   return false;
+      // }
 
       // Filter by condition
-      if (condition && product.condition !== condition) {
-        return false;
-      }
+      // if (condition && product.condition !== condition) {
+      //   return false;
+      // }
 
       // Filter by ID
       if (id && product.id !== id) {
@@ -245,7 +274,7 @@ export const AppProvider = ({ children }) => {
       return true;
     });
   }
-
+  console.log(collections, "collections");
   const appInfo = {
     BASE_URL,
     allData,
@@ -258,6 +287,23 @@ export const AppProvider = ({ children }) => {
     navCollections,
     fetchSearchProducts,
     searchCategories,
+    // filter//
+    selectedCategories,
+    setSelectedCategories,
+    selectedBrands,
+    setSelectedBrands,
+    selectedFeatures,
+    setSelectedFeatures,
+    selectedRatings,
+    setSelectedRatings,
+    selectedCondition,
+    setSelectedCondition,
+    selectedPriceRange,
+    setSelectedPriceRange,
+    selectedItems,
+    setSelectedItems,
+    reset,
+    setReset,
   };
   return <AppContext.Provider value={appInfo}>{children}</AppContext.Provider>;
 };

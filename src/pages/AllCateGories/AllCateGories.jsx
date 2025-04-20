@@ -6,71 +6,51 @@ import { useProductStore } from "../../providers/AppProviders";
 import { useParams } from "react-router-dom";
 
 const AllCategories = () => {
-  const { loading, fetchSearchProducts, searchCategories } = useProductStore();
-  const [selectedCategories, setSelectedCategories] = useState([]);
-  const [selectedBrands, setSelectedBrands] = useState([]);
-  const [selectedFeatures, setSelectedFeatures] = useState([]);
-  const [selectedRatings, setSelectedRatings] = useState(null);
-  const [selectedCondition, setSelectedCondition] = useState(null);
-  const [selectedPriceRange, setSelectedPriceRange] = useState({
-    min: 0,
-    max: 5000,
-  });
+  const { loading, fetchSearchProducts, searchCategories, selectedCategories } =
+    useProductStore();
 
-  const [reset, setReset] = useState(false);
   const breadcrumbItems = [
     { label: "Home", link: "/" },
     { label: "Category", link: "/categories" },
   ];
 
   //next
+
   const { id } = useParams();
-  //-------------------------------------------------------------
+
+  const [categoryId, setCategoryId] = useState(null);
+
+  // Set categoryId initially from URL param
   useEffect(() => {
-    fetchSearchProducts({
-      // title: "Pariatur Nihil volu",
-      category_id: parseInt(id),
-      // collection_id: [25, 28],
-      // min_price: 5000,
-      // max_price: 20000,
-      // sort_price: "desc",
-    });
-  }, []);
+    if (id) {
+      setCategoryId(parseInt(id));
+    }
+  }, [id]);
+
+  // Update categoryId when user selects a category
+  useEffect(() => {
+    if (selectedCategories?.id) {
+      setCategoryId(selectedCategories?.id);
+    }
+  }, [selectedCategories?.id]);
+
+  // Fetch products whenever categoryId changes
+  useEffect(() => {
+    if (categoryId) {
+      fetchSearchProducts({
+        category_id: categoryId,
+      });
+    }
+  }, [categoryId]);
 
   return (
     <section className="allcategories_content">
       <Breadcrumb items={breadcrumbItems} />
-      <CategoryList
-        selectedCategories={selectedCategories}
-        selectedBrands={selectedBrands}
-        selectedFeatures={selectedFeatures}
-        selectedRatings={selectedRatings}
-        selectedPriceRange={selectedPriceRange}
-        selectedCondition={selectedCondition}
-        setSelectedCategories={setSelectedCategories}
-        setSelectedBrands={setSelectedBrands}
-        setSelectedFeatures={setSelectedFeatures}
-        setSelectedRatings={setSelectedRatings}
-        setSelectedCondition={setSelectedCondition}
-        setSelectedPriceRange={setSelectedPriceRange}
-        reset={reset}
-        setReset={setReset}
-        // allData={allData}
-        allData={searchCategories?.Products} //main
-      />
+      <CategoryList allData={searchCategories?.Products} />
       {loading ? (
         <div>Loading categories...</div>
       ) : (
-        <CategoriesItems
-          allData={searchCategories?.Products?.data}
-          selectedCategories={selectedCategories}
-          selectedBrands={selectedBrands}
-          selectedFeatures={selectedFeatures}
-          selectedRatings={selectedRatings}
-          selectedPriceRange={selectedPriceRange}
-          selectedCondition={selectedCondition}
-          setReset={setReset}
-        />
+        <CategoriesItems allData={searchCategories?.Products?.data} />
       )}
     </section>
   );

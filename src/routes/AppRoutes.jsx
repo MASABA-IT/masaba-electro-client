@@ -26,7 +26,7 @@ const AppRoutes = () => {
           element: <AllCategories />,
         },
         {
-          path: "/categories/product/:category/:condition/:id",
+          path: "/categories/product/:id",
           element: <ProductDetails />,
         },
         {

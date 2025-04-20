@@ -33,8 +33,7 @@ const ProductDetails = () => {
   // //////////////////////
   const breadcrumbItems = [
     { label: "Home", link: "/" },
-    { label: "Category", link: "/categories" },
-    { label: category || "Unknown Category", p: "" }, // Show the category name
+    { label: "Category", link: "/categories" }, // Show the category name
     { label: productTitle || `${filteredProducts[0]?.title}`, p: "" }, // Show the product title if available, otherwise show the product ID
   ];
   const smallImages = [
@@ -45,7 +44,7 @@ const ProductDetails = () => {
     "/src/assets/imgs/imgm-5.jpeg",
     "/src/assets/imgs/imgm-6.webp",
   ];
-  console.log(allData);
+  console.log(allData.products);
   useEffect(() => {
     if (loading) {
       return;
@@ -59,14 +58,13 @@ const ProductDetails = () => {
     const selectedFilters = {
       id: id ? parseInt(id) : null,
       categories: category || "",
-      condition: condition || "Any",
     };
 
     const filteredData = filterSingleProduct(allData, selectedFilters);
     setFilteredProducts(filteredData);
-
-    if (filteredData.length > 0) {
-      const product = filteredData;
+    console.log("filterData", filteredData);
+    if (filteredData?.length > 0) {
+      const product = filteredData[0];
       setProductTitle(product.title);
     }
   }, [id, category, condition, allData, loading, filterSingleProduct]);
@@ -82,7 +80,7 @@ const ProductDetails = () => {
   const handleClick = () => {
     setSaved(!saved); // Toggle heart state
   };
-  console.log(filteredProducts);
+
   return (
     <div className="product_content">
       <Breadcrumb items={breadcrumbItems} />
@@ -114,7 +112,7 @@ const ProductDetails = () => {
           <h2 className="text-2xl xl:text-3xl font-medium font-sans ">
             <span>{filteredProducts[0]?.title}</span>,&nbsp;
             <span>{filteredProducts[0]?.subtitle}</span> <br />
-            {filteredProducts[0]?.features.map((feature) => (
+            {filteredProducts[0]?.features?.map((feature) => (
               <span>{feature}&nbsp;</span>
             ))}
           </h2>
@@ -145,7 +143,9 @@ const ProductDetails = () => {
           {/* price-box */}
           <div className="flex items-center   gap-x-4 py-6 px-4 bg-orange-100 mt-4  ">
             <div className="flex flex-col border-r-2 border-neutral-300 p-4 md:pr-10 xl:pr-16 ">
-              <p className="text-2xl xl:text-3xl font-bold text-red-500">$98.00</p>
+              <p className="text-2xl xl:text-3xl font-bold text-red-500">
+                $98.00
+              </p>
               <span className="text-2xl">50-100 pcs</span>
             </div>
             <div className="flex flex-col border-r-2 border-neutral-300 p-4 pr-16">

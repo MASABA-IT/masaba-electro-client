@@ -4,24 +4,23 @@ import { IoReorderFourSharp } from "react-icons/io5";
 import { PiGridFourFill } from "react-icons/pi";
 import CategoriesBrandFilter from "../CategoriesBrandFilter/CategoriesBrandFilter";
 import SingleProductCard from "../SingleProductCard/SingleProductCard";
-import { FaChevronDown, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import PaginationsBtn from "../PaginationsBtn/PaginationsBtn";
 import { useIsMobile } from "../../hooks/useIsMobile";
 import { MdOutlineSort } from "react-icons/md";
 import { CiFilter } from "react-icons/ci";
 import { iconButtonClasses } from "@mui/material";
+import { useProductStore } from "../../providers/AppProviders";
 
-const CategoriesItems = ({
-  allData,
-  selectedCategories,
-  selectedBrands,
-  selectedFeatures,
-  selectedRatings,
-  selectedPriceRange,
-  selectedCondition,
-  setReset,
- 
-}) => {
+const CategoriesItems = ({ allData }) => {
+  const {
+    selectedFeatures,
+    selectedBrands,
+    selectedCategories,
+    selectedCondition,
+    selectedRatings,
+    selectedPriceRange,
+    setReset,
+  } = useProductStore();
   const [allProducts, setAllProducts] = useState([]); // All product data
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
@@ -184,8 +183,8 @@ const CategoriesItems = ({
         </div>
       ) : (
         <div className="container border px-4 py-3">
-          {!selectedCategories.length > 0 ? (
-            <p>{`Now All ${allProducts.length} items`}</p>
+          {!selectedCategories?.length > 0 ? (
+            <p>{`Now All ${allProducts?.length} items`}</p>
           ) : (
             <div className="flex justify-center items-center gap-x-2">
               <p>{`${allProducts.length} items in `}</p>
@@ -235,15 +234,7 @@ const CategoriesItems = ({
         </div>
       )}
 
-      <CategoriesBrandFilter
-        selectedCategories={selectedCategories}
-        selectedBrands={selectedBrands}
-        selectedFeatures={selectedFeatures}
-        selectedRatings={selectedRatings}
-        selectedPriceRange={selectedPriceRange}
-        selectedCondition={selectedCondition}
-        setReset={setReset}
-      />
+      <CategoriesBrandFilter />
 
       {loading ? (
         <div className="text-center py-5">Loading...</div>
@@ -253,7 +244,7 @@ const CategoriesItems = ({
             isGridView ? 3 : 1
           } lg:grid-cols-${isGridView ? 4 : 1} gap-4  `} //mt-4
         >
-          {allData.map((product) => (
+          {allData?.map((product) => (
             <SingleProductCard
               key={product.id}
               product={product}

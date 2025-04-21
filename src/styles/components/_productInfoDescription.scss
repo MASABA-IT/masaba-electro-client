@@ -1,0 +1,66 @@
+/* ProductInfoDescription.css */
+
+.description-area p {
+  font-size: 1.6rem; /* 18px is optimal for readability */
+  line-height: 1.8; /* Comfortable line height */
+  margin-bottom: 1.25rem;
+  color: #2d2d2d; /* Slightly darker for better contrast */
+  font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.2px;
+  word-spacing: 0.5px;
+}
+
+.description-area h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  color: #1f2937; /* text-gray-900 */
+}
+
+.description-area h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: #374151;
+}
+
+.description-area ul,
+.description-area ol {
+  font-size: 1.4rem;
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
+  color: #374151;
+}
+
+.description-area ul {
+  list-style-type: disc;
+}
+
+.description-area ol {
+  list-style-type: decimal;
+}
+
+.description-area li {
+  margin-bottom: 1rem;
+}
+
+.description-area table {
+  width: 100%;
+  font-size: 1.4rem;
+  border-collapse: collapse;
+  margin-top: 1.5rem;
+  color: #374151;
+}
+
+.description-area th,
+.description-area td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #d1d5db; /* border-gray-300 */
+  text-align: left;
+}
+
+.description-area th {
+  background-color: #f3f4f6; /* bg-gray-100 */
+  font-weight: 600;
+}

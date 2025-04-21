@@ -8,7 +8,7 @@ const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const AppContext = createContext();
 export const AppProvider = ({ children }) => {
   //fake data next remove
-  const [allData, setAllData] = useState([]);
+  const [productData, setProductData] = useState(null);
 
   //1 GLOBAL STATES
   const [categories, setCategories] = useState([]);
@@ -211,23 +211,21 @@ export const AppProvider = ({ children }) => {
   //  end
   ///////////////
   ///////ALL DATA
-
+  const fetchProductById = async (id) => {
+    setLoading(true);
+    try {
+      const response = await fetch(`${BASE_URL}/api/product/view/${id}`);
+      const data = await response.json();
+      setProductData(data);
+    } catch (error) {
+      console.error("Error fetching product data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
   useEffect(() => {
-    const allProducts = async () => {
-      try {
-        const response = await fetch(`${BASE_URL}/api/products`);
-        const data = await response.json();
-        console.log(data.products, "data");
-        setAllData(data);
-      } catch (error) {
-        console.error("Error fetching categories data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    allProducts();
-  }, []);
+    fetchProductById(4); // ✅ runs only once on mount
+  }, []); 
   ///////////////
   ///////ALL DATA
 
@@ -251,33 +249,29 @@ export const AppProvider = ({ children }) => {
   ////FILTER SINGLE PRODUCT VIEWS
   // Filter function that accepts only ID, category (single string), and condition
   function filterSingleProduct(allData, selectedFilters) {
-    const { products } = allData;
-    const { id } = selectedFilters;
-    // const { id, category, condition } = selectedFilters;
-    console.log(products, id);
-    return products.filter((product) => {
-      // Filter by category (single string match)
-      // if (category && product.category !== category) {
-      //   return false;
-      // }
-
-      // Filter by condition
-      // if (condition && product.condition !== condition) {
-      //   return false;
-      // }
-
-      // Filter by ID
-      if (id && product.id !== id) {
-        return false;
-      }
-
-      return true;
-    });
+    // const { products } = allData;
+    // const { id } = selectedFilters;
+    // // const { id, category, condition } = selectedFilters;
+    // console.log(products, id);
+    // return products.filter((product) => {
+    //   // Filter by category (single string match)
+    //   // if (category && product.category !== category) {
+    //   //   return false;
+    //   // }
+    //   // Filter by condition
+    //   // if (condition && product.condition !== condition) {
+    //   //   return false;
+    //   // }
+    //   // Filter by ID
+    //   if (id && product.id !== id) {
+    //     return false;
+    //   }
+    //   return true;
+    // });
   }
-  console.log(collections, "collections");
+
   const appInfo = {
     BASE_URL,
-    allData,
     loading,
     filterSingleProduct,
     filters,
@@ -304,6 +298,8 @@ export const AppProvider = ({ children }) => {
     setSelectedItems,
     reset,
     setReset,
+    productData,
+    setProductData,
   };
   return <AppContext.Provider value={appInfo}>{children}</AppContext.Provider>;
 };

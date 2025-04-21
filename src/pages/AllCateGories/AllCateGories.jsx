@@ -16,7 +16,7 @@ const AllCategories = () => {
 
   //next
 
-  const { id } = useParams();
+  const { id = 1 } = useParams();
 
   const [categoryId, setCategoryId] = useState(null);
 

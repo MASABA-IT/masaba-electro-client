@@ -1,0 +1,21 @@
+.reviewsWithComments {
+  margin-top: 2rem;
+  padding: 1rem;
+  background-color: white;
+  grid-column: full-start / full-end;
+
+  input {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+  }
+}
+@keyframes ping-slow {
+  75%,
+  100% {
+    transform: scale(1.1);
+    opacity: 0;
+  }
+}
+.animate-ping-slow {
+  animation: ping-slow 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}

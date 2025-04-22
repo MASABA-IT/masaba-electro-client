@@ -17,9 +17,10 @@ import ProductDetailsRelated from "../../components/ProductDetailsRelated/Produc
 import ProductDetailsDiscount from "../../components/ProductDetailsDiscount/ProductDetailsDiscount";
 import ProductPriceSection from "../../components/ProductPriceSection/ProductPriceSection";
 import ProductInfo from "../../components/ProductInfo/ProductInfo";
+import ReviewsWithComments from "../../components/ReviewsWithComments/ReviewsWithComments";
 
 const ProductDetails = () => {
-  const { filterSingleProduct, productData, loading } = useProductStore();
+  const { fetchProductById, productData, loading } = useProductStore();
   const { category, condition, id } = useParams();
   const [filteredProducts, setFilteredProducts] = useState([]);
 
@@ -31,16 +32,50 @@ const ProductDetails = () => {
     console.log(`Added ${qty} of ${product.title} to cart`);
     // your cart logic here
   };
+
+  useEffect(() => {
+    fetchProductById(id);
+  }, []);
   useEffect(() => {
     if (filteredProducts[0]?.image) {
       setMainImage(filteredProducts[0].image);
     }
   }, [filteredProducts]);
 
-  const product = useMemo(() => productData?.product || null, [productData]);
-  console.log(product, "product");
+  const product = useMemo(
+    () => productData?.productArray || null,
+    [productData]
+  );
+  console.log(product);
   if (loading || !productData) {
-    return <p>Loading...</p>;
+    return (
+      <div className="product_content animate-pulse min-h-[500px] bg-white p-6 rounded-xl shadow-md space-y-6">
+        <div className="grid bg-white p-6 shadow-sm animate-pulse gap-6 grid-cols-1 md:grid-cols-3">
+          {/* 1st: Image Gallery Placeholder */}
+          <div className="bg-gray-200 rounded-lg h-[400px] w-full"></div>
+
+          {/* 2nd: Product Info Placeholder */}
+          <div className="flex flex-col space-y-4 col-span-1 md:col-span-1">
+            <div className="h-8 bg-gray-300 rounded w-3/4"></div>
+            <div className="h-6 bg-gray-200 rounded w-full"></div>
+            <div className="h-6 bg-gray-200 rounded w-5/6"></div>
+            <div className="h-6 bg-gray-200 rounded w-1/2"></div>
+            <div className="h-24 bg-gray-100 rounded"></div>
+          </div>
+
+          {/* 3rd: Add to Cart / Price Section */}
+          <div className="flex flex-col space-y-3">
+            <div className="h-10 w-full bg-gray-300 rounded"></div>
+            <div className="h-10 w-2/3 bg-gray-300 rounded"></div>
+            <div className="h-10 w-1/2 bg-gray-400 rounded"></div>
+          </div>
+        </div>
+        <div className="h-8 bg-gray-200 rounded w-1/3"></div>
+        <div className="h-96 bg-gray-200 rounded"></div>
+        <div className="h-6 bg-gray-200 rounded w-2/3"></div>
+        <div className="h-6 bg-gray-200 rounded w-1/2"></div>
+      </div>
+    );
   }
 
   // //////////////////////
@@ -85,9 +120,11 @@ const ProductDetails = () => {
       </div>
       {/* 2nd Column */}
       <ProductDetailsInfo product={product} />
-      {/* 3rd Column */}
+      {/* 3rd Column Revies & Comments */}
+      <ReviewsWithComments product={product} />
+      {/* 4th Column */}
       <ProductDetailsRelated />
-      {/* 4th column */}
+      {/* 5th  column */}
       <ProductDetailsDiscount />
     </div>
   );

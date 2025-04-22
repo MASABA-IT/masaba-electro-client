@@ -223,9 +223,6 @@ export const AppProvider = ({ children }) => {
       setLoading(false);
     }
   };
-  useEffect(() => {
-    fetchProductById(4); // ✅ runs only once on mount
-  }, []); 
   ///////////////
   ///////ALL DATA
 
@@ -300,6 +297,7 @@ export const AppProvider = ({ children }) => {
     setReset,
     productData,
     setProductData,
+    fetchProductById,
   };
   return <AppContext.Provider value={appInfo}>{children}</AppContext.Provider>;
 };

@@ -71,24 +71,24 @@ const ProductDetailsInfo = ({ product }) => {
       price: "$10 - $50",
     },
   ];
-  const videos = [
-    "https://www.w3schools.com/html/movie.mp4", // Example video 1
-    "https://www.w3schools.com/html/mov_bbb.mp4", // Example video 2
-    "https://www.w3schools.com/html/movie.mp4", // Example video 3
-    "https://www.w3schools.com/html/mov_bbb.mp4", // Example video 4
-    "https://www.w3schools.com/html/movie.mp4", // Example video 5
-  ];
+  // const videos = [
+  //   "https://www.w3schools.com/html/movie.mp4", // Example video 1
+  //   "https://www.w3schools.com/html/mov_bbb.mp4", // Example video 2
+  //   "https://www.w3schools.com/html/movie.mp4", // Example video 3
+  //   "https://www.w3schools.com/html/mov_bbb.mp4", // Example video 4
+  //   "https://www.w3schools.com/html/movie.mp4", // Example video 5
+  // ];
 
-  const settings = {
-    dots: false, // No dots
-    infinite: true,
-    speed: 500,
-    autoplay: true,
-    autoplaySpeed: 3000, // Change every 3 seconds
-    slidesToShow: 1, // Only show one video at a time
-    slidesToScroll: 1,
-    fade: true, // Apply fade effect between slides
-  };
+  // const settings = {
+  //   dots: false, // No dots
+  //   infinite: true,
+  //   speed: 500,
+  //   autoplay: true,
+  //   autoplaySpeed: 3000, // Change every 3 seconds
+  //   slidesToShow: 1, // Only show one video at a time
+  //   slidesToScroll: 1,
+  //   fade: true, // Apply fade effect between slides
+  // };
 
   return (
     <div className="productDetailsInfo mt-8 rounded-lg shadow-sm">
@@ -134,44 +134,14 @@ const ProductDetailsInfo = ({ product }) => {
             </table>
             `
         }
-        reviews={[
-          {
-            name: "Alice",
-            rating: 5,
-            comment: "Absolutely amazing product! Exceeded my expectations.",
-            date: "2025-04-20",
-          },
-          {
-            name: "Bob",
-            rating: 4,
-            comment:
-              "Good quality overall, but shipping took longer than expected.",
-            date: "2025-04-18",
-          },
-          {
-            name: "Sophia",
-            rating: 3,
-            comment:
-              "Average experience. Product is okay, packaging could be better.",
-            date: "2025-04-17",
-          },
-          {
-            name: "Liam",
-            rating: 5,
-            comment: "Top-notch! The design and build quality are excellent.",
-            date: "2025-04-15",
-          },
-          {
-            name: "Emma",
-            rating: 2,
-            comment: "Not satisfied. The item was defective on arrival.",
-            date: "2025-04-13",
-          },
-        ]}
+        reviews={product?.reviews}
+        termsAndConditions={product?.terms_conditions}
+        shipping={product?.shipping}
       />
 
       {/* you may like right */}
-      <ProductMightLike products={products} videos={videos} />
+      <ProductMightLike products={products} />
+      {/* <ProductMightLike products={products} videos={videos} /> */}
     </div>
   );
 };

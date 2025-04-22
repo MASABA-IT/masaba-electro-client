@@ -96,11 +96,9 @@ const ProductInfo = ({ product }) => {
         )}
 
         {product?.warranty && (
-          <div className="flex justify-between items-center py-3">
+          <div className="flex justify-between items-center py-3   ">
             <span className="text-gray-500 font-medium">Warranty:</span>
-            <span className="text-gray-800">
-              {product.warranty} year(s)
-            </span>
+            <span className="text-gray-800">{product.warranty} year(s)</span>
           </div>
         )}
       </div>

@@ -4,7 +4,9 @@ import { IoCheckmarkOutline } from "react-icons/io5";
 import { FaRegStar, FaStar } from "react-icons/fa";
 const ProductInfoDescription = ({
   description,
-  reviews = [],
+  termsAndConditions,
+  shipping,
+  // reviews = [],
   productData = [],
   items = [],
 }) => {
@@ -17,9 +19,11 @@ const ProductInfoDescription = ({
   };
 
   const hasDescription = !!description;
-  const hasReviews = reviews.length > 0;
-
-  const showTabs = hasDescription || hasReviews;
+  const hasTermsAndConditions = !!termsAndConditions;
+  const hasShipping = !!shipping;
+  // const hasReviews = reviews.length > 0;
+  // console.log(reviews);
+  const showTabs = hasDescription;
 
   return (
     <div className="productInfoSwitch text-2xl mr-4 md:p-6 bg-white">
@@ -38,7 +42,7 @@ const ProductInfoDescription = ({
               Description
             </button>
           )}
-          {hasReviews && (
+          {hasTermsAndConditions && (
             <button
               onClick={() => setActiveTab(2)}
               className={`px-4 py-2 ${
@@ -47,9 +51,33 @@ const ProductInfoDescription = ({
                   : ""
               }`}
             >
-              Reviews
+              Terms & Conditions
             </button>
           )}
+          {hasShipping && (
+            <button
+              onClick={() => setActiveTab(3)}
+              className={`px-4 py-2 ${
+                activeTab === 3
+                  ? "font-semibold border-b-2 border-stone-500"
+                  : ""
+              }`}
+            >
+              Shipping
+            </button>
+          )}{" "}
+          {/* {hasReviews && (
+            <button
+              onClick={() => setActiveTab(4)}
+              className={`px-4 py-2 ${
+                activeTab === 4
+                  ? "font-semibold border-b-2 border-stone-500"
+                  : ""
+              }`}
+            >
+              Reviews
+            </button>
+          )} */}
         </div>
       )}
 
@@ -69,39 +97,69 @@ const ProductInfoDescription = ({
               dangerouslySetInnerHTML={{ __html: description }}
             />
           )}
+          {activeTab === 2 && hasTermsAndConditions && (
+            <div
+              className="description-area prose max-w-full"
+              dangerouslySetInnerHTML={{ __html: termsAndConditions }}
+            />
+          )}
+          {activeTab === 3 && hasShipping && (
+            <div
+              className="description-area prose max-w-full"
+              dangerouslySetInnerHTML={{ __html: shipping }}
+            />
+          )}
 
-          {activeTab === 2 && hasReviews && (
+          {activeTab === 4 && hasReviews && (
             <div className="review-section space-y-4">
               {reviews.map((review, index) => (
                 <div
                   key={index}
-                  className="p-4 border rounded-md text-2xl shadow-sm bg-gray-50 space-y-2"
+                  className="p-6 rounded-2xl bg-white space-y-4  transition duration-300"
                 >
-                  {/* Header: Name (Left) + Date (Right) */}
+                  {/* Header: Name + Date */}
                   <div className="flex justify-between items-center">
-                    <p className="font-bold text-2xl text-gray-800">
-                      {review.name}
+                    <p className="font-semibold text-xl text-gray-900">
+                      {review?.user?.name}
                     </p>
-                    <p className="text-xl italic text-gray-500">
-                      {new Date(review.date).toLocaleDateString()}
+                    <p className="text-xl text-gray-500 italic">
+                      {(() => {
+                        const rawDate = review?.created_at;
+                        const date = new Date(rawDate);
+                        const isValid = !isNaN(date.getTime());
+                        const finalDate = isValid ? date : new Date();
+
+                        return finalDate.toLocaleDateString("en-GB", {
+                          day: "2-digit",
+                          month: "short",
+                          year: "numeric",
+                        });
+                      })()}
                     </p>
                   </div>
-                  {/* Rating (Stars) */}
 
-                  <p className="flex items-center gap-1 text-yellow-500 text-base">
-                    {[...Array(5)].map((_, i) =>
-                      i < review.rating ? (
-                        <FaStar key={i} />
-                      ) : (
-                        <FaRegStar key={i} />
-                      )
-                    )}
-                  </p>
-                  {/* Comment */}
-                  <p className="text-gray-700">{review.comment}</p>
-                  {/* Optional: Location and Helpful Votes */}
-                  <div className="text-sm text-gray-500 space-y-1">
-                    {review.location && <p>Location: {review.location}</p>}
+                  {/* Rating and Review */}
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-1 text-yellow-500 text-xl">
+                      {[...Array(5)].map((_, i) =>
+                        i < review.rating ? (
+                          <FaStar key={i} />
+                        ) : (
+                          <FaRegStar key={i} />
+                        )
+                      )}
+                      <span className="text-gray-500 text-sm ml-2">
+                        ({review.rating}/5)
+                      </span>
+                    </div>
+                    <p className="text-gray-800 text-lg leading-relaxed">
+                      {review?.review}
+                    </p>
+                  </div>
+
+                  {/* Footer: Location + Helpful */}
+                  <div className="text-sm text-gray-500 space-y-1 border-t pt-3 mt-2">
+                    {review.location && <p>📍 Location: {review.location}</p>}
                     {review.helpfulVotes !== undefined && (
                       <p>👍 {review.helpfulVotes} people found this helpful</p>
                     )}

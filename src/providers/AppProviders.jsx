@@ -224,24 +224,41 @@ export const AppProvider = ({ children }) => {
     }
   };
   ///////////////
-  ///////ALL DATA
+  /////// Comments
+  const postComment = async ({
+    product_id,
+    username,
+    phone_number,
+    email,
+    comment,
+  }) => {
+    try {
+      const response = await fetch(`${BASE_URL}/api/product/comment`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          product_id: product_id,
+          username,
+          phone_number,
+          email,
+          comment,
+        }),
+      });
 
-  // useEffect(() => {
-  //   const fetchCategories = async () => {
-  //     try {
-  //       const response = await fetch("/src/data/categories.json");
-  //       const data = await response.json();
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to post comment");
+      }
 
-  //       setAllData(data);
-  //     } catch (error) {
-  //       console.error("Error fetching categories data:", error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchCategories();
-  // }, []);
+      const result = await response.json();
+      return result; // You can handle this in your UI
+    } catch (error) {
+      console.error("Error posting comment:", error.message);
+      throw error; // Let the caller handle the error
+    }
+  };
 
   ////FILTER SINGLE PRODUCT VIEWS
   // Filter function that accepts only ID, category (single string), and condition
@@ -298,6 +315,7 @@ export const AppProvider = ({ children }) => {
     productData,
     setProductData,
     fetchProductById,
+    postComment,
   };
   return <AppContext.Provider value={appInfo}>{children}</AppContext.Provider>;
 };

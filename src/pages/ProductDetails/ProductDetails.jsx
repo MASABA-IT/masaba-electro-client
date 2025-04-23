@@ -100,8 +100,8 @@ const ProductDetails = () => {
       <div className="grid bg-white p-6 shadow-sm">
         {/* IMG GALLERY */}
         <ImageGallery
-          smallImages={smallImages}
-          initialMainImage={mainImage}
+          smallImages={product.images}
+          initialMainImage={product.thumbnail}
           autoSlideInterval={4000}
         />
 

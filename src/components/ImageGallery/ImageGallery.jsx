@@ -1,11 +1,16 @@
 import React, { useRef, useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useProductStore } from "../../providers/AppProviders";
 
 const ImageGallery = ({
   smallImages = [],
   initialMainImage = "",
   autoSlideInterval = 3000,
 }) => {
+  const galleryRef = useRef(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  const { BASE_URL } = useProductStore();
   const [mainImage, setMainImage] = useState(
     initialMainImage || smallImages[0] || ""
   );
@@ -32,13 +37,48 @@ const ImageGallery = ({
       setActiveIndex(0);
     }
   }, [initialMainImage, smallImages]);
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+      },
+      { threshold: 0.5 } // Adjust as needed
+    );
+
+    if (galleryRef.current) observer.observe(galleryRef.current);
+
+    return () => {
+      if (galleryRef.current) observer.unobserve(galleryRef.current);
+    };
+  }, []);
+  useEffect(() => {
+    if (smallImages.length <= 1 || !isVisible) {
+      clearInterval(intervalRef.current);
+      return;
+    }
+
+    startAutoSlide();
+
+    return () => clearInterval(intervalRef.current); // Cleanup on unmount
+  }, [smallImages, isVisible]);
 
   const startAutoSlide = () => {
     clearInterval(intervalRef.current);
     intervalRef.current = setInterval(() => {
       setActiveIndex((prevIndex) => {
         const nextIndex = (prevIndex + 1) % smallImages.length;
-        setMainImage(smallImages[nextIndex]);
+        const nextImage = smallImages[nextIndex].image_path;
+        setMainImage(nextImage);
+
+        // Scroll thumbnail into view
+        setTimeout(() => {
+          thumbnailRefs.current[nextIndex]?.scrollIntoView({
+            behavior: "smooth",
+            inline: "center",
+            block: "nearest",
+          });
+        }, 100); // slight delay for smooth animation
+
         return nextIndex;
       });
     }, autoSlideInterval);
@@ -57,13 +97,13 @@ const ImageGallery = ({
   };
 
   return (
-    <div className="product_img">
+    <div className="product_img" ref={galleryRef}>
       {/* Main Image with Animation */}
       <div className="main-image border-2 rounded-lg overflow-hidden h-[350px] xl:h-[500px] flex items-center justify-center relative">
         <AnimatePresence mode="wait">
           <motion.img
             key={mainImage}
-            src={mainImage}
+            src={`${BASE_URL}/${mainImage}`}
             alt="Main Product"
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -80,7 +120,7 @@ const ImageGallery = ({
           <motion.div
             key={index}
             ref={(el) => (thumbnailRefs.current[index] = el)}
-            onClick={() => handleImageClick(image, index)}
+            onClick={() => handleImageClick(image.image_path, index)}
             whileTap={{ scale: 0.9 }}
             whileHover={{ scale: 1.05 }}
             className={`min-w-[7rem] m-1 cursor-pointer border-2 rounded-md transition-all duration-300 p-2 ${
@@ -90,7 +130,7 @@ const ImageGallery = ({
             }`}
           >
             <img
-              src={image}
+              src={`${BASE_URL}/${image.image_path}`}
               alt={`Thumb ${index + 1}`}
               className="h-20 w-full object-cover rounded"
             />

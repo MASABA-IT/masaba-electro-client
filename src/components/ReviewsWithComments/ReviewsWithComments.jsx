@@ -7,8 +7,10 @@ import CommentSection from "../CommentSection/CommentSection";
 const ReviewsWithComments = ({ product }) => {
   return (
     <div className="reviewsWithComments col-start-2 col-end-10 space-y-10">
-      <ReviewSection product={product} />
-      <CommentSection />
+      {product?.reviews?.data?.length > 0 && (
+        <ReviewSection product={product} />
+      )}
+      <CommentSection  product={product}/>
     </div>
   );
 };

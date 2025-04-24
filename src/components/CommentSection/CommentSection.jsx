@@ -250,7 +250,7 @@ const CommentSection = ({ product }) => {
                 hasPrev={!!pagination.prev_page_url}
                 hasNext={!!pagination.next_page_url}
                 onPageChange={(page) => setCurrentPage(page)}
-                primaryColor={"green"}
+                primaryColor="green"
               />
             </div>
           )}

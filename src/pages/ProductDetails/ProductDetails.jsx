@@ -20,7 +20,8 @@ import ProductInfo from "../../components/ProductInfo/ProductInfo";
 import ReviewsWithComments from "../../components/ReviewsWithComments/ReviewsWithComments";
 
 const ProductDetails = () => {
-  const { fetchProductById, productData, loading } = useProductStore();
+  const { fetchProductById, productData, loading, addToRecentlyViewed } =
+    useProductStore();
   const { category, condition, id } = useParams();
   const [filteredProducts, setFilteredProducts] = useState([]);
 
@@ -32,10 +33,15 @@ const ProductDetails = () => {
     console.log(`Added ${qty} of ${product.title} to cart`);
     // your cart logic here
   };
-
   useEffect(() => {
     fetchProductById(id);
   }, []);
+  //Recently Viewd
+  useEffect(() => {
+    if (id) {
+      addToRecentlyViewed(parseInt(id));
+    }
+  }, [id, addToRecentlyViewed]);
   useEffect(() => {
     if (filteredProducts[0]?.image) {
       setMainImage(filteredProducts[0].image);
@@ -46,7 +52,11 @@ const ProductDetails = () => {
     () => productData?.productArray || null,
     [productData]
   );
-  console.log(product);
+  const relatedProducts = useMemo(
+    () => productData?.collectionProducts || null,
+    [productData]
+  );
+  console.log(relatedProducts);
   if (loading || !productData) {
     return (
       <div className="product_content animate-pulse min-h-[500px] bg-white p-6 rounded-xl shadow-md space-y-6">
@@ -123,7 +133,7 @@ const ProductDetails = () => {
       {/* 3rd Column Revies & Comments */}
       <ReviewsWithComments product={product} />
       {/* 4th Column */}
-      <ProductDetailsRelated />
+      <ProductDetailsRelated relatedProducts={relatedProducts} />
       {/* 5th  column */}
       <ProductDetailsDiscount />
     </div>

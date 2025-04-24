@@ -5,7 +5,6 @@ import StarRating from "../StarRating/StarRating";
 import { useProductStore } from "../../providers/AppProviders";
 
 const SingleProductCard = ({ product, isGridView }) => {
-  console.log("product", product);
   const { BASE_URL } = useProductStore();
 
   const [isLiked, setIsLiked] = useState(false);

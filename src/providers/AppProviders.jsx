@@ -32,6 +32,8 @@ export const AppProvider = ({ children }) => {
   });
   const [selectedItems, setSelectedItems] = useState([]);
   const [reset, setReset] = useState(false);
+  const [recentlyViewed, setRecentlyViewed] = useState([]);
+  const [recentlyViewsData, setRecentlyViewsData] = useState(null);
   //1 FILTER DATA MULTI OR SINGLE
   useEffect(() => {
     const fetchFilterData = async () => {
@@ -259,7 +261,64 @@ export const AppProvider = ({ children }) => {
       throw error; // Let the caller handle the error
     }
   };
+  ///////////////
+  /////// Recently Views Data
 
+  useEffect(() => {
+    const stored = JSON.parse(localStorage.getItem("recentlyViewed")) || [];
+    setRecentlyViewed(stored.map(Number));
+  }, []);
+
+  // Add productId to recentlyViewed
+  const addToRecentlyViewed = (productId) => {
+    // Remove the productId if it already exists to avoid duplicates
+    const updated = recentlyViewed.filter((id) => id !== productId);
+
+    // Add the new productId to the front of the array
+    updated.unshift(productId);
+
+    // Limit the array to 5 productIds only
+    if (updated.length > 6) updated.length = 6;
+
+    // Only update the state if the array has changed
+    if (JSON.stringify(updated) !== JSON.stringify(recentlyViewed)) {
+      setRecentlyViewed(updated);
+    }
+  };
+
+  // Update localStorage whenever recentlyViewed changes
+  useEffect(() => {
+    if (recentlyViewed.length) {
+      localStorage.setItem("recentlyViewed", JSON.stringify(recentlyViewed));
+    }
+  }, [recentlyViewed]);
+  // Send data to API whenever recentlyViewed changes
+  useEffect(() => {
+    const updateRecentlyViewedData = async () => {
+      if (recentlyViewed.length) {
+        try {
+          const response = await fetch(`${BASE_URL}/api/recent-product/view`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ ids: recentlyViewed }), // Send the updated array
+          });
+          console.log(response);
+          if (response.ok) {
+            const result = await response.json();
+            setRecentlyViewsData(result);
+          } else {
+            console.error("Failed to update recently viewed products.");
+          }
+        } catch (error) {
+          console.error("Error while sending recently viewed data:", error);
+        }
+      }
+    };
+
+    updateRecentlyViewedData();
+  }, [recentlyViewed]);
   ////FILTER SINGLE PRODUCT VIEWS
   // Filter function that accepts only ID, category (single string), and condition
   function filterSingleProduct(allData, selectedFilters) {
@@ -316,6 +375,10 @@ export const AppProvider = ({ children }) => {
     setProductData,
     fetchProductById,
     postComment,
+    //recently viewd
+    recentlyViewed,
+    addToRecentlyViewed,
+    recentlyViewsData,
   };
   return <AppContext.Provider value={appInfo}>{children}</AppContext.Provider>;
 };

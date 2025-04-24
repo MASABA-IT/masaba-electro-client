@@ -1,63 +1,52 @@
 import React from "react";
+import { useProductStore } from "../../providers/AppProviders";
 
-const ProductDetailsRelated = () => {
-  const products = [
-    {
-      name: "Xiaomi Realme 8",
-      originalPrice: "$234",
-      discountedPrice: "$199",
-      imageUrl: "/src/assets/imgs/imgm-6.webp",
-    },
-    {
-      name: "Samsung Galaxy S21",
-      originalPrice: "$999",
-      discountedPrice: "$899",
-      imageUrl: "/src/assets/imgs/imgm-5.jpeg",
-    },
-    {
-      name: "Apple iPhone 13",
-      originalPrice: "$1099",
-      discountedPrice: "$999",
-      imageUrl: "/src/assets/imgs/imgm-3.webp",
-    },
-    {
-      name: "Xiaomi Realme 8",
-      originalPrice: "$234",
-      discountedPrice: "$199",
-      imageUrl: "/src/assets/imgs/imgm-3.jpg",
-    },
-    {
-      name: "Samsung Galaxy S21",
-      originalPrice: "$999",
-      discountedPrice: "$899",
-      imageUrl: "/src/assets/imgs/imgm-5.jpeg",
-    },
-    {
-      name: "Apple iPhone 13",
-      originalPrice: "$1099",
-      discountedPrice: "$999",
-      imageUrl: "/src/assets/imgs/imgm-6.webp",
-    },
-    // Add more products as needed
-  ];
-
+const ProductDetailsRelated = ({ relatedProducts }) => {
+  console.log(relatedProducts);
+  const { BASE_URL } = useProductStore();
+  const handleViewsDataClick = (id) => {
+    window.location.href = `/categories/product/${id}`;
+  };
   return (
     <div className="product-details-related bg-white my-5">
       <div className="p-6">
         <h1 className="text-2xl font-bold mb-6">Related Products</h1>
         <div className="product-grid">
-          {products.map((product, index) => (
-            <div key={index} className="related_product-card">
+          {relatedProducts?.map((product, index) => (
+            <div
+              key={index}
+              className="related_product-card cursor-pointer"
+              onClick={() => handleViewsDataClick(product?.id)}
+            >
               <div className="w-[100%] ">
                 <img
-                  src={product.imageUrl}
+                  src={`${BASE_URL}/${product.thumbnail}`}
                   alt={product.name}
                   className="product-image"
                 />
               </div>
-              <h2 className="product-name text-2xl">{product.name}</h2>
-              <p className="original-price text-xl">{product.originalPrice}</p>
-              <p className="discounted-price">{product.discountedPrice}</p>
+              <h2 className="product-name text-2xl">{product.title}</h2>
+              <div className="space-y-1 min-h-[3.5rem] flex flex-col justify-start pl-4">
+                {product.discount_price ? (
+                  <>
+                    <p className="text-sm line-through text-gray-500">
+                      ৳ {parseFloat(product.base_price).toFixed(2)}
+                    </p>
+                    <p className="text-md font-bold text-red-600">
+                      ৳ {parseFloat(product.discount_price).toFixed(2)}
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-sm invisible">
+                      ৳ {parseFloat(product.base_price).toFixed(2)}
+                    </p>
+                    <p className="text-md font-bold text-gray-800">
+                      ৳ {parseFloat(product.base_price).toFixed(2)}
+                    </p>
+                  </>
+                )}
+              </div>
             </div>
           ))}
         </div>

@@ -14,32 +14,22 @@ const AllCategories = () => {
     { label: "Category", link: "/categories" },
   ];
 
-  //next
+  const { id } = useParams();
+  const [categoryId, setCategoryId] = useState(() => {
+    return id ? parseInt(id) : 1;
+  });
 
-  const { id = 1 } = useParams();
-
-  const [categoryId, setCategoryId] = useState(null);
-
-  // Set categoryId initially from URL param
+  // If selected category changes from UI, override categoryId
   useEffect(() => {
-    if (id) {
-      setCategoryId(parseInt(id));
+    if (!id && selectedCategories?.id && selectedCategories.id !== categoryId) {
+      setCategoryId(selectedCategories.id);
     }
-  }, [id]);
+  }, [selectedCategories, id]);
 
-  // Update categoryId when user selects a category
-  useEffect(() => {
-    if (selectedCategories?.id) {
-      setCategoryId(selectedCategories?.id);
-    }
-  }, [selectedCategories?.id]);
-
-  // Fetch products whenever categoryId changes
+  // Fetch products when categoryId changes
   useEffect(() => {
     if (categoryId) {
-      fetchSearchProducts({
-        category_id: categoryId,
-      });
+      fetchSearchProducts({ category_id: categoryId });
     }
   }, [categoryId]);
 

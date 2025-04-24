@@ -4,6 +4,7 @@ import { FaStar, FaRegStar } from "react-icons/fa";
 import Slider from "@mui/material/Slider";
 import { useProductStore } from "../../providers/AppProviders";
 import { li } from "framer-motion/client";
+import { useParams } from "react-router-dom";
 
 const CategoryList = () => {
   const {
@@ -22,6 +23,7 @@ const CategoryList = () => {
     reset,
     setReset,
   } = useProductStore();
+  const { id } = useParams();
   const [minPrice, setMinPrice] = useState(100);
   const [maxPrice, setMaxPrice] = useState(1000);
   const [openCategories, setOpenCategories] = useState({
@@ -38,7 +40,11 @@ const CategoryList = () => {
   useEffect(() => {
     setSelectedPriceRange({ min: minPrice, max: maxPrice });
   }, [minPrice, maxPrice, setSelectedPriceRange]);
-
+  // useEffect(() => {
+  //   if (id) {
+  //     setSelectedCategories(id);
+  //   }
+  // }, [id]);
   // Update selected categories
   const handleCategorySelect = (category) => {
     setSelectedCategories(category);
@@ -262,19 +268,23 @@ const CategoryList = () => {
                           ? filter.children.categories.length
                           : 5
                       )
-                      .map((cat, idx) => (
-                        <label
-                          key={idx}
-                          className={`py-2 block text-gray-500 cursor-pointer text-2xl ${
-                            selectedCategories?.id === cat?.id
-                              ? "bg-blue-100 text-blue-600"
-                              : ""
-                          } hover:text-blue-500 hover:bg-gray-100`}
-                          onClick={() => handleCategorySelect(cat)}
-                        >
-                          {cat[filter.labelKey]}
-                        </label>
-                      ))}
+                      .map((cat, idx) => {
+                        const isSelected =
+                          selectedCategories?.id === cat?.id ||
+                          (!selectedCategories && idx === 0);
+
+                        return (
+                          <label
+                            key={idx}
+                            className={`py-2 block text-gray-500 cursor-pointer text-2xl ${
+                              isSelected ? "bg-blue-100 text-blue-600" : ""
+                            } hover:text-blue-500 hover:bg-gray-100`}
+                            onClick={() => handleCategorySelect(cat)}
+                          >
+                            {cat[filter.labelKey]}
+                          </label>
+                        );
+                      })}
 
                   {/* See All / See Less */}
                   {filter.children?.categories?.length > 5 && (

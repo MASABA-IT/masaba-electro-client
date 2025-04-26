@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { IoCheckmarkOutline } from "react-icons/io5";
 import { FaRegStar, FaStar } from "react-icons/fa";
@@ -24,7 +24,21 @@ const ProductInfoDescription = ({
   // const hasReviews = reviews.length > 0;
   // console.log(reviews);
   const showTabs = hasDescription;
+  const tabRefs = {
+    1: useRef(null),
+    2: useRef(null),
+    3: useRef(null),
+    // 4: useRef(null),
+  };
 
+  const handleTabClick = (tabIndex) => {
+    setActiveTab(tabIndex);
+    tabRefs[tabIndex]?.current?.scrollIntoView({
+      behavior: "smooth",
+      inline: "center",
+      block: "nearest",
+    });
+  };
   return (
     <div className="productInfoSwitch text-2xl mr-4 md:p-6 bg-white">
       {/* Tabs */}
@@ -32,7 +46,8 @@ const ProductInfoDescription = ({
         <div className="tabs border-b-2 overflow-x-auto whitespace-nowrap scrollbar-hide">
           {hasDescription && (
             <button
-              onClick={() => setActiveTab(1)}
+              ref={tabRefs[1]}
+              onClick={() => handleTabClick(1)}
               className={`px-4 py-2 ${
                 activeTab === 1
                   ? "font-semibold border-b-2 border-stone-500"
@@ -44,7 +59,8 @@ const ProductInfoDescription = ({
           )}
           {hasTermsAndConditions && (
             <button
-              onClick={() => setActiveTab(2)}
+              ref={tabRefs[2]}
+              onClick={() => handleTabClick(2)}
               className={`px-4 py-2 ${
                 activeTab === 2
                   ? "font-semibold border-b-2 border-stone-500"
@@ -56,7 +72,8 @@ const ProductInfoDescription = ({
           )}
           {hasShipping && (
             <button
-              onClick={() => setActiveTab(3)}
+              ref={tabRefs[3]}
+              onClick={() => handleTabClick(3)}
               className={`px-4 py-2 ${
                 activeTab === 3
                   ? "font-semibold border-b-2 border-stone-500"
@@ -65,19 +82,7 @@ const ProductInfoDescription = ({
             >
               Shipping
             </button>
-          )}{" "}
-          {/* {hasReviews && (
-            <button
-              onClick={() => setActiveTab(4)}
-              className={`px-4 py-2 ${
-                activeTab === 4
-                  ? "font-semibold border-b-2 border-stone-500"
-                  : ""
-              }`}
-            >
-              Reviews
-            </button>
-          )} */}
+          )}
         </div>
       )}
 
@@ -110,14 +115,14 @@ const ProductInfoDescription = ({
             />
           )}
 
-          {activeTab === 4 && hasReviews && (
+          {/* {activeTab === 4 && hasReviews && (
             <div className="review-section space-y-4">
               {reviews.map((review, index) => (
                 <div
                   key={index}
                   className="p-6 rounded-2xl bg-white space-y-4  transition duration-300"
                 >
-                  {/* Header: Name + Date */}
+               
                   <div className="flex justify-between items-center">
                     <p className="font-semibold text-xl text-gray-900">
                       {review?.user?.name}
@@ -138,7 +143,7 @@ const ProductInfoDescription = ({
                     </p>
                   </div>
 
-                  {/* Rating and Review */}
+                
                   <div className="space-y-2">
                     <div className="flex items-center gap-1 text-yellow-500 text-xl">
                       {[...Array(5)].map((_, i) =>
@@ -157,7 +162,7 @@ const ProductInfoDescription = ({
                     </p>
                   </div>
 
-                  {/* Footer: Location + Helpful */}
+              
                   <div className="text-sm text-gray-500 space-y-1 border-t pt-3 mt-2">
                     {review.location && <p>📍 Location: {review.location}</p>}
                     {review.helpfulVotes !== undefined && (
@@ -167,13 +172,13 @@ const ProductInfoDescription = ({
                 </div>
               ))}
             </div>
-          )}
+          )} */}
         </motion.div>
       </div>
 
       {/* Product Table */}
       {productData?.length > 0 && (
-        <div className="table-section text-base mt-6">
+        <div className="table-section text-base mt-6 ">
           {productData.map((item, index) => (
             <div
               key={index}

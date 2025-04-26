@@ -197,11 +197,14 @@ $font-size: 16px;
   }
 }
 /* For screens larger than 768px (typically PC/Laptop) */
-@media (min-width: 768px) {
-  .video-carousel-container video {
-    height: 400px; /* Fixed height for PC/Laptop */
-    object-fit: cover;
-  }
+
+@media (max-width: 768px) {
+  // .productInfoSwitch {
+  //   grid-column: full-start / col-end 6;
+  // }
+  // .youMightLike {
+  //   grid-column: col-end 6 / full-end;
+  // }
   .content {
     max-width: 80%;
     min-height: 250px;
@@ -211,9 +214,54 @@ $font-size: 16px;
   }
 }
 
-/* Optional: If you want a different height on very large screens (e.g., desktops) */
-@media (min-width: 1200px) {
-  .video-carousel-container video {
-    height: 500px; /* You can adjust the height for larger screens */
+@media (max-width: 1024px) {
+  .productInfoSwitch {
+    grid-column: full-start / col-end 6;
+  }
+  .youMightLike {
+    grid-column: col-end 6 / full-end;
   }
 }
+/* For screens larger than 425px   */
+@media (max-width: 425px) {
+  .productInfoSwitch {
+    grid-column: full-start / full-end;
+  }
+  .youMightLike {
+    grid-column: full-start / full-end;
+  }
+}
+/* Optional: If you want a different height on very large screens (e.g., desktops) */
+// @media (max-width: 768px) {
+//   .content {
+//     max-width: 80%;
+//     min-height: 250px;
+//   }
+//   .table-section {
+//     max-width: 50%;
+//   }
+// }
+// @media (max-width: 768px) {
+//   .productInfoSwitch {
+//     grid-column: full-start / col-end 6;
+//   }
+//   .youMightLike {
+//     grid-column: col-end 6 / full-end;
+//   }
+//   .content {
+//     max-width: 80%;
+//     min-height: 250px;
+//   }
+//   .table-section {
+//     max-width: 50%;
+//   }
+// }
+
+// @media (min-width: 769px) and (max-width: 1024px) {
+//   .productInfoSwitch {
+//     grid-column: full-start / col-end 6;
+//   }
+//   .youMightLike {
+//     grid-column: col-end 6 / full-end;
+//   }
+// }

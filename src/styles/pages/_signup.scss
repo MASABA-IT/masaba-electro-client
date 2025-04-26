@@ -1,0 +1,36 @@
+@use "../utils/variables" as *;
+
+.signup_content {
+  max-width: 140rem;
+  width: 100%;
+  margin: 0 auto;
+  padding: 5px 20px;
+
+  display: grid;
+  grid-template-rows: minmax(45vh, auto) repeat(7, min-content);
+  grid-template-columns:
+    [full-start] minmax(6rem, 1fr)
+    repeat(8, [col-start] minmax(min-content, 14rem) [col-end])
+    minmax(6rem, 1fr)
+    [full-end];
+
+  row-gap: 1rem;
+}
+
+.signup_form {
+  width: 100%;
+  grid-column: full-start / full-end;
+}
+
+.signup_left {
+  @apply h-full min-h-[400px];
+  background-size: cover;
+  background-position: center;
+}
+
+.signup_right {
+  @apply h-full min-h-[400px];
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}

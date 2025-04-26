@@ -21,7 +21,10 @@ const AllCategories = () => {
 
   // If selected category changes from UI, override categoryId
   useEffect(() => {
+ 
     if (!id && selectedCategories?.id && selectedCategories.id !== categoryId) {
+      setCategoryId(selectedCategories.id);
+    } else if (selectedCategories?.id && selectedCategories.id !== categoryId) {
       setCategoryId(selectedCategories.id);
     }
   }, [selectedCategories, id]);

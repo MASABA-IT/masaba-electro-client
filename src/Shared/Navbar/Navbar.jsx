@@ -5,14 +5,27 @@ import { HiMiniShoppingCart } from "react-icons/hi2";
 import { IoIosSearch, IoMdMenu } from "react-icons/io";
 import { MdMessage } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
+import { useProductStore } from "../../providers/AppProviders";
 const Navbar = ({ showSidebar, setShowSidebar }) => {
+  const { userData, handleLogout } = useProductStore();
+  const navigate = useNavigate();
+
+  const handleButtonClick = () => {
+    if (userData?.token) {
+      navigate("/dashboard");
+      // handleLogout(navigate);
+    } else {
+      navigate("/login");
+    }
+  };
+  console.log(userData, "userData");
   const [searchTerm, setSearchTerm] = useState("");
   const [category, setCategory] = useState("All");
 
   const handleSearch = () => {
     console.log("Searching for:", searchTerm, "in category:", category);
   };
-  const navigate = useNavigate();
+
   return (
     <nav className="navbar shadow-sm">
       {/* Desktop View */}
@@ -69,9 +82,14 @@ const Navbar = ({ showSidebar, setShowSidebar }) => {
           </div>
           {/* icons */}
           <div className="nav-icons flex gap-x-6 justify-between items-center text-gray-500">
-            <button className="flex flex-col items-center gap-y-3">
+            <button
+              className="flex flex-col items-center gap-y-3"
+              onClick={handleButtonClick}
+            >
               <FaUser className=" " />
-              <span className="text-sm">Profile</span>
+              <span className="text-sm">
+                {userData?.token ? "Profile" : "Login"}
+              </span>
             </button>
             <button className="flex flex-col items-center gap-y-3">
               <MdMessage className=" " />

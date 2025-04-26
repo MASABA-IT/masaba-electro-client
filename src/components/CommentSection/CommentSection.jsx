@@ -186,12 +186,12 @@ const CommentSection = ({ product }) => {
         </div>
 
         {/* Comments Section - Fixed height container with scroll */}
-        <div className="bg-white p-6 rounded-xl border shadow-sm border-gray-200 flex flex-col">
+        <div className=" bg-white p-6 rounded-xl border shadow-sm border-gray-200 flex flex-col">
           <h3 className="text-2xl font-semibold text-gray-800 mb-4">
             Comments ({comments.length || 0})
           </h3>
 
-          <div className="flex-1 overflow-y-auto space-y-4 min-h-[400px]">
+          <div className="flex-1 overflow-y-auto space-y-4 h-auto lg:min-h-[400px]">
             {isLoading ? (
               <div className="space-y-4 animate-pulse">
                 {[1, 2, 3].map((_, idx) => (
@@ -243,16 +243,14 @@ const CommentSection = ({ product }) => {
 
           {/* Pagination - Fixed at bottom */}
           {pagination.last_page > 1 && (
-            <div className="mt-4 pt-4 border-t border-gray-200">
-              <Pagination
-                currentPage={currentPage}
-                lastPage={pagination.last_page}
-                hasPrev={!!pagination.prev_page_url}
-                hasNext={!!pagination.next_page_url}
-                onPageChange={(page) => setCurrentPage(page)}
-                primaryColor="green"
-              />
-            </div>
+            <Pagination
+              currentPage={currentPage}
+              lastPage={pagination.last_page}
+              hasPrev={!!pagination.prev_page_url}
+              hasNext={!!pagination.next_page_url}
+              onPageChange={(page) => setCurrentPage(page)}
+              primaryColor="green"
+            />
           )}
         </div>
       </div>

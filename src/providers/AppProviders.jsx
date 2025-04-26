@@ -2,6 +2,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { buildSearchQuery } from "../utils/buildSearchQuery";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 // ✅ Import API Base URL from .env
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -34,6 +35,16 @@ export const AppProvider = ({ children }) => {
   const [reset, setReset] = useState(false);
   const [recentlyViewed, setRecentlyViewed] = useState([]);
   const [recentlyViewsData, setRecentlyViewsData] = useState(null);
+  ///LOGIN&SIGNUP
+  const [formData, setFormData] = useState({
+    username: "",
+    phone_number: "",
+    email: "",
+    password: "",
+    password_confirmation: "",
+  });
+  const [userData, setUserData] = useState(null);
+
   //1 FILTER DATA MULTI OR SINGLE
   useEffect(() => {
     const fetchFilterData = async () => {
@@ -304,9 +315,10 @@ export const AppProvider = ({ children }) => {
             },
             body: JSON.stringify({ ids: recentlyViewed }), // Send the updated array
           });
-          console.log(response);
+          console.log(response, "response");
           if (response.ok) {
             const result = await response.json();
+
             setRecentlyViewsData(result);
           } else {
             console.error("Failed to update recently viewed products.");
@@ -342,6 +354,40 @@ export const AppProvider = ({ children }) => {
     //   return true;
     // });
   }
+  //USER-DATA-SET
+  useEffect(() => {
+    const storedUserData = JSON.parse(localStorage.getItem("userData"));
+    if (storedUserData) {
+      setUserData(storedUserData);
+    }
+  }, []);
+  //LOgOut
+  const handleLogout = async (navigate) => {
+    try {
+      const response = await fetch(`${BASE_URL}/api/logout`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${userData?.token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        console.log("Logout successful ✅");
+      } else {
+        console.warn("Logout request failed, but clearing local data anyway.");
+      }
+    } catch (error) {
+      console.error("Logout error ❌:", error);
+    } finally {
+      localStorage.removeItem("userData");
+      setUserData(null);
+      if (navigate) {
+        navigate("/login");
+      }
+    }
+  };
+  //HANDLE LOGIN
 
   const appInfo = {
     BASE_URL,
@@ -379,6 +425,12 @@ export const AppProvider = ({ children }) => {
     recentlyViewed,
     addToRecentlyViewed,
     recentlyViewsData,
+    //LOGIN&PASS
+    formData,
+    setFormData,
+    userData,
+    setUserData,
+    handleLogout,
   };
   return <AppContext.Provider value={appInfo}>{children}</AppContext.Provider>;
 };

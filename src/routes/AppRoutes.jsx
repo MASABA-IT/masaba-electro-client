@@ -6,6 +6,10 @@ import Home from "../pages/Home/Home";
 import ProductDetails from "../pages/ProductDetails/ProductDetails";
 import AllCartPage from "../pages/AllCartPage/AllCartPage";
 import AllCategories from "../pages/AllCateGories/AllCateGories";
+import Login from "../pages/Login/Login";
+import SignUp from "../pages/SignUp/SignUp";
+import PrivateRoute from "../components/PrivateRoute";
+import Dashboard from "../pages/Dashboard/Dashboard";
 
 const AppRoutes = () => {
   const router = createBrowserRouter([
@@ -32,6 +36,22 @@ const AppRoutes = () => {
         {
           path: "/cart",
           element: <AllCartPage />,
+        },
+        {
+          path: "/login",
+          element: <Login />,
+        },
+        {
+          path: "/signup",
+          element: <SignUp />,
+        },
+        {
+          path: "/dashboard",
+          element: (
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          ),
         },
       ],
     },

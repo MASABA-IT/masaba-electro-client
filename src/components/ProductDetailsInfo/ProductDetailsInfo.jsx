@@ -10,7 +10,6 @@ import ProductInfoDescription from "../ProductInfoDescription/ProductInfoDescrip
 import ProductMightLike from "../ProductMightLike/ProductMightLike";
 
 const ProductDetailsInfo = ({ product }) => {
-  console.log(product);
   const [activeTab, setActiveTab] = useState(1); // Default to the first tab (Description)
   const [productData, setProductData] = useState([]); // State for dynamic product data
 
@@ -140,7 +139,7 @@ const ProductDetailsInfo = ({ product }) => {
       />
 
       {/* you may like right */}
-      <ProductMightLike products={products} />
+      <ProductMightLike />
       {/* <ProductMightLike products={products} videos={videos} /> */}
     </div>
   );

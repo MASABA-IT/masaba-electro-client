@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FaArrowRight } from "react-icons/fa";
 import { useProductStore } from "../../providers/AppProviders";
+import { Link } from "react-router-dom";
 
 // CollectionItem Component (each item in a collection)
 const CollectionItem = ({ item }) => {
@@ -102,12 +103,15 @@ const Collection = ({ collection }) => {
           height: "100%",
         }}
       >
-        <h2 className="text-2xl md:text-3xl font-semibold">
+        <h2 className="text-2xl md:text-3xl mb-6 font-semibold">
           {collection.title}
         </h2>
-        <button className="w-60 bg-white px-8 mt-4 py-4 rounded-lg text-2xl font-semibold text-gray-600 transition duration-300 ease-in-out hover:shadow-md hover:-translate-y-1 hover:scale-105 active:scale-95">
+        <Link
+          to="/categories"
+          className="w-60 bg-white px-8 mt-4 py-4 rounded-lg text-2xl font-semibold text-gray-600 transition duration-300 ease-in-out hover:shadow-md hover:-translate-y-1 hover:scale-105 active:scale-95"
+        >
           Source Now
-        </button>
+        </Link>
       </div>
 
       <div className="collection-right">
@@ -127,9 +131,12 @@ const Collection = ({ collection }) => {
         )}
       </div>
 
-      <button className="w-60  flex justify-center items-center gap-2 md:hidden   px-8 py-4 rounded-lg text-xl font-semibold text-blue-500 transition duration-300 ease-in-out hover:shadow-md hover:-translate-y-1 hover:scale-105 active:scale-95">
+      <Link
+        to="/categories"
+        className="w-60  flex justify-center items-center gap-2 md:hidden   px-8 py-4 rounded-lg text-xl font-semibold text-blue-500 transition duration-300 ease-in-out hover:shadow-md hover:-translate-y-1 hover:scale-105 active:scale-95"
+      >
         Source Now <FaArrowRight />
-      </button>
+      </Link>
     </div>
   );
 };

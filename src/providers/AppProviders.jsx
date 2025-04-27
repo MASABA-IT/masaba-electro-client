@@ -2,7 +2,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { buildSearchQuery } from "../utils/buildSearchQuery";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
 // ✅ Import API Base URL from .env
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -364,6 +363,7 @@ export const AppProvider = ({ children }) => {
   //LOgOut
   const handleLogout = async (navigate) => {
     try {
+      console.log(userData?.token, "token");
       const response = await fetch(`${BASE_URL}/api/logout`, {
         method: "POST",
         headers: {
@@ -387,8 +387,18 @@ export const AppProvider = ({ children }) => {
       }
     }
   };
-  //HANDLE LOGIN
 
+  useEffect(() => {
+    const storedUserData = localStorage.getItem("userData");
+
+    if (storedUserData) {
+      const parsedUserData = JSON.parse(storedUserData);
+      setUserData(parsedUserData); // Set user data from localStorage
+    }
+  }, []);
+  console.log(userData, "check--- --data");
+
+  //HANDLE LOGIN
   const appInfo = {
     BASE_URL,
     loading,

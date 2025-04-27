@@ -53,6 +53,7 @@ const Login = () => {
       setIsLoading(true); // Set loading state to true during API call
 
       try {
+        // 1. Login API call
         const response = await fetch(`${BASE_URL}/api/login`, {
           method: "POST",
           headers: {
@@ -72,17 +73,35 @@ const Login = () => {
           setIsLoading(false); // Reset loading state
           return;
         }
-        console.log(result, "login-result");
+
+        // 2. Fetch profile data using the token from login response
+        const profileResponse = await fetch(`${BASE_URL}/api/profile/show`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${result.token}`, // Send the token for authentication
+          },
+        });
+
+        const profileResult = await profileResponse.json();
+        console.log(profileResponse, "---------PROFILE");
+        if (!profileResponse.ok) {
+          console.error("Failed to fetch profile data ❌:", profileResult);
+          alert(profileResult.message || "Failed to fetch profile data!");
+          setIsLoading(false); // Reset loading state
+          return;
+        }
+
+        // 3. If both login and profile fetch are successful, set user data
         const userData = {
           message: result.message || "Login successful!",
           token: result.token,
           user: {
-            username: result.user.username,
+            username: result.user.name,
             email: result.user.email,
-            phone: result.user.phone_number,
           },
+          profile: profileResult, // Add profile data to userData
         };
-
+        console.log("user-data", userData, "check");
         // Save user data to localStorage
         localStorage.setItem("userData", JSON.stringify(userData));
 
@@ -90,7 +109,7 @@ const Login = () => {
         setUserData(userData);
 
         // Navigate to dashboard or home page
-        // navigate("/dashboard");
+        navigate("/dashboard");
 
         // Clear the form fields after successful login
         setEmail("");

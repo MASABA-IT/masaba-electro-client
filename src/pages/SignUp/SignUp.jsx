@@ -78,7 +78,7 @@ const SignUp = () => {
           alert(result.message || "Registration failed!");
           return;
         }
-        console.log(result, "resutl");
+
         const userData = {
           message: result.message || "Registration successful!",
           token: result.token, // Assumed token from server response
@@ -108,7 +108,7 @@ const SignUp = () => {
         alert(result.message || "Registration successful! 🎉");
 
         // Navigate after success
-        navigate("/login");
+        navigate("/dashboard");
       } catch (error) {
         console.error("Error during registration ❌:", error);
         alert("Something went wrong! Try again later.");

@@ -18,7 +18,7 @@ const Navbar = ({ showSidebar, setShowSidebar }) => {
       navigate("/login");
     }
   };
-  console.log(userData, "userData");
+
   const [searchTerm, setSearchTerm] = useState("");
   const [category, setCategory] = useState("All");
 
@@ -38,13 +38,18 @@ const Navbar = ({ showSidebar, setShowSidebar }) => {
         </button>
         <div className="w-full  flex justify-between items-center  ">
           <div className="brand flex justify-center items-center gap-2 md:text-3xl lg:text-5xl font-black">
-            <Link to="/" className="flex justify-center items-center gap-2">
+            <Link
+              to="/"
+              className="flex justify-center items-center gap-2 "
+              style={{ textShadow: "1px 1px #333" }}
+            >
               <img
                 src="/src/assets/logo/nav-logo.svg"
                 alt="Brand Logo"
                 className="brand-logo md:w-12"
               />
-              <span>Brand</span>
+              <span className="text-stone-600">Masaba </span>
+              <span className="text-orange-400"> Bazar </span>
             </Link>
           </div>
           {/* Input field */}
@@ -101,6 +106,13 @@ const Navbar = ({ showSidebar, setShowSidebar }) => {
             </button>
             <button
               className="flex flex-col items-center gap-y-3"
+              onClick={() => navigate("/wishlist")}
+            >
+              <FaHeart className=" " />
+              <span className="text-sm">Wishlist</span>
+            </button>
+            <button
+              className="flex flex-col items-center gap-y-3"
               onClick={() => navigate("/cart")}
             >
               <HiMiniShoppingCart className=" " />
@@ -113,7 +125,10 @@ const Navbar = ({ showSidebar, setShowSidebar }) => {
       <div className="md:hidden nav-content">
         <div className="w-full flex-wrap flex gap-y-4 md:gap-y-0  justify-between items-center  ">
           <div>
-            <div className="brand flex justify-center items-center gap-2 text-3xl md:text-5xl font-black">
+            <div
+              className="  flex justify-center items-center gap-2 text-4xl md:text-5xl font-black"
+              style={{ textShadow: "1px 1px #333" }}
+            >
               <button
                 onClick={() => setShowSidebar(!showSidebar)}
                 className="md:hidden "
@@ -125,7 +140,8 @@ const Navbar = ({ showSidebar, setShowSidebar }) => {
                 alt="Brand Logo"
                 className="brand-logo w-12 aspect-square"
               />
-              <span>Brand</span>
+              <span className="text-stone-700">Masaba </span>
+              <span className="text-orange-400"> Bazar </span>
             </div>
           </div>
 

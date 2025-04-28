@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import defaultProfile from "../../assets/imgs/fake_profile.jpg";
 import {
   FaUser,
@@ -12,25 +12,12 @@ import {
 } from "react-icons/fa"; // Import icons from react-icons
 import { useProductStore } from "../../providers/AppProviders";
 import ProfileSection from "../../components/ProfileSection/ProfileSection";
+import ChangePasswordSection from "../../components/ChangePasswordSection/ChangePasswordSection";
+// import WishlistProducts from "../WishlistProducts/WishlistProducts";
 
 const Dashboard = () => {
   const { BASE_URL, userData, handleLogout } = useProductStore();
-  const { data } = userData.profile;
-  console.log(data, "------------data-----------");
-  const navigate = useNavigate();
-  const [name, setName] = useState(data.name);
-  const [email, setEmail] = useState(data.email);
-  const [phone, setPhone] = useState(data.phone_number);
-  const [address, setAddress] = useState(data.address);
-
-  const [profileImg, setProfileImg] = useState(
-    data.image ? `${BASE_URL}/${data.image}` : defaultProfile
-  );
-
-  console.log(profileImg);
-  const [selectedSection, setSelectedSection] = useState("profile");
-  const [image, setImage] = useState(profileImg);
-
+  const [activeIndex, setActiveIndex] = useState(0);
   const menuItems = [
     { name: "Profile", icon: <FaUser />, section: "profile" },
     {
@@ -38,11 +25,11 @@ const Dashboard = () => {
       icon: <FaShoppingCart />,
       section: "orders",
     },
-    {
-      name: "Wishlist",
-      icon: <FaHeart />,
-      section: "wishlist",
-    },
+    // {
+    //   name: "Wishlist",
+    //   icon: <FaHeart />,
+    //   section: "wishlist",
+    // },
     {
       name: "Saved Data",
       icon: <FaSave />,
@@ -55,27 +42,55 @@ const Dashboard = () => {
     },
   ];
 
-  const handleMenuClick = (section) => {
-    setSelectedSection(section); // Update the selected section based on the clicked menu item
+  const { section } = useParams();
+
+  const validSections = menuItems.map((item) => item.section);
+  console.log(validSections, "valid-checker");
+  const isValidSection = validSections.includes(section);
+
+  const [selectedSection, setSelectedSection] = useState(
+    isValidSection ? section : "profile"
+  );
+
+  const { user } = userData;
+  const profileData = userData.profile?.data;
+
+  const data =
+    profileData?.name &&
+    profileData.address &&
+    profileData &&
+    Object.keys(profileData).length > 0
+      ? profileData
+      : user;
+
+  const navigate = useNavigate();
+  const [name, setName] = useState(data.name);
+  const [email, setEmail] = useState(data.email);
+  const [phone, setPhone] = useState(data.phone || data.phone_number);
+  const [address, setAddress] = useState(data.address);
+  const [profileImg, setProfileImg] = useState(
+    data?.image || userData.profile?.data?.image
+      ? `${BASE_URL}/${data.image || userData.profile?.data.image}`
+      : defaultProfile
+  );
+
+  const [image, setImage] = useState(profileImg);
+
+  const token = userData?.token;
+
+  const handleMenuClick = (section, index) => {
+    setSelectedSection(section);
+    setActiveIndex(index);
   };
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
-    console.log("Selected file:", file);
 
     if (!file) return;
 
     const formData = new FormData();
     formData.append("image", file); // Append the image file
 
-    // Log FormData contents
-    formData.forEach((value, key) => {
-      console.log(key, value);
-    });
-
     try {
-      const userData = JSON.parse(localStorage.getItem("userData"));
-      const token = userData?.token;
-
       // Log headers and body
       console.log("Headers:", {
         Authorization: `Bearer ${token}`,
@@ -86,29 +101,35 @@ const Dashboard = () => {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        body: formData, 
+        body: formData,
       });
 
       const result = await response.json();
 
       if (response.ok) {
-        console.log("Image updated successfully ✅", result);
         // console.log(result.data?.imageUrl, "result.data?.imageUrl");
-        setImage(result.data?.imageUrl || URL.createObjectURL(file));
+        setImage(result.image || URL.createObjectURL(file));
+
         if (userData) {
           const updatedUserData = {
             ...userData,
             profile: {
-              ...userData.profile,
-              image: result.data?.imageUrl, 
+              ...(userData.profile || {}),
+
+              data: {
+                ...(userData.profile?.data || {}),
+                image: result.image,
+              },
             },
           };
-
           // Save the updated user data back to localStorage
           localStorage.setItem("userData", JSON.stringify(updatedUserData));
+          console.log(updatedUserData, "updateUserData");
+          console.log(localStorage.getItem("userData"), "userData");
         }
-        console.log(result.data?.imageUrl, "result.data?.imageUrl", result);
+
         alert("Profile image updated!");
+        window.location.reload();
       } else {
         console.error("Image update failed ❌", result);
         alert(result.message || "Failed to update image.");
@@ -119,7 +140,6 @@ const Dashboard = () => {
     }
   };
 
-  // Trigger the file input click programmatically
   const handleImageClick = () => {
     const fileInput = document.getElementById("profileImageInput");
     console.log(fileInput, "fileInput");
@@ -133,21 +153,22 @@ const Dashboard = () => {
       navigate("/login");
     }
   };
-  const handleSaveProfile = (
-    newName,
-    newEmail,
-    newPhone,
-    newAddress,
-    newProfileImg
-  ) => {
-    setName(newName);
-    setEmail(newEmail);
-    setPhone(newPhone);
-    setAddress(newAddress);
-    setProfileImg(newProfileImg);
-    console.log(name, email, phone, newAddress, newProfileImg);
-    alert("Profile Updated!");
-  };
+
+  // const handleSaveProfile = (
+  //   newName,
+  //   newEmail,
+  //   newPhone,
+  //   newAddress,
+  //   newProfileImg
+  // ) => {
+  //   setName(newName);
+  //   setEmail(newEmail);
+  //   setPhone(newPhone);
+  //   setAddress(newAddress);
+  //   setProfileImg(newProfileImg);
+  //   console.log(name, email, phone, newAddress, newProfileImg);
+  //   alert("Profile Updated!");
+  // };
 
   return (
     <div className="dashboard__content">
@@ -180,8 +201,13 @@ const Dashboard = () => {
           {menuItems.map((item, index) => (
             <button
               key={index}
-              onClick={() => handleMenuClick(item.section)} // Update the selected section on click
-              className="w-full dashboard_btnarea   hover:bg-blue-200 duration-75 text-2xl text-gray-600 p-6 rounded flex items-center gap-x-6"
+              onClick={() => handleMenuClick(item.section, index)}
+              className={`w-full dashboard_btnarea text-2xl text-gray-600 p-4 rounded flex items-center gap-x-6 duration-75 
+                ${
+                  activeIndex === index
+                    ? "bg-blue-300 text-white"
+                    : "hover:bg-blue-100"
+                }`}
             >
               {item.icon}
               <span>{item.name}</span>
@@ -209,7 +235,7 @@ const Dashboard = () => {
             address={address}
             handleImageClick={handleImageClick}
             handleImageUpload={handleImageUpload}
-            onSave={handleSaveProfile}
+            //onSave={handleSaveProfile}
           />
         )}
 
@@ -220,12 +246,7 @@ const Dashboard = () => {
           </div>
         )}
 
-        {selectedSection === "wishlist" && (
-          <div>
-            <h3 className="text-xl mb-4">Wishlist</h3>
-            <p>Your wishlist will be displayed here.</p>
-          </div>
-        )}
+        {/* {selectedSection === "wishlist" && <WishlistProducts />} */}
 
         {selectedSection === "saved-data" && (
           <div>
@@ -234,12 +255,7 @@ const Dashboard = () => {
           </div>
         )}
 
-        {selectedSection === "change-password" && (
-          <div>
-            <h3 className="text-xl mb-4">Change Password</h3>
-            <p>Your password change section will be here.</p>
-          </div>
-        )}
+        {selectedSection === "change-password" && <ChangePasswordSection />}
       </div>
     </div>
   );

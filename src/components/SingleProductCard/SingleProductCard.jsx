@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaEye, FaRegHeart, FaRegStar } from "react-icons/fa"; // Eye icon from react-icons
 import { Link, useNavigate } from "react-router-dom";
 import StarRating from "../StarRating/StarRating";
@@ -27,6 +27,80 @@ const SingleProductCard = ({ product, isGridView }) => {
     console.log("click");
     navigate(`/categories/product/${product.id}`);
   };
+  const handleLikeClick = (e) => {
+    e.stopPropagation();
+
+    const currentLikedStatus = !isLiked; // Toggling the status first
+
+    // Update the localStorage and wishlist based on the action
+    if (currentLikedStatus) {
+      updateWishlistInLocalStorage(product.id, "add");
+      addToWishlistAPI(product.id);
+    } else {
+      updateWishlistInLocalStorage(product.id, "remove");
+    }
+
+    // Set the new liked status
+    setIsLiked(currentLikedStatus);
+  };
+
+  const updateWishlistInLocalStorage = (productId, action) => {
+    const existingWishlist =
+      JSON.parse(localStorage.getItem("wishlistData")) || [];
+
+    if (action === "add") {
+      // Check if product already in wishlist
+      const isProductAlreadyInWishlist = existingWishlist.some(
+        (item) => item.product_id === productId
+      );
+
+      if (!isProductAlreadyInWishlist) {
+        existingWishlist.push({ product_id: productId });
+        localStorage.setItem("wishlistData", JSON.stringify(existingWishlist));
+      }
+    } else if (action === "remove") {
+      const updatedWishlist = existingWishlist.filter(
+        (item) => item.product_id !== productId
+      );
+      localStorage.setItem("wishlistData", JSON.stringify(updatedWishlist));
+    }
+  };
+
+  const addToWishlistAPI = () => {
+    const url = `${BASE_URL}/api/wishlist/products`;
+
+    // Prepare data to send the product_id in the required format
+    const wishlistData = JSON.parse(localStorage.getItem("wishlistData")) || [];
+
+    // Prepare data to send all product IDs from localStorage
+    const data = { product_ids: wishlistData };
+    console.log(data, "data");
+
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Product added to wishlist:", data);
+      })
+      .catch((error) => {
+        console.error("Error adding to wishlist:", error);
+      });
+  };
+
+  useEffect(() => {
+    // Check if the product is already in the wishlist when component mounts
+    const existingWishlist =
+      JSON.parse(localStorage.getItem("wishlistData")) || [];
+    const isProductInWishlist = existingWishlist.some(
+      (item) => item.product_id === product.id
+    );
+    setIsLiked(isProductInWishlist);
+  }, [product.id]);
   return (
     <div
       className={` product-card relative border rounded-lg overflow-hidden flex  flex-col cursor-pointer hover:shadow-md duration-100   md:flex-${
@@ -157,10 +231,11 @@ const SingleProductCard = ({ product, isGridView }) => {
         className={`custom-button absolute xl:right-3 right-2 md:right-2 ${
           isGridView ? "md:bottom-20  xl:bottom-34 md:right-2" : "top-4"
         } border-2 p-3 rounded-lg text-2xl group hover:shadow-sm`}
-        onClick={(e) => {
-          e.stopPropagation();
-          setIsLiked(!isLiked);
-        }}
+        onClick={handleLikeClick}
+        // onClick={(e) => {
+        //   e.stopPropagation();
+        //   setIsLiked(!isLiked);
+        // }}
       >
         <FaRegHeart className={isLiked ? "text-red-500" : "text-blue-400"} />
       </button>

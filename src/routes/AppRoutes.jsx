@@ -10,6 +10,7 @@ import Login from "../pages/Login/Login";
 import SignUp from "../pages/SignUp/SignUp";
 import PrivateRoute from "../components/PrivateRoute";
 import Dashboard from "../pages/Dashboard/Dashboard";
+import WishlistProducts from "../pages/WishlistProducts/WishlistProducts";
 
 const AppRoutes = () => {
   const router = createBrowserRouter([
@@ -38,10 +39,14 @@ const AppRoutes = () => {
           element: <AllCartPage />,
         },
         {
+          path: "/wishlist",
+          element: <WishlistProducts />,
+        },
+        {
           path: "/login",
           element: <Login />,
         },
-     
+
         {
           path: "/signup",
           element: <SignUp />,

@@ -63,7 +63,7 @@ const SignUp = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            username: formData.username,
+            name: formData.username,
             phone_number: formData.phone_number, // Keep as formData.phone_number if that's your field
             email: formData.email,
             password: formData.password,
@@ -83,7 +83,7 @@ const SignUp = () => {
           message: result.message || "Registration successful!",
           token: result.token, // Assumed token from server response
           user: {
-            username: result.user.name,
+            name: result.user.name,
             email: result.user.email,
             phone: result.user.phone_number,
           },
@@ -95,7 +95,7 @@ const SignUp = () => {
         setUserData(userData);
         // Clear form (✅ matching your actual formData structure)
         setFormData({
-          username: "",
+          name: "",
           phone_number: "",
           email: "",
           password: "",
@@ -116,7 +116,7 @@ const SignUp = () => {
     }
   };
 
-  console.log(formData, "formData");
+  console.log(formData, "formData---------------");
   return (
     <div className="signup_content xl:min-h-screen bg-gradient-to-br from-pink-100 via-white to-blue-100 flex items-center justify-center p-8">
       <div className="signup_form my-10  bg-white/90 backdrop-blur-md shadow-2xl rounded-3xl overflow-hidden flex items-center flex-col md:flex-row xl:h-[60vh] xl:max-h-[800px]">

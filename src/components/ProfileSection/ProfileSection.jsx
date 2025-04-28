@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { FaEdit } from "react-icons/fa";
+import { useProductStore } from "../../providers/AppProviders";
 const ProfileSection = ({
   image,
   name,
@@ -10,17 +11,75 @@ const ProfileSection = ({
   handleImageUpload,
   onSave,
 }) => {
+  const { BASE_URL } = useProductStore();
   const [isEditing, setIsEditing] = useState(false);
   const [editedName, setEditedName] = useState(name);
   const [editedEmail, setEditedEmail] = useState(email);
   const [editedPhone, setEditedPhone] = useState(phone);
-  const [editedAddress, setEditedAddress] = useState(address);
+  const [editedAddress, setEditedAddress] = useState(address || "");
 
-  const handleSave = () => {
-    onSave(editedName, editedEmail, editedPhone); // Call the parent save handler
-    setIsEditing(false);
+  const handleProfileSave = async () => {
+    try {
+      const userData = JSON.parse(localStorage.getItem("userData"));
+      const token = userData?.token;
+      console.log(userData, "userData");
+      if (!token) {
+        throw new Error("No token available!");
+      }
+
+      const payload = {
+        name: editedName,
+        email: editedEmail,
+        phone_number: editedPhone,
+        address: editedAddress,
+      };
+
+      const updatedUserData = {
+        ...userData,
+        profile: {
+          data: {
+            ...userData.profile.data,
+            name: editedName,
+            email: editedEmail,
+            phone_number: editedPhone,
+            address: editedAddress,
+          },
+        },
+      };
+      console.log(payload, "payload1");
+      console.log(updatedUserData, "updatedUserData1");
+      // Ensure that you only send the relevant data
+      const response = await fetch(`${BASE_URL}/api/change-profile`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await response.json();
+      console.log(updatedUserData, "updatedUserData");
+      console.log(payload, "payload");
+      console.log(result, "result");
+
+      if (response.ok && result.status === "success") {
+        // Update the user data in localStorage
+        localStorage.setItem("userData", JSON.stringify(updatedUserData));
+        alert("Profile updated successfully!");
+        window.location.reload();
+      } else {
+        alert("Failed to update profile");
+      }
+    } catch (error) {
+      console.error("Error saving profile:", error);
+      alert("Something went wrong while updating the profile");
+    }
   };
 
+  // console.log(sanitizedUserData, "sanitizedUserData");
+  // console.log(payload, "payload");
+  // console.log(result, "result");
   return (
     <div className="profile-edit-form text-2xl">
       <div className="relative w-60 h-60">
@@ -112,9 +171,7 @@ const ProfileSection = ({
         value={editedAddress}
         onChange={(e) => setEditedAddress(e.target.value)}
         className="w-full p-2 mt-2 border rounded-md"
-        placeholder={`${
-          editedAddress ? editedAddress : "ℹ️Please enter your address"
-        }`}
+        placeholder={editedAddress || "ℹ️Please enter your address"}
         disabled={!isEditing}
       />
 
@@ -123,7 +180,7 @@ const ProfileSection = ({
         {isEditing ? (
           <>
             <button
-              onClick={handleSave}
+              onClick={handleProfileSave}
               className="bg-green-500 text-white p-2 rounded hover:bg-green-600"
             >
               Save Changes

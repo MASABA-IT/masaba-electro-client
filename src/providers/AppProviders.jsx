@@ -393,10 +393,9 @@ export const AppProvider = ({ children }) => {
 
     if (storedUserData) {
       const parsedUserData = JSON.parse(storedUserData);
-      setUserData(parsedUserData); // Set user data from localStorage
+      setUserData(parsedUserData);
     }
   }, []);
-  console.log(userData, "check--- --data");
 
   //HANDLE LOGIN
   const appInfo = {

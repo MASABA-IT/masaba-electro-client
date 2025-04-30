@@ -5,7 +5,7 @@ const CartSummary = ({
   applyCoupon,
   cartData,
   discount = 22.0,
-  tax = 22.0,
+
   onCheckout,
   paymentOptions = [
     { id: 12, src: "/src/assets/imgs/payment1.png", alt: "Payment Option 1" },
@@ -19,7 +19,7 @@ const CartSummary = ({
     (total, item) => total + item.price * item.quantity,
     0
   );
-  const total = (subtotal - discount + tax).toFixed(2);
+  const total = (subtotal - discount).toFixed(2);
 
   return (
     <div className="carts_totalAmount flex flex-col gap-y-4">
@@ -62,14 +62,14 @@ const CartSummary = ({
                   -${discount.toFixed(2)}
                 </td>
               </tr>
-              <tr>
+              {/* <tr>
                 <td className="text-xl font-semibold py-2 text-gray-500">
                   Tax
                 </td>
                 <td className="text-xl font-semibold py-2 text-right text-gray-500">
                   +${tax.toFixed(2)}
                 </td>
-              </tr>
+              </tr> */}
               <tr>
                 <td className="border-t border-gray-300 my-4" colSpan="2"></td>
               </tr>

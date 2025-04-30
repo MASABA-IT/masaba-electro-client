@@ -45,7 +45,7 @@ const Dashboard = () => {
   const { section } = useParams();
 
   const validSections = menuItems.map((item) => item.section);
-  console.log(validSections, "valid-checker");
+
   const isValidSection = validSections.includes(section);
 
   const [selectedSection, setSelectedSection] = useState(
@@ -173,7 +173,7 @@ const Dashboard = () => {
   return (
     <div className="dashboard__content">
       {/* Left Side: Profile Info */}
-      <div className="dashboard_left-listArea bg-white">
+      <div className="dashboard_left-listArea bg-white relative">
         <div className="profile-info p-4">
           {/* Title */}
           <h2 className="text-2xl font-bold">Profile</h2>
@@ -197,7 +197,7 @@ const Dashboard = () => {
         </div>
 
         {/* Menu Items */}
-        <div className="w-full flex justify-center items-center flex-col p-4 gap-4 overflow-y-auto">
+        <div className="w-full   h-[350px]  flex   items-center flex-col p-4 gap-4 overflow-y-auto ">
           {menuItems.map((item, index) => (
             <button
               key={index}
@@ -213,14 +213,13 @@ const Dashboard = () => {
               <span>{item.name}</span>
             </button>
           ))}
-
-          <button
-            onClick={handleButtonClick}
-            className="w-full bg-gray-500 text-2xl text-white p-4 rounded  "
-          >
-            Logout
-          </button>
         </div>
+        <button
+          onClick={handleButtonClick}
+          className="w-full bg-gray-500 text-2xl text-white p-4 rounded  absolute bottom-0"
+        >
+          Logout
+        </button>
       </div>
 
       {/* Right Side: Editable Profile or Other Sections */}

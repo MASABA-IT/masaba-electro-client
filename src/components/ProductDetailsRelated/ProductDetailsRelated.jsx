@@ -2,7 +2,6 @@ import React from "react";
 import { useProductStore } from "../../providers/AppProviders";
 
 const ProductDetailsRelated = ({ relatedProducts }) => {
-  console.log(relatedProducts);
   const { BASE_URL } = useProductStore();
   const handleViewsDataClick = (id) => {
     window.location.href = `/categories/product/${id}`;

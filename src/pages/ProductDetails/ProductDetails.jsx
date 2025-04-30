@@ -18,21 +18,85 @@ import ProductDetailsDiscount from "../../components/ProductDetailsDiscount/Prod
 import ProductPriceSection from "../../components/ProductPriceSection/ProductPriceSection";
 import ProductInfo from "../../components/ProductInfo/ProductInfo";
 import ReviewsWithComments from "../../components/ReviewsWithComments/ReviewsWithComments";
+import { updateWishlistInLocalStorage } from "../../utils/wishlist";
 
 const ProductDetails = () => {
-  const { fetchProductById, productData, loading, addToRecentlyViewed } =
-    useProductStore();
+  const {
+    fetchProductById,
+    productData,
+    loading,
+    addToRecentlyViewed,
+    showWishlist,
+    BASE_URL,
+    cartData,
+    addToCart,
+    createCartItem,
+  } = useProductStore();
+
   const { category, condition, id } = useParams();
   const [filteredProducts, setFilteredProducts] = useState([]);
+  const [resetTrigger, setResetTrigger] = useState(false);
+  const [newProduct, setNewProduct] = useState(null);
+  useEffect(() => {
+    if (productData?.productArray) {
+      const initialQty = 1;
+      const cartItem = createCartItem(productData.productArray, initialQty);
+      setNewProduct(cartItem);
+    }
+  }, [productData, createCartItem]);
 
   const [mainImage, setMainImage] = useState(filteredProducts[0]?.image || "");
 
-  const [saved, setSaved] = useState(false);
-  const handleSaveToggle = () => setSaved((prev) => !prev);
-  const handleAddToCart = (qty) => {
-    console.log(`Added ${qty} of ${product.title} to cart`);
-    // your cart logic here
+  const saveId = showWishlist.some((item) => item.id === parseInt(id));
+
+  const [saved, setSaved] = useState(saveId);
+  useEffect(() => {
+    setSaved(saveId);
+  }, [saveId]);
+  const handleSaveToggle = (e) => {
+    e.stopPropagation();
+
+    const currentLikedStatus = !saveId;
+    if (currentLikedStatus) {
+      updateWishlistInLocalStorage(product.id, "add");
+      addToWishlistAPI(product.id);
+    } else {
+      updateWishlistInLocalStorage(product.id, "remove");
+    }
+    setSaved(currentLikedStatus);
   };
+  const addToWishlistAPI = () => {
+    const url = `${BASE_URL}/api/wishlist/products`;
+
+    // Prepare data to send the product_id in the required format
+    const wishlistData = JSON.parse(localStorage.getItem("wishlistData")) || [];
+
+    // Prepare data to send all product IDs from localStorage
+    const data = { product_ids: wishlistData };
+
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Product added to wishlist:", data);
+      })
+      .catch((error) => {
+        console.error("Error adding to wishlist:", error);
+      });
+  };
+  const handleAddToCart = () => {
+    if (!newProduct) return;
+    console.log("Adding to cart:", newProduct);
+    addToCart(newProduct, newProduct.quantity || 1);
+    setResetTrigger((prev) => !prev);
+  };
+
+  console.log(newProduct, "newProduct");
   useEffect(() => {
     fetchProductById(id);
   }, []);
@@ -56,7 +120,7 @@ const ProductDetails = () => {
     () => productData?.collectionProducts || null,
     [productData]
   );
-  console.log(relatedProducts);
+
   if (loading || !productData) {
     return (
       <div className="product_content animate-pulse min-h-[500px] bg-white p-6 rounded-xl shadow-md space-y-6">
@@ -87,21 +151,16 @@ const ProductDetails = () => {
       </div>
     );
   }
-
+  //////////////
+  //ADD TO CART
   // //////////////////////
+
   const breadcrumbItems = [
     { label: "Home", link: "/" },
     { label: "Category", link: "/categories" }, // Show the category name
     { label: product.title || `${filteredProducts[0]?.title}`, p: "" }, // Show the product title if available, otherwise show the product ID
   ];
-  const smallImages = [
-    "/src/assets/imgs/imgw-1.jpg",
-    "/src/assets/imgs/imgw-2.jpg",
-    "/src/assets/imgs/imgm-3.webp",
-    "/src/assets/imgs/imgm-4.webp",
-    "/src/assets/imgs/imgm-5.jpeg",
-    "/src/assets/imgs/imgm-6.webp",
-  ];
+  console.log(product, "product");
 
   return (
     <div className="product_content">
@@ -126,6 +185,11 @@ const ProductDetails = () => {
           isSaved={saved}
           onSaveToggle={handleSaveToggle}
           onAddToCart={handleAddToCart}
+          id={id}
+          createCartItem={createCartItem}
+          newProduct={newProduct}
+          setNewProduct={setNewProduct}
+          resetTrigger={resetTrigger}
         />
       </div>
       {/* 2nd Column */}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaHeart, FaUser } from "react-icons/fa";
 import { HiMiniShoppingCart } from "react-icons/hi2";
 
@@ -7,7 +7,14 @@ import { MdMessage } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import { useProductStore } from "../../providers/AppProviders";
 const Navbar = ({ showSidebar, setShowSidebar }) => {
-  const { userData, handleLogout } = useProductStore();
+  const { userData, handleLogout, cartItems } = useProductStore();
+  // Your cartItems state (you can replace this with actual data)
+  const [cartCount, setCartCount] = useState(cartItems.length); // Store the cart count for animation
+
+  useEffect(() => {
+    // Whenever cartItems change, update the cart count
+    setCartCount(cartItems.length);
+  }, [cartItems]);
   const navigate = useNavigate();
 
   const handleButtonClick = () => {
@@ -112,10 +119,20 @@ const Navbar = ({ showSidebar, setShowSidebar }) => {
               <span className="text-sm">Wishlist</span>
             </button>
             <button
-              className="flex flex-col items-center gap-y-3"
+              className="flex flex-col items-center gap-y-3 relative"
               onClick={() => navigate("/cart")}
             >
-              <HiMiniShoppingCart className=" " />
+              <HiMiniShoppingCart className="text-2xl" />
+
+              {/* Cart count notification */}
+              {cartCount > 0 && (
+                <span
+                  className="absolute -top-2 right-0 text-white text-xs bg-red-500 rounded-full w-6 h-6 p-3 flex items-center justify-center animate-bounce"
+                  style={{ transform: "translate(50%, -50%)" }}
+                >
+                  {cartCount}
+                </span>
+              )}
               <span className="text-sm">My Cart</span>
             </button>
           </div>

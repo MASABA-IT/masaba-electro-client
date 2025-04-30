@@ -156,7 +156,7 @@ const ReviewSection = ({ product }) => {
         {/* Pagination-------- */}
 
         {pagination.last_page > 1 && (
-          <Pagination 
+          <Pagination
             currentPage={currentPage}
             lastPage={pagination.last_page}
             hasPrev={!!pagination.prev_page_url}

@@ -10,9 +10,13 @@ export const AppProvider = ({ children }) => {
   //fake data next remove
   const [productData, setProductData] = useState(null);
 
+  const [isLiked, setIsLiked] = useState(false);
   //1 GLOBAL STATES
   const [categories, setCategories] = useState([]);
-
+  const [showWishlist, setShowWishlist] = useState([]);
+  const [cartData, setCartData] = useState(
+    JSON.parse(localStorage.getItem("cartData")) || []
+  );
   const [searchCategories, setSearchCategories] = useState(null);
   const [collections, setCollections] = useState(null);
   const [navCollections, setNavCollections] = useState(null);
@@ -314,7 +318,7 @@ export const AppProvider = ({ children }) => {
             },
             body: JSON.stringify({ ids: recentlyViewed }), // Send the updated array
           });
-          console.log(response, "response");
+
           if (response.ok) {
             const result = await response.json();
 
@@ -397,7 +401,143 @@ export const AppProvider = ({ children }) => {
     }
   }, []);
 
+  useEffect(() => {
+    const syncWishlistFromLocalStorage = () => {
+      const wishlistData =
+        JSON.parse(localStorage.getItem("wishlistData")) || [];
+
+      if (wishlistData.length > 0) {
+        const url = `${BASE_URL}/api/wishlist/products`;
+        const data = { product_ids: wishlistData };
+
+        fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            setShowWishlist(data.products);
+          })
+          .catch((error) => {
+            console.error("Error syncing wishlist:", error);
+          });
+      } else {
+        setShowWishlist([]);
+      }
+    };
+
+    // Custom event শুনো
+    window.addEventListener("wishlistUpdated", syncWishlistFromLocalStorage);
+
+    // একবার রান করাও পেজ লোডে
+    syncWishlistFromLocalStorage();
+
+    return () => {
+      window.removeEventListener(
+        "wishlistUpdated",
+        syncWishlistFromLocalStorage
+      );
+    };
+  }, []);
+  ///////////////
+  //////CARTDATA
+
+  // 1) Initialize from localStorage
+  const [cartItems, setCartItems] = useState(() => {
+    const stored = localStorage.getItem("cartData");
+    return stored ? JSON.parse(stored) : [];
+  });
+
+  // 2) Keep localStorage in sync whenever cartItems changes
+  useEffect(() => {
+    localStorage.setItem("cartData", JSON.stringify(cartItems));
+  }, [cartItems]);
+  // 3) Add to cart (if not already there, qty=1)
+  const createCartItem = (product, qty = 1) => ({
+    id: product.id,
+    title: product.title,
+    image: product.thumbnail,
+    price: product.base_price,
+    quantity: qty,
+    subtotal: product.subtotal,
+  });
+
+  // Add or update product in cart
+  const addToCart = (product, qty = 1) => {
+    setCartItems((prev) => {
+      const index = prev.findIndex((item) => item.id === product.id);
+      const price = parseFloat(product.price); // Ensure numeric
+      const itemSubtotal = price * qty;
+
+      if (index !== -1) {
+        const updated = [...prev];
+        const existingItem = updated[index];
+        const newQty = existingItem.quantity + qty;
+
+        const newSubtotal =
+          parseFloat(existingItem.subtotal || 0) + itemSubtotal;
+
+        updated[index] = {
+          ...existingItem,
+          quantity: newQty,
+          subtotal: newSubtotal.toFixed(2),
+        };
+        return updated;
+      }
+
+      return [
+        ...prev,
+        {
+          id: product.id,
+          title: product.title,
+          image: product.image,
+          price: price.toFixed(2),
+          quantity: qty,
+          subtotal: itemSubtotal.toFixed(2),
+        },
+      ];
+    });
+  };
+
+  // Update cart item (e.g., from another page)
+  const updateCartItem = (id, changes = {}) => {
+    setCartItems((prev) =>
+      prev.map((item) =>
+        item.id === id
+          ? { ...item, ...changes, subtotal: changes.price * changes.quantity }
+          : item
+      )
+    );
+  };
+
+  // Remove item
+  const removeFromCart = (id) => {
+    setCartItems((prev) => prev.filter((item) => item.id !== id));
+  };
+
+  // function updateCartItem(productId, updates) {
+  //   setCartItems((prev) => {
+  //     const index = prev.findIndex((item) => item.id === productId);
+  //     if (index === -1) return prev;
+
+  //     const updatedCart = [...prev];
+  //     const existing = updatedCart[index];
+  //     const updatedItem = createCartItem(
+  //       { ...existing },
+  //       { ...existing, ...updates }
+  //     );
+
+  //     updatedCart[index] = updatedItem;
+  //     localStorage.setItem("cartItems", JSON.stringify(updatedCart));
+  //     return updatedCart;
+  //   });
+  // }
+
   //HANDLE LOGIN
+  console.log(cartItems, "cartItems");
   const appInfo = {
     BASE_URL,
     loading,
@@ -440,6 +580,15 @@ export const AppProvider = ({ children }) => {
     userData,
     setUserData,
     handleLogout,
+    //showWishlist
+    showWishlist,
+    //cart-data
+    cartData,
+    addToCart,
+    updateCartItem,
+    removeFromCart,
+    createCartItem,
+    cartItems,
   };
   return <AppContext.Provider value={appInfo}>{children}</AppContext.Provider>;
 };

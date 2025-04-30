@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CartItem from "../../components/CartItem/CartItem";
 import { LuArrowLeft } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
@@ -7,45 +7,14 @@ import SecureInfoPanel from "../../components/SecureInfoPanel/SecureInfoPanel";
 // import CartLetterSave from "../../components/CartLetterSave/CartLetterSave";
 import ProductDetailsDiscount from "../../components/ProductDetailsDiscount/ProductDetailsDiscount";
 import CartLetterSave from "../../components/CartLetterSave/CartLetterSave";
+import { useProductStore } from "../../providers/AppProviders";
 
 const AllCartPage = () => {
+  const { cartItems, removeFromCart } = useProductStore();
   const [couponCode, setCouponCode] = useState("");
   const [discount, setDiscount] = useState(0);
-  const [cartData, setCartData] = useState([
-    {
-      id: 1,
-      image: "/src/assets/imgs/reItem1.png",
-      title: "T-shirts with multiple colors, for men and lady",
-      size: "Medium",
-      color: "Blue",
-      material: "Plastic",
-      seller: "Artel Market",
-      price: 78.99,
-      quantity: 2,
-    },
-    {
-      id: 2,
-      image: "/src/assets/imgs/item1.png",
-      title: "Running Shoes - Unisex",
-      size: "10",
-      color: "Black",
-      material: "Leather",
-      seller: "Runner's World",
-      price: 120.5,
-      quantity: 1,
-    },
-    {
-      id: 3,
-      image: "/src/assets/imgs/item2.png",
-      title: "Smart Watch Series 7",
-      size: "One Size",
-      color: "Silver",
-      material: "Metal",
-      seller: "Tech Hub",
-      price: 199.99,
-      quantity: 1,
-    },
-  ]);
+  const [cartData, setCartData] = useState(cartItems);
+
   const paymentOptions = [
     { src: "/src/assets/imgs/payment1.png", alt: "Payment Option 1" },
     { src: "/src/assets/imgs/payment2.png", alt: "Payment Option 2" },
@@ -63,20 +32,23 @@ const AllCartPage = () => {
     );
     setCartData(updatedCart);
   };
+  useEffect(() => {
+    setCartData(cartItems);
+  }, [cartItems]);
 
   // Remove Item Logic
-  const removeItem = (id) => {
-    const newCart = cartData.filter((item) => item.id !== id);
-    setCartData(newCart);
+  // const removeItem = (id) => {
+  //   const newCart = cartData.filter((item) => item.id !== id);
+  //   setCartData(newCart);
 
-    if (newCart.length === 0) {
-      setNotification("Your cart is empty!");
-    } else {
-      setNotification("Item removed from cart.");
-    }
+  //   if (newCart.length === 0) {
+  //     setNotification("Your cart is empty!");
+  //   } else {
+  //     setNotification("Item removed from cart.");
+  //   }
 
-    setTimeout(() => setNotification(null), 3000);
-  };
+  //   setTimeout(() => setNotification(null), 3000);
+  // };
 
   // Save for Later (Placeholder)
   const saveForLater = (id) => {
@@ -138,28 +110,30 @@ const AllCartPage = () => {
       )}
 
       {/* Cart Items or Empty State */}
-      <div className="carts_present bg-white">
-        {cartData.length === 0 ? (
-          <div
-            className="text-center text-xl font-semibold text-gray-500 py-10"
-            style={{ height: "140px" }} // Fixed height for smooth layout
-          >
-            Your cart is empty. Start shopping now!
-          </div>
-        ) : (
-          cartData.map((item) => (
-            <CartItem
-              key={item.id}
-              item={item}
-              removeItem={removeItem}
-              saveForLater={saveForLater}
-              updateItemQuantity={updateItemQuantity} // Passing callback
-            />
-          ))
-        )}
+      <div className="carts_present h-full bg-white flex flex-col">
+        <div className="flex-grow">
+          {cartData.length === 0 ? (
+            <div
+              className="text-center text-xl font-semibold text-gray-500 py-10"
+              style={{ height: "140px" }} // Fixed height for smooth layout
+            >
+              Your cart is empty. Start shopping now!
+            </div>
+          ) : (
+            cartData.map((item) => (
+              <CartItem
+                key={item.id}
+                item={item}
+                removeItem={removeFromCart}
+                saveForLater={saveForLater}
+                updateItemQuantity={updateItemQuantity}
+              />
+            ))
+          )}
+        </div>
 
         {/* Action Buttons */}
-        <div className="flex justify-between px-6 py-4">
+        <div className=" flex justify-between   px-6 py-4 ">
           <button
             onClick={goToShop}
             className="flex justify-center items-center gap-4 text-xl xl:text-[1.6rem] bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 duration-75"
@@ -167,7 +141,7 @@ const AllCartPage = () => {
             <LuArrowLeft className="text-4xl" />
             Back to shop
           </button>
-          <button
+          {/* <button
             onClick={clearAll}
             disabled={cartData.length === 0} // Disable button if cart is empty
             className={`text-xl xl:text-[1.6rem] ${
@@ -177,7 +151,7 @@ const AllCartPage = () => {
             } px-6 py-3 rounded-lg duration-75`}
           >
             {cartData.length === 0 ? "Your cart is empty" : "Remove all"}
-          </button>
+          </button> */}
         </div>
       </div>
 

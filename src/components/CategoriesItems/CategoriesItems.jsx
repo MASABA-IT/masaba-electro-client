@@ -242,7 +242,7 @@ const CategoriesItems = ({ allData }) => {
         <div
           className={`product-list grid  grid-cols-1 md:grid-cols-${
             isGridView ? 3 : 1
-          } lg:grid-cols-${isGridView ? 4 : 1} gap-4  `} //mt-4
+          } lg:grid-cols-${isGridView ? 4 : 1} gap-4  `}  
         >
           {allData?.map((product) => (
             <SingleProductCard

@@ -1,0 +1,44 @@
+@use "../utils/variables" as *;
+.guestCheckout_content {
+  width: 100%;
+  height: auto;
+  margin: 0 auto;
+  //
+}
+.guestcheckout_fullForm {
+  max-width: 140rem;
+  width: 100%;
+  height: auto;
+  margin: 0 auto;
+  display: grid;
+  grid-template-rows: minmax(45vh, auto) repeat(7, min-content);
+  grid-template-columns:
+    [full-start] minmax(6rem, 1fr) repeat(
+      8,
+      [col-start] minmax(min-content, 14rem) [col-end]
+    )
+    minmax(6rem, 1fr) [full-end];
+  gap: 1rem;
+}
+// .guestCheckout_header {
+//   grid-column: full-start/full-end;
+// }
+.guestCheckout_form {
+  grid-column: full-start/col-start 6;
+}
+.guestCheckout_summary {
+  grid-column: col-start 6 / full-end;
+}
+
+@media (max-width: 768px) {
+  .home_content {
+    padding: 5px;
+    row-gap: 1rem;
+  }
+}
+@media (max-width: 425px) {
+  .home_content {
+    padding: 0 !important;
+    grid-template-rows: 25vh repeat(7, min-content);
+  }
+}

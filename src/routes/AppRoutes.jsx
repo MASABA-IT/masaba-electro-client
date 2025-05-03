@@ -11,6 +11,7 @@ import SignUp from "../pages/SignUp/SignUp";
 import PrivateRoute from "../components/PrivateRoute";
 import Dashboard from "../pages/Dashboard/Dashboard";
 import WishlistProducts from "../pages/WishlistProducts/WishlistProducts";
+import GuestCheckoutPage from "../pages/GuestCheckoutPage/GuestCheckoutPage";
 
 const AppRoutes = () => {
   const router = createBrowserRouter([
@@ -50,6 +51,10 @@ const AppRoutes = () => {
         {
           path: "/signup",
           element: <SignUp />,
+        },
+        {
+          path: "/guest-checkout",
+          element: <GuestCheckoutPage />,
         },
         {
           path: "/dashboard",

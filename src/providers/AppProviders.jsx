@@ -38,6 +38,12 @@ export const AppProvider = ({ children }) => {
   const [reset, setReset] = useState(false);
   const [recentlyViewed, setRecentlyViewed] = useState([]);
   const [recentlyViewsData, setRecentlyViewsData] = useState(null);
+  //coupon state
+  const [couponCode, setCouponCode] = useState("");
+  const [couponResponse, setCouponResponse] = useState(null);
+  //Delivery charge options
+  const [deliveryOptions, setDeliveryOptions] = useState([]);
+  const [selectedDeliveryId, setSelectedDeliveryId] = useState(1);
   ///LOGIN&SIGNUP
   const [formData, setFormData] = useState({
     username: "",
@@ -537,7 +543,109 @@ export const AppProvider = ({ children }) => {
   // }
 
   //HANDLE LOGIN
-  console.log(cartItems, "cartItems");
+
+  const handleApplyCoupon = async () => {
+    if (!couponCode.trim()) {
+      setError("Please enter a coupon code.");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `${BASE_URL}/api/coupon/code-check?coupon_code=${couponCode}`
+      );
+      const data = await response.json();
+
+      if (response.ok) {
+        setCouponResponse(data);
+        setError("");
+      } else {
+        setError(data.message || "Invalid coupon code.");
+        setCouponResponse(null);
+      }
+    } catch (err) {
+      setError("Something went wrong.");
+      setCouponResponse(null);
+    }
+  };
+  //Delivery charge options
+  //  const [deliveryOptions, setDeliveryOptions] = useState([]);
+  //const [selectedDeliveryId, setSelectedDeliveryId] = useState(1);
+
+  useEffect(() => {
+    const fetchDeliveryOptions = async () => {
+      try {
+        const res = await fetch(`${BASE_URL}/api/delivery-charge`);
+        const data = await res.json();
+        setDeliveryOptions(data.delivery_charge || []);
+      } catch (error) {
+        console.error("Failed to fetch delivery charges", error);
+      }
+    };
+
+    fetchDeliveryOptions();
+  }, []);
+
+  // নির্দিষ্ট ডেলিভারি চার্জ বের করো
+  const selectedDelivery = deliveryOptions.find(
+    (item) => item.id === selectedDeliveryId
+  );
+  const deliveryAmount = selectedDelivery
+    ? parseFloat(selectedDelivery.amount)
+    : 0;
+
+  //Union,district,thana,division
+  const [divisions, setDivisions] = useState([]);
+  const [districts, setDistricts] = useState([]);
+  const [thanas, setThanas] = useState([]);
+  const [unions, setUnions] = useState([]);
+
+  const [selectedDivision, setSelectedDivision] = useState(null);
+  const [selectedDistrict, setSelectedDistrict] = useState(null);
+  const [selectedThana, setSelectedThana] = useState(null);
+  const [selectedUnion, setSelectedUnion] = useState(null);
+
+  useEffect(() => {
+    fetch(`${BASE_URL}/api/divisions`)
+      .then((res) => res.json())
+      .then(setDivisions);
+  }, []);
+
+  useEffect(() => {
+    if (selectedDivision) {
+      fetch(`${BASE_URL}/api/get-districts/${selectedDivision}`)
+        .then((res) => res.json())
+        .then(setDistricts);
+    } else {
+      setDistricts([]);
+    }
+    setSelectedDistrict(null);
+    setSelectedThana(null);
+    setUnions([]);
+  }, [selectedDivision]);
+
+  useEffect(() => {
+    if (selectedDistrict) {
+      fetch(`${BASE_URL}/api/get-thanas/${selectedDistrict}`)
+        .then((res) => res.json())
+        .then(setThanas);
+    } else {
+      setThanas([]);
+    }
+    setSelectedThana(null);
+    setUnions([]);
+  }, [selectedDistrict]);
+
+  useEffect(() => {
+    if (selectedThana) {
+      fetch(`${BASE_URL}/api/get-unions/${selectedThana}`)
+        .then((res) => res.json())
+        .then(setUnions);
+    } else {
+      setSelectedUnion(null);
+      setUnions([]);
+    }
+  }, [selectedThana]);
   const appInfo = {
     BASE_URL,
     loading,
@@ -589,6 +697,30 @@ export const AppProvider = ({ children }) => {
     removeFromCart,
     createCartItem,
     cartItems,
+    //coupon-code
+    handleApplyCoupon,
+    couponCode,
+    setCouponCode,
+    couponResponse,
+    //Delivery options
+    deliveryOptions,
+    selectedDeliveryId,
+    setSelectedDeliveryId,
+    deliveryAmount,
+    selectedDeliveryTitle: selectedDelivery?.title || "",
+    //THANA,UNION,DIVISION,DISTRICT
+    divisions,
+    districts,
+    thanas,
+    unions,
+    selectedDivision,
+    selectedDistrict,
+    selectedThana,
+    selectedUnion,
+    setSelectedDivision,
+    setSelectedDistrict,
+    setSelectedThana,
+    setSelectedUnion,
   };
   return <AppContext.Provider value={appInfo}>{children}</AppContext.Provider>;
 };

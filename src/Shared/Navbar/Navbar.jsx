@@ -44,7 +44,7 @@ const Navbar = ({ showSidebar, setShowSidebar }) => {
           <IoMdMenu />
         </button>
         <div className="w-full  flex justify-between items-center  ">
-          <div className="brand flex justify-center items-center gap-2 md:text-3xl lg:text-5xl font-black">
+          <div className="brand flex justify-center items-center gap-2 md:text-3xl lg:text-4xl font-black">
             <Link
               to="/"
               className="flex justify-center items-center gap-2 "

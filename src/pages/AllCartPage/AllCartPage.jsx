@@ -62,34 +62,22 @@ const AllCartPage = () => {
     navigate("/categories");
   };
 
-  // Clear All Items in Cart
-  const clearAll = () => {
-    if (cartData.length > 0) {
-      setCartData([]);
-      setNotification("All items have been removed from your cart.");
-    } else {
-      setNotification("Your cart is already empty.");
-    }
-    setTimeout(() => setNotification(null), 3000);
-  };
   // Apply Coupon Code
   const applyCoupon = () => {
-    // Simulate a valid coupon check
-    const validCoupons = {
-      DISCOUNT10: 10, // 10% discount
-      DISCOUNT20: 20, // 20% discount
-    };
-
-    if (validCoupons[couponCode]) {
-      setDiscount(validCoupons[couponCode]);
-      setNotification(
-        `Coupon applied! You get ${validCoupons[couponCode]}% off.`
-      );
-    } else {
-      setNotification("Invalid coupon code.");
-    }
-
-    setTimeout(() => setNotification(null), 3000);
+    // // Simulate a valid coupon check
+    // const validCoupons = {
+    //   DISCOUNT10: 10, // 10% discount
+    //   DISCOUNT20: 20, // 20% discount
+    // };
+    // if (validCoupons[couponCode]) {
+    //   setDiscount(validCoupons[couponCode]);
+    //   setNotification(
+    //     `Coupon applied! You get ${validCoupons[couponCode]}% off.`
+    //   );
+    // } else {
+    //   setNotification("Invalid coupon code.");
+    // }
+    // setTimeout(() => setNotification(null), 3000);
   };
 
   const onCheckout = () => {
@@ -111,7 +99,7 @@ const AllCartPage = () => {
 
       {/* Cart Items or Empty State */}
       <div className="carts_present h-full bg-white flex flex-col">
-        <div className="flex-grow">
+        <div className="flex-grow  ">
           {cartData.length === 0 ? (
             <div
               className="text-center text-xl font-semibold text-gray-500 py-10"
@@ -157,12 +145,12 @@ const AllCartPage = () => {
 
       {/* Total Amount Placeholder */}
       <CartSummary
-        couponCode={couponCode}
-        setCouponCode={setCouponCode}
-        applyCoupon={applyCoupon}
+        // couponCode={couponCode}
+        // setCouponCode={setCouponCode}
+        // applyCoupon={applyCoupon}
         cartData={cartData}
-        discount={22.0}
-        tax={22.0}
+        // discount={22.0}
+        // tax={22.0}
         onCheckout={onCheckout}
         paymentOptions={paymentOptions}
       />

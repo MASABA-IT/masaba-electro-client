@@ -47,9 +47,9 @@ export default function CartItem({
   console.log(item.id, item.stocks?.[0]?.quantity, "---------qty");
   console.log(isQtyAllowed(item.id, item.stocks?.[0]?.quantity));
   return (
-    <div className="flex flex-col md:flex-row justify-between items-start gap-6 p-4 border-b-2 m-4 pb-6 bg-gray-50">
+    <div className="flex flex-col md:flex-row justify-between items-start gap-6 p-2 border-b-2 m-4 pb-6 bg-gray-50">
       {/* Left */}
-      <div className="flex gap-4">
+      <div className="flex gap-4 px-4">
         <img
           src={`${BASE_URL}/${item.image}`}
           alt={item.title}
@@ -59,32 +59,19 @@ export default function CartItem({
           <h2 className="text-2xl xl:text-2xl font-semibold text-gray-600">
             {item.title}
           </h2>
-          <p className="text-2xl font-bold text-zinc-500">
-            Price: ৳{item.price * selectedQty}
+          <p className="text-2xl font-bold text-gray-500">
+            Price: ৳{parseFloat(item.price)}
           </p>
-          <div className="mt-4 space-x-4 text-xl xl:text-2xl flex">
-            {/* Remove Item Button */}
-            <button
-              className="text-red-500 border rounded-lg px-2 xl:px-4 py-2 hover:bg-red-50 duration-75"
-              onClick={() => removeItem(item.id)}
-            >
-              <IoTrash />
-            </button>
-            {/* Save for Later Button */}
-            {/* <button
-              className="text-blue-500 border rounded-lg px-2 xl:px-4 py-2 hover:bg-blue-100 duration-75"
-              onClick={() => saveForLater(item.id)}
-            >
-              Save for later
-            </button> */}
-          </div>
+          <p className="text-2xl font-bold text-zinc-500">
+            Total Price: ৳{parseFloat(item.price * selectedQty)}
+          </p>
         </div>
       </div>
 
       {/* Right */}
-      <div className="text-right flex items-center justify-between w-full md:w-auto flex-row-reverse md:flex-col">
+      <div className="w-full md:w-auto p-2   text-right flex items-center justify-between  flex-row-reverse md:flex-col">
         {/* Quantity Selector */}
-        <div className="mt-4 flex items-center gap-2 text-2xl">
+        <div className="mt-2 flex items-center gap-2 text-2xl">
           <button
             onClick={() => handleQuantityChange(selectedQty - 1)}
             className="w-10 h-10 text-xl rounded-lg bg-gray-100 hover:bg-gray-200 flex items-center justify-center"
@@ -112,6 +99,22 @@ export default function CartItem({
           >
             <IoMdAdd />
           </button>
+        </div>
+        <div className="mt-4 space-x-4 text-xl xl:text-2xl flex  ">
+          {/* Remove Item Button */}
+          <button
+            className="w-auto flex justify-center items-center gap-x-2 text-red-500 border rounded-lg px-2 xl:px-4 py-2 hover:bg-red-50 duration-75"
+            onClick={() => removeItem(item.id)}
+          >
+            <IoTrash /> <span className="text-base">Remove</span>
+          </button>
+          {/* Save for Later Button */}
+          {/* <button
+              className="text-blue-500 border rounded-lg px-2 xl:px-4 py-2 hover:bg-blue-100 duration-75"
+              onClick={() => saveForLater(item.id)}
+            >
+              Save for later
+            </button> */}
         </div>
       </div>
     </div>

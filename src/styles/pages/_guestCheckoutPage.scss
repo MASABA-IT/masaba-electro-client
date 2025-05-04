@@ -41,4 +41,10 @@
     padding: 0 !important;
     grid-template-rows: 25vh repeat(7, min-content);
   }
+  .guestCheckout_form {
+    grid-column: full-start/full-end;
+  }
+  .guestCheckout_summary {
+    grid-column: full-start/full-end;
+  }
 }

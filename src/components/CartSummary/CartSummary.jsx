@@ -22,23 +22,40 @@ const CartSummary = ({
     selectedDeliveryId,
     setSelectedDeliveryId,
     deliveryAmount,
+    selectedDelivery,
     selectedDeliveryTitle,
   } = useProductStore();
   const navigate = useNavigate();
-
+  console.log(selectedDelivery, "selectedDelivery");
   const handleCheckout = () => {
     const userData = localStorage.getItem("userData");
 
+    // Prepare billing summary
+    const billingSummary = {
+      subtotal: parseFloat(subtotal.toFixed(2)),
+      discountAmount: parseFloat(discountAmount.toFixed(2)),
+      deliveryAmount: parseFloat(deliveryAmount.toFixed(2)),
+      total: parseFloat(total.toFixed(2)),
+      selectedDelivery: selectedDelivery,
+
+      appliedCoupon: couponResponse?.coupon || null,
+    };
+
+    // Save to localStorage
+    localStorage.setItem("billingSummary", JSON.stringify(billingSummary));
+
+    // Redirect
     if (userData) {
       const parsed = JSON.parse(userData);
       if (parsed?.token) {
-        onCheckout();
+        onCheckout(); // this might already route to next step
         return;
       }
     }
 
     navigate("/guest-checkout");
   };
+
   const subtotal = cartData.reduce(
     (total, item) => total + item.price * item.quantity,
     0

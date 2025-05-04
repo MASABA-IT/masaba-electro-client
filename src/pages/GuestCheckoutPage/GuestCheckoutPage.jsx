@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import checkout from "../../assets/imgs/shoppingBag.webp";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+import { useNavigate } from "react-router-dom";
 import { FaShoppingBag } from "react-icons/fa";
 import { useProductStore } from "../../providers/AppProviders";
+import GuestCheckoutHeader from "../../components/GuestCheckoutHeader/GuestCheckoutHeader";
+import GuestBillingSummary from "../../components/GuestBillingSummary/GuestBillingSummary";
 
 const GuestCheckoutPage = () => {
   const {
@@ -19,8 +23,12 @@ const GuestCheckoutPage = () => {
     setSelectedDistrict,
     setSelectedThana,
     setSelectedUnion,
+    logo,
   } = useProductStore();
+  const MySwal = withReactContent(Swal);
+  const navigate = useNavigate();
 
+  const billingSummary = JSON.parse(localStorage.getItem("billingSummary"));
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -87,40 +95,108 @@ const GuestCheckoutPage = () => {
       setSelectedUnion(value);
     }
   };
+  console.log(logo);
+  const handlePlaceOrder = async () => {
+    const cartData = JSON.parse(localStorage.getItem("cartData")) || [];
 
-  console.log("formData", formData);
-  console.log(districts);
-  const cartData = JSON.parse(localStorage.getItem("cartData")) || [];
-  console.log(cartData);
+    const products = cartData.map((item) => ({
+      product_id: item.id,
+      quantity: item.quantity,
+    }));
+
+    const body = {
+      username: formData.fullName,
+      phone_number: formData.phone,
+      email: formData.email,
+      address: formData.address,
+      postal_code: formData.zipCode,
+      division_id: formData.division,
+      district_id: formData.district,
+      thana_id: formData.thana,
+      union_id: formData.union,
+      products,
+      payment_method: "cashOnDelivery",
+      delivery_charge_id: billingSummary.selectedDelivery.id,
+    };
+
+    try {
+      const response = await fetch(`${BASE_URL}/api/guest/order-place`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+
+      if (!response.ok) throw new Error("Order failed");
+
+      const result = await response.json();
+      const orderId = result.order.id;
+      console.log("orderId", orderId);
+      console.log("✅ Order Success:", result);
+
+      // Clear localStorage and form
+      localStorage.removeItem("cartData");
+      localStorage.removeItem("billingSummary");
+
+      setFormData({
+        fullName: "",
+        email: "",
+        phone: "",
+        address: "",
+        zipCode: "",
+        division: "",
+        district: "",
+        thana: "",
+        union: "",
+      });
+
+      // 🔔 Show success modal with logo
+      showSuccessAlert(
+        "Order Placed!",
+        "Your order has been placed successfully.",
+        logo,
+        orderId
+      );
+    } catch (err) {
+      console.error("❌ Order Error:", err);
+      alert("Failed to place order.");
+    }
+  };
+
+  const showSuccessAlert = (title, message, logo, orderId) => {
+    Swal.fire({
+      title: `<strong style="font-size: 18px;">${title}</strong>`,
+      html: `
+      <p style="margin-bottom: 6px;">${message}</p>
+      <p style="font-size: 14px; color: #065f46;"><strong>Order ID:</strong> #Masaba-${orderId}</p>
+    `,
+      text: message,
+      icon: "success",
+      confirmButtonText: "OK",
+      background: "#ecfdf5",
+      color: "#065f46",
+      customClass: {
+        popup: "rounded-2xl p-6 shadow-xl",
+        confirmButton:
+          "bg-[#065f46] text-white px-4 py-2 rounded mt-4 text-base",
+        icon: "swal2-icon-success",
+        title: "mt-6 text-center text-lg font-semibold",
+      },
+      imageUrl: logo ? `${BASE_URL}/${logo}` : "/assets/logo/nav-logo.svg",
+      imageAlt: "Logo",
+      imageWidth: 50,
+      imageHeight: 50,
+      imageClass: "absolute top-4 right-4",
+      allowOutsideClick: false,
+    }).then(() => {
+      // ✅ Full page reload to home after OK
+      window.location.href = "/";
+    });
+  };
+
   return (
     <div className="guestCheckout_content min-h-screen bg-stone-50">
       {/* Header */}
-      <div className="w-full guestCheckout_header bg-gradient-to-br from-cyan-600 to-teal-500 text-white shadow-md min-h-[200px] flex justify-center items-center relative overflow-hidden">
-        {/* Left Side - Image (object-contain) */}
-        <div className="absolute top-1/2 left-1/3 transform -translate-x-[60%] -translate-y-1/2 h-full p-4">
-          <img
-            src={checkout}
-            alt="Checkout"
-            className="w-[70%] h-[90%] object-contain"
-          />
-        </div>
-
-        {/* Right Side - Text Content */}
-        <div className="w-2/3 flex flex-col justify-center items-center text-center px-4 gap-y-4">
-          <h1
-            className="text-2xl md:text-5xl font-bold"
-            style={{ textShadow: "0 2px 4px #777" }}
-          >
-            Guest Checkout
-          </h1>
-          <h3 className="text-lg md:text-2xl font-semibold">
-            <Link to="/" className="hover:text-yellow-300">
-              Home
-            </Link>{" "}
-            &gt; <span className="text-yellow-300">Shop Checkout</span>
-          </h3>
-        </div>
-      </div>
+      <GuestCheckoutHeader />
 
       {/* Main content: form and billing */}
       <div className="guestcheckout_fullForm p-10">
@@ -369,46 +445,7 @@ const GuestCheckoutPage = () => {
         </div>
 
         {/* Right: Billing Summary - Sticky */}
-        <div className="guestCheckout_summary">
-          <h3 className="text-xl font-semibold mb-4">Billing Summary</h3>
-          <div className="grid grid-cols-1 gap-4">
-            {cartData?.map((item) => (
-              <div
-                key={item.id}
-                className="border p-4 rounded-md shadow-md bg-white flex justify-between items-center"
-              >
-                {/* Left side: Image + Title */}
-                <div className="flex items-center gap-4">
-                  <img
-                    src={`${BASE_URL}/${item.image}`}
-                    alt={item.title}
-                    className="w-24 h-24 object-cover rounded"
-                  />
-                  <div>
-                    <h2 className="text-xl font-semibold">{item.title}</h2>
-                    <p className="text-gray-500">Qty: {item.quantity}</p>
-                  </div>
-                </div>
-
-                {/* Right side: Total price */}
-                <div className="text-right">
-                  <p className="text-xl font-bold text-teal-600">
-                    ৳{parseFloat((item.price * item.quantity).toFixed(2))}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="bg-white p-6 rounded-lg shadow sticky top-10">
-            <ul className="space-y-2 text-lg">
-              <li>Subtotal: ৳1200</li>
-              <li>Discount: ৳100</li>
-              <li>Delivery: ৳80</li>
-              <li className="font-bold text-xl mt-2">Total: ৳1180</li>
-            </ul>
-          </div>
-        </div>
+        <GuestBillingSummary handlePlaceOrder={handlePlaceOrder} />
       </div>
     </div>
   );

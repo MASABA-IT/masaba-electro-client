@@ -7,7 +7,8 @@ import { MdMessage } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import { useProductStore } from "../../providers/AppProviders";
 const Navbar = ({ showSidebar, setShowSidebar }) => {
-  const { userData, handleLogout, cartItems } = useProductStore();
+  const { userData, handleLogout, cartItems, logo, BASE_URL } =
+    useProductStore();
   // Your cartItems state (you can replace this with actual data)
   const [cartCount, setCartCount] = useState(cartItems.length); // Store the cart count for animation
 
@@ -51,7 +52,7 @@ const Navbar = ({ showSidebar, setShowSidebar }) => {
               style={{ textShadow: "1px 1px #333" }}
             >
               <img
-                src="/src/assets/logo/nav-logo.svg"
+                src={`${BASE_URL}/${logo}`}
                 alt="Brand Logo"
                 className="brand-logo md:w-12"
               />
@@ -153,7 +154,7 @@ const Navbar = ({ showSidebar, setShowSidebar }) => {
                 <IoMdMenu />
               </button>
               <img
-                src="/src/assets/logo/nav-logo.svg"
+                src={`${BASE_URL}/${logo}`}
                 alt="Brand Logo"
                 className="brand-logo w-12 aspect-square"
               />

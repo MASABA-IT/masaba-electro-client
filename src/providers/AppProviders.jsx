@@ -24,6 +24,7 @@ export const AppProvider = ({ children }) => {
   const [filters, setFilters] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [logo, setLogo] = useState(null);
   //////////////////
   const [selectedCategories, setSelectedCategories] = useState(null);
   const [selectedBrands, setSelectedBrands] = useState([]);
@@ -53,7 +54,23 @@ export const AppProvider = ({ children }) => {
     password_confirmation: "",
   });
   const [userData, setUserData] = useState(null);
+  // /////LOGO
 
+  const fetchFrontendSettings = async () => {
+    try {
+      const response = await fetch(`${BASE_URL}/api/frontends`);
+      const data = await response.json();
+      console.log(data.frontends[0].site_logo_black, "data----------");
+      setLogo(data.frontends[0].site_logo_black);
+    } catch (error) {
+      console.error("Error fetching frontend settings:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchFrontendSettings();
+  }, []);
+  ///
   //1 FILTER DATA MULTI OR SINGLE
   useEffect(() => {
     const fetchFilterData = async () => {
@@ -590,6 +607,7 @@ export const AppProvider = ({ children }) => {
   const selectedDelivery = deliveryOptions.find(
     (item) => item.id === selectedDeliveryId
   );
+
   const deliveryAmount = selectedDelivery
     ? parseFloat(selectedDelivery.amount)
     : 0;
@@ -707,6 +725,7 @@ export const AppProvider = ({ children }) => {
     selectedDeliveryId,
     setSelectedDeliveryId,
     deliveryAmount,
+    selectedDelivery,
     selectedDeliveryTitle: selectedDelivery?.title || "",
     //THANA,UNION,DIVISION,DISTRICT
     divisions,
@@ -721,6 +740,8 @@ export const AppProvider = ({ children }) => {
     setSelectedDistrict,
     setSelectedThana,
     setSelectedUnion,
+    //DYNAMIC LOGO
+    logo,
   };
   return <AppContext.Provider value={appInfo}>{children}</AppContext.Provider>;
 };

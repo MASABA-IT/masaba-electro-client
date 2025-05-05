@@ -42,11 +42,13 @@ const GuestBillingSummary = ({ handlePlaceOrder }) => {
                 />
                 <div>
                   <h2 className="text-xl font-semibold">{item.title}</h2>
-                  <p className="text-gray-500">Qty: {item.quantity}</p>
+                  <p className="text-gray-500 text-xl">
+                    Quantity: {item.quantity}
+                  </p>
                 </div>
               </div>
               <div className="text-right">
-                <p className="text-xl font-bold text-teal-600">
+                <p className="text-xl font-bold text-gray-700">
                   ৳{(item.price * item.quantity).toFixed(2)}
                 </p>
               </div>

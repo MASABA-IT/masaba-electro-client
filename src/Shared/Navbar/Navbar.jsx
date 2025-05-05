@@ -7,7 +7,7 @@ import { MdMessage } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import { useProductStore } from "../../providers/AppProviders";
 const Navbar = ({ showSidebar, setShowSidebar }) => {
-  const { userData, handleLogout, cartItems, logo, BASE_URL } =
+  const { userData, handleLogout, cartItems, logo, BASE_URL, showWishlist } =
     useProductStore();
   // Your cartItems state (you can replace this with actual data)
   const [cartCount, setCartCount] = useState(cartItems.length); // Store the cart count for animation
@@ -113,11 +113,20 @@ const Navbar = ({ showSidebar, setShowSidebar }) => {
               <span className="text-sm">Orders</span>
             </button>
             <button
-              className="flex flex-col items-center gap-y-3"
+              className="flex flex-col items-center gap-y-3 relative "
               onClick={() => navigate("/wishlist")}
             >
               <FaHeart className=" " />
               <span className="text-sm">Wishlist</span>
+
+              {showWishlist.length > 0 && (
+                <span
+                  className="absolute -top-2 right-0 text-white text-xs bg-red-500 rounded-full w-6 h-6 p-3 flex items-center justify-center animate-bounce"
+                  style={{ transform: "translate(50%, -50%)" }}
+                >
+                  {showWishlist.length}
+                </span>
+              )}
             </button>
             <button
               className="flex flex-col items-center gap-y-3 relative"

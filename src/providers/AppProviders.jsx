@@ -25,6 +25,8 @@ export const AppProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [logo, setLogo] = useState(null);
+  const [email, setEmail] = useState("");
+
   //////////////////
   const [selectedCategories, setSelectedCategories] = useState(null);
   const [selectedBrands, setSelectedBrands] = useState([]);
@@ -60,7 +62,7 @@ export const AppProvider = ({ children }) => {
     try {
       const response = await fetch(`${BASE_URL}/api/frontends`);
       const data = await response.json();
-      console.log(data.frontends[0].site_logo_black, "data----------");
+
       setLogo(data.frontends[0].site_logo_black);
     } catch (error) {
       console.error("Error fetching frontend settings:", error);
@@ -197,6 +199,7 @@ export const AppProvider = ({ children }) => {
           throw new Error("Failed to fetch collections");
         }
         const data = await res.json();
+
         setCollections(data);
       } catch (err) {
         setError(err.message);
@@ -255,6 +258,7 @@ export const AppProvider = ({ children }) => {
     try {
       const response = await fetch(`${BASE_URL}/api/product/view/${id}`);
       const data = await response.json();
+      console.log(data);
       setProductData(data);
     } catch (error) {
       console.error("Error fetching product data:", error);
@@ -308,16 +312,12 @@ export const AppProvider = ({ children }) => {
 
   // Add productId to recentlyViewed
   const addToRecentlyViewed = (productId) => {
-    // Remove the productId if it already exists to avoid duplicates
     const updated = recentlyViewed.filter((id) => id !== productId);
 
-    // Add the new productId to the front of the array
     updated.unshift(productId);
 
-    // Limit the array to 5 productIds only
     if (updated.length > 6) updated.length = 6;
 
-    // Only update the state if the array has changed
     if (JSON.stringify(updated) !== JSON.stringify(recentlyViewed)) {
       setRecentlyViewed(updated);
     }
@@ -357,6 +357,67 @@ export const AppProvider = ({ children }) => {
 
     updateRecentlyViewedData();
   }, [recentlyViewed]);
+
+  /**
+   *   ///////////////////
+/////// Recommended Viewed Data
+ 
+   */
+
+  const [recommendedViewed, setRecommendedViewed] = useState([]);
+  const [recommendedViewsData, setRecommendedViewsData] = useState([]);
+
+  useEffect(() => {
+    const stored = JSON.parse(localStorage.getItem("recommendedViewed")) || [];
+    setRecommendedViewed(stored.map(Number));
+  }, []);
+
+  const addToRecommendedViewed = (productId) => {
+    const updated = recommendedViewed.filter((id) => id !== productId); // remove if exists
+    updated.unshift(productId);
+    if (updated.length > 10) updated.length = 10;
+
+    if (JSON.stringify(updated) !== JSON.stringify(recommendedViewed)) {
+      setRecommendedViewed(updated);
+    }
+  };
+
+  useEffect(() => {
+    if (recommendedViewed.length) {
+      localStorage.setItem(
+        "recommendedViewed",
+        JSON.stringify(recommendedViewed)
+      );
+    }
+  }, [recommendedViewed]);
+
+  useEffect(() => {
+    const updateRecommendedViewedData = async () => {
+      if (recommendedViewed.length) {
+        try {
+          const response = await fetch(`${BASE_URL}/api/recent-product/view`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ ids: recommendedViewed }),
+          });
+
+          if (response.ok) {
+            const result = await response.json();
+            setRecommendedViewsData(result);
+          } else {
+            console.error("Failed to fetch recommended viewed products.");
+          }
+        } catch (error) {
+          console.error("Error fetching recommended viewed data:", error);
+        }
+      }
+    };
+
+    updateRecommendedViewedData();
+  }, [recommendedViewed]);
+
   ////FILTER SINGLE PRODUCT VIEWS
   // Filter function that accepts only ID, category (single string), and condition
   function filterSingleProduct(allData, selectedFilters) {
@@ -664,6 +725,52 @@ export const AppProvider = ({ children }) => {
       setUnions([]);
     }
   }, [selectedThana]);
+
+  ///SITE META
+  const [siteMeta, setSiteMeta] = useState({});
+
+  useEffect(() => {
+    const fetchSiteMeta = async () => {
+      try {
+        const res = await fetch(`${BASE_URL}/api/frontends`);
+        const data = await res.json();
+
+        setSiteMeta(data?.frontends[0]);
+      } catch (err) {
+        console.error("Failed to fetch site meta", err);
+      }
+    };
+
+    fetchSiteMeta();
+  }, []);
+  /** MAIL SUBSCRIBE  */
+  // const handleSubscribe = async (email) => {
+  //   if (!email) {
+  //     alert("Please enter your email.");
+  //     return;
+  //   }
+
+  //   try {
+  //     const response = await fetch(`${BASE_URL}/api/mail/subscribe`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({ email }),
+  //     });
+
+  //     if (response.ok) {
+  //       alert("Subscription successful!");
+  //       setEmail(""); // Clear input
+  //     } else {
+  //       alert("Subscription failed. Try again later.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Subscription error:", error);
+  //     alert("Something went wrong.");
+  //   }
+  // };
+
   const appInfo = {
     BASE_URL,
     loading,
@@ -742,6 +849,14 @@ export const AppProvider = ({ children }) => {
     setSelectedUnion,
     //DYNAMIC LOGO
     logo,
+    //RecommendedViewed
+    addToRecommendedViewed,
+    recommendedViewsData,
+    //SITEMETA
+    siteMeta,
+    // handleSubscribe,
+    email,
+    setEmail,
   };
   return <AppContext.Provider value={appInfo}>{children}</AppContext.Provider>;
 };

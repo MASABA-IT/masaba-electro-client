@@ -1,19 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { FaArrowRight } from "react-icons/fa";
 import { useProductStore } from "../../providers/AppProviders";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // CollectionItem Component (each item in a collection)
 const CollectionItem = ({ item }) => {
+  const navigate = useNavigate();
   const { BASE_URL } = useProductStore();
   const [imgLoaded, setImgLoaded] = useState(false); // renamed for clarity
 
   const hasDiscount =
     item.discount_price &&
     parseFloat(item.discount_price) < parseFloat(item.base_price);
-
+  const handleProductClick = () => {
+    console.log("click");
+    navigate(`/categories/product/${item.id}`);
+  };
   return (
-    <div className="collection-item relative p-4 bg-white rounded  min-h-[130px]">
+    <div
+      className="collection-item relative p-4 bg-white rounded  min-h-[130px] cursor-pointer"
+      onClick={handleProductClick}
+    >
       {/* Always render image to let it load */}
       <img
         src={`${BASE_URL}/${item.thumbnail}`}
@@ -24,7 +31,7 @@ const CollectionItem = ({ item }) => {
 
       {!imgLoaded ? (
         // 🔄 Show Pulse Skeleton while waiting for image
-        <div className="animate-pulse space-y-3">
+        <div className="animate-pulse space-y-3 ">
           <div className="h-6 bg-gray-300 rounded w-3/4" /> {/* Title */}
           <div className="flex gap-3">
             <div className="h-5 w-20 bg-gray-300 rounded" />{" "}
@@ -36,8 +43,8 @@ const CollectionItem = ({ item }) => {
         </div>
       ) : (
         // ✅ Real Content after image is loaded
-        <>
-          <div className="item-info space-y-2">
+        <div className="">
+          <div className="item-info space-y-2 ">
             <h4 className="text-lg md:text-2xl font-serif">{item.title}</h4>
 
             {hasDiscount ? (
@@ -63,7 +70,7 @@ const CollectionItem = ({ item }) => {
               className="h-full w-full object-cover"
             />
           </div>
-        </>
+        </div>
       )}
     </div>
   );

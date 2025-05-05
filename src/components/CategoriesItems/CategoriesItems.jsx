@@ -30,7 +30,6 @@ const CategoriesItems = ({ allData }) => {
   useEffect(() => {
     setLoading(true);
     if (!allData || allData.length === 0) {
-      console.error("Categories data is empty or undefined.");
       setLoading(false);
       return;
     }
@@ -117,6 +116,18 @@ const CategoriesItems = ({ allData }) => {
 
       return b.price - a.price;
     });
+  console.log("allProducts", allProducts);
+  console.log(
+    " selectedCategories  selectedBrands  selectedFeatures  selectedRatings  selectedCondition  selectedPriceRange ",
+    {
+      selectedCategories,
+      selectedBrands,
+      selectedFeatures,
+      selectedRatings,
+      selectedCondition,
+      selectedPriceRange,
+    }
+  );
 
   // Calculate pagination values
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
@@ -157,7 +168,7 @@ const CategoriesItems = ({ allData }) => {
   };
 
   return (
-    <div className="categoriesitems_content ">
+    <div className="categoriesitems_content">
       {isMobile ? (
         <div className="w-full flex  justify-between gap-x-3 items-center text-xl md:text-2xl py-3">
           <div className="  flex  items-center space-x-2">
@@ -242,7 +253,7 @@ const CategoriesItems = ({ allData }) => {
         <div
           className={`product-list grid  grid-cols-1 md:grid-cols-${
             isGridView ? 3 : 1
-          } lg:grid-cols-${isGridView ? 4 : 1} gap-4  `}  
+          } lg:grid-cols-${isGridView ? 4 : 1} gap-4  `}
         >
           {allData?.map((product) => (
             <SingleProductCard

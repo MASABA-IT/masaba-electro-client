@@ -21,7 +21,6 @@ const AllCategories = () => {
 
   // If selected category changes from UI, override categoryId
   useEffect(() => {
- 
     if (!id && selectedCategories?.id && selectedCategories.id !== categoryId) {
       setCategoryId(selectedCategories.id);
     } else if (selectedCategories?.id && selectedCategories.id !== categoryId) {
@@ -41,7 +40,15 @@ const AllCategories = () => {
       <Breadcrumb items={breadcrumbItems} />
       <CategoryList allData={searchCategories?.Products} />
       {loading ? (
-        <div>Loading categories...</div>
+        <div className="categoriesitems_content relative">
+          <div className="absolute inset-0 flex flex-col items-center justify-center z-10 space-y-4">
+            <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+
+            <p className="text-gray-700 text-2xl font-medium">Loading ...</p>
+
+            <div className="w-8 h-2 bg-blue-300 rounded-full animate-pulse"></div>
+          </div>
+        </div>
       ) : (
         <CategoriesItems allData={searchCategories?.Products?.data} />
       )}

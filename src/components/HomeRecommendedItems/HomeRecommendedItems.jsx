@@ -1,68 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { useProductStore } from "../../providers/AppProviders";
+import { useNavigate } from "react-router-dom";
 
-const recommendedItems = [
-  {
-    id: 1,
-    title: "T-shirts with multiple colors, for men",
-    price: "$199.99",
-    imageUrl: "/src/assets/imgs/reItem1.png",
-  },
-  {
-    id: 2,
-    title: "Jeans shorts for men blue color",
-    price: "$129.99",
-    imageUrl: "/src/assets/imgs/reItem2.png",
-  },
-  {
-    id: 3,
-    title: "Brown winter coat medium size",
-    price: "$49.99",
-    imageUrl: "/src/assets/imgs/reItem3.png",
-  },
-  {
-    id: 4,
-    title: "Jeans bag for travel for men",
-    price: "$89.99",
-    imageUrl: "/src/assets/imgs/reItem4.png",
-  },
-  {
-    id: 5,
-    title: "Leather wallet",
-    price: "$79.99",
-    imageUrl: "/src/assets/imgs/reItem5.png",
-  },
-  {
-    id: 6,
-    title: "Canon camera black, 100x zoom",
-    price: "$39.99",
-    imageUrl: "/src/assets/imgs/reItem6.png",
-  },
-  {
-    id: 7,
-    title: "Headset for gaming with mic",
-    price: "$29.99",
-    imageUrl: "/src/assets/imgs/reItem7.png",
-  },
-  {
-    id: 8,
-    title: "Smartwatch silver color modern",
-    price: "$59.99",
-    imageUrl: "/src/assets/imgs/reItem8.png",
-  },
-  {
-    id: 9,
-    title: "Blue wallet for men leather metarfial",
-    price: "$149.99",
-    imageUrl: "/src/assets/imgs/reItem9.png",
-  },
-  {
-    id: 10,
-    title: "Jeans bag for travel for men",
-    price: "$99.99",
-    imageUrl: "/src/assets/imgs/reItem10.png",
-  },
-];
 const HomeRecommendedItems = () => {
+  const navigate = useNavigate();
+  const { recommendedViewsData, BASE_URL } = useProductStore();
+
   const [visibleItems, setVisibleItems] = useState([]);
   // const [loading, setLoading] = useState(true);
   const handleIntersection = (entries, observer) => {
@@ -84,30 +27,48 @@ const HomeRecommendedItems = () => {
     return () => {
       observer.disconnect();
     };
-  }, []);
-
+  }, [recommendedViewsData]);
+  const handleProductClick = (itemId) => {
+    navigate(`/categories/product/${itemId}`);
+  };
   return (
     <div className="home_recommendedItems w-full rounded-lg">
       <h2 className="mb-4">Recommended Items</h2>
 
-      <div className="grid">
-        {recommendedItems.map((item) => (
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {recommendedViewsData.map((item) => (
           <div
             key={item.id}
             id={`item-${item.id}`}
-            className={`item-card ${
+            className={`item-card bg-white rounded-lg overflow-hidden shadow hover:shadow-xl transition-all duration-300 transform hover:scale-105 cursor-pointer ${
               visibleItems.includes(`item-${item.id}`) ? "fade-in" : ""
             }`}
+            onClick={() => handleProductClick(item.id)}
           >
-            <div>
+            <div className="aspect-w-1 aspect-h-1">
               <img
-                src={item.imageUrl}
+                src={`${BASE_URL}/${item.thumbnail}`}
                 alt={item.title}
-                className="w-full object-cover rounded-md"
+                className="w-full h-full object-cover"
               />
             </div>
-            <p>{item.price}</p>
-            <h3>{item.title}</h3>
+            <div className="p-2">
+              <h3 className="text-sm font-medium">{item.title}</h3>
+              <div className="mt-2 text-xl font-semibold text-green-600">
+                {item.discount_price ? (
+                  <>
+                    <span className="text-orange-400 text-2xl">
+                      ৳ {parseFloat(item.discount_price).toFixed(2)}
+                    </span>
+                    <span className="text-gray-500 line-through ml-2 text-lg">
+                      ৳ {parseFloat(item.base_price).toFixed(2)}
+                    </span>
+                  </>
+                ) : (
+                  <span>৳ {parseFloat(item.base_price).toFixed(2)}</span>
+                )}
+              </div>
+            </div>
           </div>
         ))}
       </div>

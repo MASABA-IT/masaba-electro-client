@@ -26,6 +26,7 @@ const ProductDetails = () => {
     productData,
     loading,
     addToRecentlyViewed,
+    addToRecommendedViewed,
     showWishlist,
     BASE_URL,
     cartData,
@@ -91,12 +92,15 @@ const ProductDetails = () => {
   };
   const handleAddToCart = () => {
     if (!newProduct) return;
-    console.log("Adding to cart:", newProduct);
+
     addToCart(newProduct, newProduct.quantity || 1);
     setResetTrigger((prev) => !prev);
   };
 
-  console.log(newProduct, "newProduct");
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
   useEffect(() => {
     fetchProductById(id);
   }, []);
@@ -106,6 +110,13 @@ const ProductDetails = () => {
       addToRecentlyViewed(parseInt(id));
     }
   }, [id, addToRecentlyViewed]);
+  //Recommendent Data
+
+  useEffect(() => {
+    if (id) {
+      addToRecommendedViewed(parseInt(id));
+    }
+  }, [id, addToRecommendedViewed]);
   useEffect(() => {
     if (filteredProducts[0]?.image) {
       setMainImage(filteredProducts[0].image);
@@ -151,6 +162,7 @@ const ProductDetails = () => {
       </div>
     );
   }
+
   //////////////
   //ADD TO CART
   // //////////////////////
@@ -160,7 +172,6 @@ const ProductDetails = () => {
     { label: "Category", link: "/categories" }, // Show the category name
     { label: product.title || `${filteredProducts[0]?.title}`, p: "" }, // Show the product title if available, otherwise show the product ID
   ];
-  console.log(product, "product");
 
   return (
     <div className="product_content">

@@ -58,7 +58,7 @@ const NavbarHeader = () => {
           </button> */}
         </div>
 
-        <div className="flex gap-x-4 items-center">
+        {/* <div className="flex gap-x-4 items-center">
           <button className="flex items-center">
             <span className="whitespace-nowrap">English, USD</span>{" "}
             <MdOutlineKeyboardArrowDown />
@@ -73,7 +73,7 @@ const NavbarHeader = () => {
             />
             <MdOutlineKeyboardArrowDown />
           </button>
-        </div>
+        </div> */}
       </div>
     </div>
   );

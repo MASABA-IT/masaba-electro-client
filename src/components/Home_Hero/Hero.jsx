@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion"; // Import framer-motion
 import { useProductStore } from "../../providers/AppProviders";
 import { useNavigate } from "react-router-dom";
+import { FaFaceSmile } from "react-icons/fa6";
 
 const Hero = () => {
   const { categories, fetchSearchProducts, searchCategories } =
@@ -26,7 +27,7 @@ const Hero = () => {
               Array.from({ length: 9 }).map((_, index) => (
                 <li
                   key={index}
-                  className="w-3/4 h-full my-3 mx-auto md:h-7 bg-gray-300 rounded animate-pulse px-4"
+                  className="w-3/4 h-full my-3 mx-auto md:h-7  bg-gray-300 rounded animate-pulse px-4"
                 ></li>
               ))
             : categories.map((category, index) => (
@@ -37,7 +38,7 @@ const Hero = () => {
                     navigate(`/categories/${category?.id}`);
                   }}
                   role="button"
-                  className={`item-1 cursor-pointer ${
+                  className={`item-1 cursor-pointer hover:text-blue-400 duration-75 ${
                     activeIndex === index ? "active" : ""
                   } transition-all duration-300 ease-in-out`}
                   initial={{ opacity: 0 }}
@@ -63,7 +64,10 @@ const Hero = () => {
         <h1 className="text-4xl md:text-6xl text-gray-800 font-normal mt-2">
           Electronics items
         </h1>
-        <button className="text-blue-500 text-3xl md:text-gray-500  px-4 py-3 bg-white my-4 rounded-lg hover:text-gray-600 hover:bg-gray-50 transition-all duration-75 shadow-md hover:shadow-sm hover:cursor-pointer ">
+        <button
+          onClick={() => navigate("/categories")}
+          className="text-blue-500 text-3xl md:text-gray-500  px-4 py-3 bg-white my-4 rounded-lg hover:text-gray-600 hover:bg-gray-50 transition-all duration-75 shadow-md hover:shadow-sm hover:cursor-pointer "
+        >
           Learn More
         </button>
       </motion.div>
@@ -84,34 +88,40 @@ const Hero = () => {
                 alt=""
               />
             </p>
-            <span className="text-2xl">
+            <span className="text-2xl w-auto">
               Hi, user <br /> Let's get started
             </span>
           </div>
-          <button className=" w-[90%] text-xl hover:bg-[#3b83f6e1] transition-colors duration-75 text-white  mx-4 py-3 rounded-lg bg-blue-500">
+          <button
+            onClick={() => navigate("/signup")}
+            className=" w-[90%] text-xl hover:bg-[#3b83f6e1] transition-colors duration-75 text-white  mx-4 py-3 rounded-lg bg-blue-500"
+          >
             Join now
           </button>
-          <button className=" w-[90%] text-xl hover:bg-gray-50 transition-colors duration-75 bg-white  mx-4 py-3 rounded-lg text-blue-500">
+          <button
+            onClick={() => navigate("/login")}
+            className=" w-[90%] text-xl hover:bg-gray-50 transition-colors duration-75 bg-white  mx-4 py-3 rounded-lg text-blue-500"
+          >
             Log in
           </button>
         </div>
         {/* 2 */}
         <motion.p
-          className="child-2 flex-1 md:mt-4 md:mr-4 xl:m-4 xl:mt-0 xl:mb-4 w-[90%] mx-auto text-white bg-orange-400 text-[1.4rem] flex justify-center items-center p-4 rounded-lg"
+          className="child-2 flex-1 md:mt-4 md:mr-4 xl:m-4 xl:mt-0 xl:mb-4 w-[90%] mx-auto text-white bg-orange-400 text-[1.4rem] flex justify-center items-center p-4 rounded-lg text-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
-          Get US $10 off with a new supplier
+          "Discover Deals, Delivered Daily."
         </motion.p>
         {/* 3 */}
         <motion.p
-          className="child-3 flex-1 md:mt-4 md:mr-4 xl:m-4 xl:mt-0 xl:mb-4 w-[90%] mx-auto text-white bg-[#55BDC3] text-[1.4rem] flex justify-center items-center p-4 rounded-lg"
+          className="child-3 flex-1 md:mt-4 md:mr-4 xl:m-4 xl:mt-0 xl:mb-4 w-[90%] mx-auto text-white bg-[#55BDC3] text-[1.4rem] flex justify-center items-center p-4 rounded-lg text-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
-          Get US $10 off with a new supplier
+          "Where Quality Meets Affordability."
         </motion.p>
       </motion.div>
     </div>

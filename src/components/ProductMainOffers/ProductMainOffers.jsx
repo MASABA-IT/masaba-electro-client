@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion"; // Import framer-motion
 import { useProductStore } from "../../providers/AppProviders";
+import { useNavigate } from "react-router-dom";
 
 // CountdownTimer Component
 const CountdownTimer = ({ endDate }) => {
@@ -105,17 +106,21 @@ const OfferItem = ({ item }) => {
   const base = parseFloat(item.product.base_price);
   const discount = parseFloat(item.product.discount_price);
   const discountPercent = ((base - discount) / base) * 100;
-
+  const navigate = useNavigate();
   // State to track when the image has finished loading
   const [imageLoaded, setImageLoaded] = useState(!item);
-
+ 
+  const handleProductClick = () => {
+    navigate(`/categories/product/${item?.product_id}`);
+  };
   return (
     <motion.div
       key={item.id}
-      className="offer-box p-4 bg-white rounded"
+      className="offer-box p-4 bg-white rounded cursor-pointer"
       initial={{ opacity: 0, y: 50 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
+      onClick={handleProductClick}
     >
       <div className="offer-image relative overflow-hidden w-full h-48 rounded">
         {/* Skeleton loader overlay for the image */}
@@ -157,7 +162,7 @@ const OfferItem = ({ item }) => {
 // Main ProductMainOffers Component
 const ProductMainOffers = () => {
   const { dealsOffers } = useProductStore();
-
+  console.log(dealsOffers);
   if (!dealsOffers || !dealsOffers.deals_offers_products) {
     return <div className="min-h-[300px]"></div>;
   }

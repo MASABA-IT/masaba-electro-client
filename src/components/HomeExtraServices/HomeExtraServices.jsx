@@ -68,7 +68,7 @@ const HomeExtraServices = () => {
       <h2 className="mb-6 px-4 md:p-0">Our Extra Services</h2>
 
       {/* Mobile view - stacked with Framer Motion scroll animation */}
-      <div className="min-h-[190px] md:hidden relative">
+      <div className="min-h-[190px] md:hidden relative ">
         <motion.div
           className="absolute w-full flex justify-center items-center"
           initial={{ opacity: 0, y: 50 }}
@@ -97,10 +97,10 @@ const HomeExtraServices = () => {
                 {services[currentCard].icon}
               </span>
               <div>
-                <h3 className="text-lg font-semibold">
+                <h3 className="text-xl font-semibold">
                   {services[currentCard].title}
                 </h3>
-                <p className="text-sm text-gray-600">
+                <p className="text-lg text-gray-600">
                   {services[currentCard].description}
                 </p>
               </div>
@@ -161,8 +161,8 @@ const HomeExtraServices = () => {
                 {service.icon}
               </span>
               <div>
-                <h3 className="text-lg font-semibold">{service.title}</h3>
-                <p className="text-sm text-gray-600">{service.description}</p>
+                <h3 className="text-xl font-semibold">{service.title}</h3>
+                <p className="text-lg text-gray-600">{service.description}</p>
               </div>
             </div>
           </div>

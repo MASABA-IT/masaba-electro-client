@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import defaultProfile from "../../assets/imgs/fake_profile.jpg";
 import {
@@ -9,14 +9,18 @@ import {
   FaLock,
   FaSignOutAlt,
   FaEdit,
+  FaAddressCard,
 } from "react-icons/fa"; // Import icons from react-icons
 import { useProductStore } from "../../providers/AppProviders";
 import ProfileSection from "../../components/ProfileSection/ProfileSection";
 import ChangePasswordSection from "../../components/ChangePasswordSection/ChangePasswordSection";
+import UserAddressSection from "../../components/UserAddressSection/UserAddressSection";
+import AddAddressModal from "../../components/AddAddressModal/AddAddressModal";
 // import WishlistProducts from "../WishlistProducts/WishlistProducts";
 
 const Dashboard = () => {
-  const { BASE_URL, userData, handleLogout } = useProductStore();
+  const { BASE_URL, userData, handleLogout, billingAddress } =
+    useProductStore();
   const [activeIndex, setActiveIndex] = useState(0);
   const menuItems = [
     { name: "Profile", icon: <FaUser />, section: "profile" },
@@ -25,11 +29,11 @@ const Dashboard = () => {
       icon: <FaShoppingCart />,
       section: "orders",
     },
-    // {
-    //   name: "Wishlist",
-    //   icon: <FaHeart />,
-    //   section: "wishlist",
-    // },
+    {
+      name: "Your Address",
+      icon: <FaAddressCard />,
+      section: "address",
+    },
     {
       name: "Saved Data",
       icon: <FaSave />,
@@ -124,8 +128,6 @@ const Dashboard = () => {
           };
           // Save the updated user data back to localStorage
           localStorage.setItem("userData", JSON.stringify(updatedUserData));
-          console.log(updatedUserData, "updateUserData");
-          console.log(localStorage.getItem("userData"), "userData");
         }
 
         alert("Profile image updated!");
@@ -142,7 +144,7 @@ const Dashboard = () => {
 
   const handleImageClick = () => {
     const fileInput = document.getElementById("profileImageInput");
-    console.log(fileInput, "fileInput");
+
     fileInput.click();
   };
   const handleButtonClick = () => {
@@ -169,7 +171,37 @@ const Dashboard = () => {
   //   console.log(name, email, phone, newAddress, newProfileImg);
   //   alert("Profile Updated!");
   // };
+  const [userAddresses, setUserAddresses] = useState([]);
+  useEffect(() => {
+    if (billingAddress) {
+      setUserAddresses(billingAddress);
+    }
+  }, [billingAddress]);
 
+  const [selectedAddress, setSelectedAddress] = useState(
+    userAddresses[0]?.id || null
+  );
+  const [showModal, setShowModal] = useState(false);
+
+  const handleAddNew = () => setShowModal(true);
+
+  const handleSaveAddress = (newAddress) => {
+    setUserAddresses((prev) => [...prev, newAddress]);
+    setSelectedAddress(newAddress.id);
+  };
+
+  const handleDeleteAddress = (id) => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this address?"
+    );
+    if (!confirmed) return;
+
+    setUserAddresses((prev) => prev.filter((addr) => addr.id !== id));
+    if (selectedAddress === id) {
+      setSelectedAddress(null);
+    }
+  };
+  console.log("userAddress", userAddresses);
   return (
     <div className="dashboard__content">
       {/* Left Side: Profile Info */}
@@ -216,7 +248,7 @@ const Dashboard = () => {
         </div>
         <button
           onClick={handleButtonClick}
-          className="w-full bg-gray-500 text-2xl text-white p-4 rounded  absolute bottom-0"
+          className="w-full bg-gray-500 hover:bg-blue-400 duration-75 text-2xl text-white p-4 rounded  absolute bottom-0"
         >
           Logout
         </button>
@@ -242,6 +274,27 @@ const Dashboard = () => {
           <div>
             <h3 className="text-xl mb-4">Orders</h3>
             <p>Your orders will be displayed here.</p>
+          </div>
+        )}
+        {selectedSection === "address" && (
+          <div className="checkout_content">
+            {/* Other content... */}
+
+            <UserAddressSection
+              addresses={userAddresses}
+              selectedAddress={selectedAddress}
+              setSelectedAddress={setSelectedAddress}
+              onAddNew={handleAddNew}
+              onDeleteAddress={handleDeleteAddress}
+            />
+
+            {/* Modal logic (conditionally rendered form, etc.) */}
+            {showModal && (
+              <AddAddressModal
+                onClose={() => setShowModal(false)}
+                onSave={handleSaveAddress}
+              />
+            )}
           </div>
         )}
 

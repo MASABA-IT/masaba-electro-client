@@ -48,7 +48,7 @@ const CartSummary = ({
     if (userData) {
       const parsed = JSON.parse(userData);
       if (parsed?.token) {
-        onCheckout(); // this might already route to next step
+        onCheckout();
         return;
       }
     }

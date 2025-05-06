@@ -22,7 +22,7 @@ const ProfileSection = ({
     try {
       const userData = JSON.parse(localStorage.getItem("userData"));
       const token = userData?.token;
-      console.log(userData, "userData");
+
       if (!token) {
         throw new Error("No token available!");
       }
@@ -33,12 +33,12 @@ const ProfileSection = ({
         phone_number: editedPhone,
         address: editedAddress,
       };
-
+      console.log(userData, "userData");
       const updatedUserData = {
         ...userData,
         profile: {
           data: {
-            ...userData.profile.data,
+            ...userData?.profile?.data,
             name: editedName,
             email: editedEmail,
             phone_number: editedPhone,
@@ -46,8 +46,7 @@ const ProfileSection = ({
           },
         },
       };
-      console.log(payload, "payload1");
-      console.log(updatedUserData, "updatedUserData1");
+
       // Ensure that you only send the relevant data
       const response = await fetch(`${BASE_URL}/api/change-profile`, {
         method: "POST",
@@ -59,9 +58,6 @@ const ProfileSection = ({
       });
 
       const result = await response.json();
-      console.log(updatedUserData, "updatedUserData");
-      console.log(payload, "payload");
-      console.log(result, "result");
 
       if (response.ok && result.status === "success") {
         // Update the user data in localStorage
@@ -80,6 +76,7 @@ const ProfileSection = ({
   // console.log(sanitizedUserData, "sanitizedUserData");
   // console.log(payload, "payload");
   // console.log(result, "result");
+
   return (
     <div className="profile-edit-form text-2xl">
       <div className="relative w-60 h-60">

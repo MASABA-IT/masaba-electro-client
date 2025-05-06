@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import checkout from "../../assets/imgs/shoppingBag.webp"; // Adjust the path as needed
+import checkout from "../../assets/imgs/shoppingBag.webp";  
 
 const GuestCheckoutHeader = () => {
   return (

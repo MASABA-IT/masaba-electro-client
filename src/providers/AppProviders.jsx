@@ -46,7 +46,11 @@ export const AppProvider = ({ children }) => {
   const [couponResponse, setCouponResponse] = useState(null);
   //Delivery charge options
   const [deliveryOptions, setDeliveryOptions] = useState([]);
-  const [selectedDeliveryId, setSelectedDeliveryId] = useState(1);
+  // const [selectedDeliveryId, setSelectedDeliveryId] = useState(1);
+  const [selectedDeliveryId, setSelectedDeliveryId] = useState(
+    deliveryOptions.length > 0 ? deliveryOptions[0].id : null
+  );
+
   ///LOGIN&SIGNUP
   const [formData, setFormData] = useState({
     username: "",
@@ -451,7 +455,6 @@ export const AppProvider = ({ children }) => {
   //LOgOut
   const handleLogout = async (navigate) => {
     try {
-      console.log(userData?.token, "token");
       const response = await fetch(`${BASE_URL}/api/logout`, {
         method: "POST",
         headers: {
@@ -647,8 +650,6 @@ export const AppProvider = ({ children }) => {
     }
   };
   //Delivery charge options
-  //  const [deliveryOptions, setDeliveryOptions] = useState([]);
-  //const [selectedDeliveryId, setSelectedDeliveryId] = useState(1);
 
   useEffect(() => {
     const fetchDeliveryOptions = async () => {
@@ -743,6 +744,38 @@ export const AppProvider = ({ children }) => {
 
     fetchSiteMeta();
   }, []);
+  ///BILLING ADDRESS
+  const [billingAddress, setBillingAddress] = useState({});
+
+  useEffect(() => {
+    const fetchBillingAddress = async () => {
+      try {
+        if (!userData || !userData.token) return; // wait until token is available
+
+        const res = await fetch(`${BASE_URL}/api/user/billing-address`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${userData.token}`,
+          },
+        });
+
+        if (!res.ok) {
+          throw new Error("Failed to fetch billing address");
+        }
+
+        const data = await res.json();
+
+        setBillingAddress(data.billingAddresses);
+      } catch (err) {
+        console.error("Failed to fetch billing address", err);
+      }
+    };
+
+    fetchBillingAddress();
+  }, [userData]);
+  console.log("billingAddress", billingAddress);
+
   /** MAIL SUBSCRIBE  */
   // const handleSubscribe = async (email) => {
   //   if (!email) {
@@ -854,9 +887,11 @@ export const AppProvider = ({ children }) => {
     recommendedViewsData,
     //SITEMETA
     siteMeta,
-    // handleSubscribe,
+    // HandleSubscribe,
     email,
     setEmail,
+    //BILLING ADDRESS
+    billingAddress,
   };
   return <AppContext.Provider value={appInfo}>{children}</AppContext.Provider>;
 };

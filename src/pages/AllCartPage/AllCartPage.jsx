@@ -82,7 +82,7 @@ const AllCartPage = () => {
 
   const onCheckout = () => {
     console.log("Proceeding to checkout");
-    // Logic for checkout
+    navigate("/user-checkout");
   };
   return (
     <div className="carts">

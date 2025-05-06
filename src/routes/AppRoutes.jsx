@@ -12,6 +12,7 @@ import PrivateRoute from "../components/PrivateRoute";
 import Dashboard from "../pages/Dashboard/Dashboard";
 import WishlistProducts from "../pages/WishlistProducts/WishlistProducts";
 import GuestCheckoutPage from "../pages/GuestCheckoutPage/GuestCheckoutPage";
+import UserCheckoutPage from "../pages/UserCheckoutPage/UserCheckoutPage";
 
 const AppRoutes = () => {
   const router = createBrowserRouter([
@@ -55,6 +56,14 @@ const AppRoutes = () => {
         {
           path: "/guest-checkout",
           element: <GuestCheckoutPage />,
+        },
+        {
+          path: "/user-checkout",
+          element: (
+            <PrivateRoute>
+              <UserCheckoutPage />
+            </PrivateRoute>
+          ),
         },
         {
           path: "/dashboard",

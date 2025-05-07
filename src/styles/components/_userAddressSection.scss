@@ -1,0 +1,32 @@
+/* Custom styles for SweetAlert buttons */
+.swal-confirm-button {
+  background-color: #4caf50;
+  color: black !important;
+  border: 1px solid rgb(201, 201, 218);
+  border-radius: 5%;
+  font-size: 1.2rem;
+}
+
+.swal-cancel-button {
+  background-color: #f44336;
+  color: black !important;
+  border: 1px solid rgb(194, 194, 212);
+  border-radius: 5%;
+  font-size: 1.2rem;
+}
+
+.swal-title {
+  color: #ff5722;
+}
+
+.swal-text {
+  color: #4caf50;
+}
+
+.swal-success-title {
+  color: #4caf50;
+}
+
+.swal-success-text {
+  color: #8bc34a;
+}

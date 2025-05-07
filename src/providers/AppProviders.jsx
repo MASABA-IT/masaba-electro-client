@@ -2,6 +2,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { buildSearchQuery } from "../utils/buildSearchQuery";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 // ✅ Import API Base URL from .env
 const BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -746,36 +747,109 @@ export const AppProvider = ({ children }) => {
   }, []);
   ///BILLING ADDRESS
   const [billingAddress, setBillingAddress] = useState({});
+  const [showModal, setShowModal] = useState(false);
+  const [editAddress, setEditAddress] = useState(null);
+  // ✅ Reusable fetch function
+  const fetchBillingAddress = async () => {
+    try {
+      if (!userData || !userData.token) return;
 
+      const res = await fetch(`${BASE_URL}/api/user/billing-address`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userData.token}`,
+        },
+      });
+
+      if (!res.ok) throw new Error("Failed to fetch billing address");
+
+      const data = await res.json();
+      setBillingAddress(data.billingAddresses);
+    } catch (err) {
+      console.error("Failed to fetch billing address", err);
+    }
+  };
+
+  // 🔁 Call once on load (or when userData changes)
   useEffect(() => {
-    const fetchBillingAddress = async () => {
-      try {
-        if (!userData || !userData.token) return; // wait until token is available
-
-        const res = await fetch(`${BASE_URL}/api/user/billing-address`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${userData.token}`,
-          },
-        });
-
-        if (!res.ok) {
-          throw new Error("Failed to fetch billing address");
-        }
-
-        const data = await res.json();
-
-        setBillingAddress(data.billingAddresses);
-      } catch (err) {
-        console.error("Failed to fetch billing address", err);
-      }
-    };
-
     fetchBillingAddress();
   }, [userData]);
-  console.log("billingAddress", billingAddress);
 
+  // ❌ Delete address and refresh
+  const deleteAddress = async (id) => {
+    try {
+      const res = await fetch(`${BASE_URL}/api/user/addresss/delete/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${userData.token}`,
+        },
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Failed to delete address");
+
+      await fetchBillingAddress();
+    } catch (err) {
+      console.error("Error deleting address:", err.message);
+      alert(err.message);
+    }
+  };
+  const saveUserAddress = async ({
+    formData,
+    defaultAddress,
+    onSave,
+    onClose,
+  }) => {
+    const payload = {
+      username: formData.name,
+      phone_number: formData.phone,
+      address: formData.street,
+      division_id: formData.division,
+      district_id: formData.district,
+      thana_id: formData.thana,
+      union_id: formData.union,
+      postal_code: formData.zipCode,
+    };
+    console.log("payload", payload);
+    const isEditing = !!defaultAddress;
+    const url = isEditing
+      ? `${BASE_URL}/api/user/addresss/update/${defaultAddress?.id}`
+      : `${BASE_URL}/api/user/addresss/store`;
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userData?.token}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json();
+      if (!response.ok)
+        throw new Error(data.message || "Failed to save address");
+
+      Swal.fire({
+        icon: "success",
+        title: isEditing ? "Address Updated!" : "Address Saved!",
+        text: "Your shipping address was successfully saved.",
+        showConfirmButton: false,
+        timer: 2000,
+      });
+      await fetchBillingAddress();
+      onSave(data);
+      onClose();
+    } catch (error) {
+      console.error("Error saving address:", error.message);
+      Swal.fire({
+        icon: "error",
+        title: "Oops!",
+        text: error.message || "Something went wrong. Please try again later.",
+      });
+    }
+  };
   /** MAIL SUBSCRIBE  */
   // const handleSubscribe = async (email) => {
   //   if (!email) {
@@ -892,6 +966,15 @@ export const AppProvider = ({ children }) => {
     setEmail,
     //BILLING ADDRESS
     billingAddress,
+    deleteAddress,
+    fetchBillingAddress,
+    saveUserAddress,
+
+    //show modal
+    showModal,
+    setShowModal,
+    editAddress,
+    setEditAddress,
   };
   return <AppContext.Provider value={appInfo}>{children}</AppContext.Provider>;
 };

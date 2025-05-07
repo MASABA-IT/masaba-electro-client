@@ -95,7 +95,7 @@ const GuestCheckoutPage = () => {
       setSelectedUnion(value);
     }
   };
-  console.log(logo);
+ 
   const handlePlaceOrder = async () => {
     const cartData = JSON.parse(localStorage.getItem("cartData")) || [];
 

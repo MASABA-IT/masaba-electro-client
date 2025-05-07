@@ -19,8 +19,16 @@ import AddAddressModal from "../../components/AddAddressModal/AddAddressModal";
 // import WishlistProducts from "../WishlistProducts/WishlistProducts";
 
 const Dashboard = () => {
-  const { BASE_URL, userData, handleLogout, billingAddress } =
-    useProductStore();
+  const {
+    BASE_URL,
+    userData,
+    handleLogout,
+    billingAddress,
+    showModal,
+    setShowModal,
+    editAddress,
+    setEditAddress,
+  } = useProductStore();
   const [activeIndex, setActiveIndex] = useState(0);
   const menuItems = [
     { name: "Profile", icon: <FaUser />, section: "profile" },
@@ -34,11 +42,11 @@ const Dashboard = () => {
       icon: <FaAddressCard />,
       section: "address",
     },
-    {
-      name: "Saved Data",
-      icon: <FaSave />,
-      section: "saved-data",
-    },
+    // {
+    //   name: "Saved Data",
+    //   icon: <FaSave />,
+    //   section: "saved-data",
+    // },
     {
       name: "Change Password",
       icon: <FaLock />,
@@ -95,11 +103,6 @@ const Dashboard = () => {
     formData.append("image", file); // Append the image file
 
     try {
-      // Log headers and body
-      console.log("Headers:", {
-        Authorization: `Bearer ${token}`,
-      });
-
       const response = await fetch(`${BASE_URL}/api/change-image`, {
         method: "POST",
         headers: {
@@ -181,9 +184,21 @@ const Dashboard = () => {
   const [selectedAddress, setSelectedAddress] = useState(
     userAddresses[0]?.id || null
   );
-  const [showModal, setShowModal] = useState(false);
+  // const [showModal, setShowModal] = useState(false);
+  // const [editAddress, setEditAddress] = useState(null);
 
-  const handleAddNew = () => setShowModal(true);
+  // To Add New
+  const handleAddNew = () => {
+    setEditAddress(null);
+    setShowModal(true);
+  };
+  console.log(userAddresses, "userAddress");
+  // To Edit
+  const handleEdit = (address) => {
+    console.log(address, "edit");
+    setEditAddress(address);
+    setShowModal(true);
+  };
 
   const handleSaveAddress = (newAddress) => {
     setUserAddresses((prev) => [...prev, newAddress]);
@@ -201,9 +216,10 @@ const Dashboard = () => {
       setSelectedAddress(null);
     }
   };
+  console.log(selectedAddress);
   console.log("userAddress", userAddresses);
   return (
-    <div className="dashboard__content">
+    <div className="dashboard__content ">
       {/* Left Side: Profile Info */}
       <div className="dashboard_left-listArea bg-white relative">
         <div className="profile-info p-4">
@@ -278,19 +294,19 @@ const Dashboard = () => {
         )}
         {selectedSection === "address" && (
           <div className="checkout_content">
-            {/* Other content... */}
-
-            <UserAddressSection
-              addresses={userAddresses}
+            <UserAddressSection //  addresses={userAddresses}
+              addresses={Array.isArray(userAddresses) ? userAddresses : []}
               selectedAddress={selectedAddress}
               setSelectedAddress={setSelectedAddress}
               onAddNew={handleAddNew}
+              handleEdit={handleEdit}
               onDeleteAddress={handleDeleteAddress}
             />
 
             {/* Modal logic (conditionally rendered form, etc.) */}
             {showModal && (
               <AddAddressModal
+                defaultAddress={editAddress}
                 onClose={() => setShowModal(false)}
                 onSave={handleSaveAddress}
               />

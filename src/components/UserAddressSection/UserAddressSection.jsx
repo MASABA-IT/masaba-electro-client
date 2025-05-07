@@ -1,121 +1,81 @@
 import React from "react";
 import { MdDelete } from "react-icons/md";
+import { useProductStore } from "../../providers/AppProviders";
+import Swal from "sweetalert2";
+import { FaEdit } from "react-icons/fa";
+import AddressCardList from "../AddressCardList/AddressCardList";
 
 const UserAddressSection = ({
-  addresses = [],
+  addresses,
   selectedAddress,
   setSelectedAddress,
   onAddNew,
-  onDeleteAddress,
+  handleEdit,
 }) => {
-  const formatAddress = (addr) => {
-    if (!addr) return "No address available";
+  const { deleteAddress } = useProductStore();
+  const deletedPermission = (e, addr) => {
+    e.stopPropagation();
 
-    const {
-      username,
-      phone_number,
-      address,
-      union_name,
-      thana_name,
-      district_name,
-      division_name,
-      postal_code,
-    } = addr;
+    // Show confirmation dialog before proceeding
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
+      reverseButtons: true,
+      customClass: {
+        confirmButton: "swal-confirm-button",
+        cancelButton: "swal-cancel-button",
+        title: "swal-title", // Custom class for title
+        text: "swal-text", // Custom class for text
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Proceed with deletion if confirmed
+        deleteAddress(addr.id);
 
-    const parts = [
-      username,
-      phone_number,
-      address,
-      union_name,
-      thana_name,
-      district_name,
-      division_name,
-    ].filter(Boolean); // skip empty/null values
-
-    return `${parts.join(", ")}${postal_code ? ` - ${postal_code}` : ""}`;
+        // Success message after deleting the address
+        Swal.fire({
+          icon: "success",
+          title: "Address Deleted!",
+          text: "Your shipping address has been successfully deleted.",
+          showConfirmButton: false,
+          timer: 2000,
+          customClass: {
+            title: "swal-success-title",
+            text: "swal-success-text",
+          },
+        });
+      }
+    });
   };
 
   return (
-    <div className="bg-white p-4 rounded-md shadow-sm">
-      {/* Title and Add Button */}
+    <div className="bg-white p-5 rounded-lg shadow-md">
+      {/* Header */}
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-xl font-semibold">Your Address</h3>
+        <h2 className="text-2xl font-semibold text-gray-800">Your Address</h2>
         <button
           onClick={onAddNew}
-          className="text-blue-600 underline text-xl md:text-2xl"
+          className="text-blue-600 text-2xl hover:underline"
         >
-          + Add New Address
+          + Add New
         </button>
       </div>
 
-      {/* Address Cards */}
-      {addresses.length === 0 ? (
-        <p className="text-gray-600">You have no saved addresses.</p>
+      {/* Address List */}
+      {addresses?.length === 0 ? (
+        <p className="text-gray-500 text-xl">No addresses added yet.</p>
       ) : (
-        <div className=" flex flex-col gap-y-2">
-          {addresses.map((addr) => (
-            <label
-              key={addr.id}
-              className={`border p-4 rounded-md cursor-pointer shadow-sm flex items-start gap-3 transition relative ${
-                selectedAddress === addr.id
-                  ? "border-green-600 bg-blue-50"
-                  : "border-gray-300"
-              }`}
-            >
-              <input
-                type="radio"
-                name="address"
-                value={addr.id}
-                checked={selectedAddress === addr.id}
-                onChange={() => setSelectedAddress(addr.id)}
-                className="mt-1 accent-green-600"
-              />
-              <div className="text-gray-800 text-base leading-relaxed space-y-1">
-                <p>
-                  <span className="font-semibold">Name:</span> {addr.username}
-                </p>
-                <p>
-                  <span className="font-semibold">Phone:</span>{" "}
-                  {addr.phone_number}
-                </p>
-                <p>
-                  <span className="font-semibold">Street:</span> {addr.address}
-                </p>
-                <p>
-                  <span className="font-semibold">Union:</span>{" "}
-                  {addr.union_name}
-                </p>
-                <p>
-                  <span className="font-semibold">Thana:</span>{" "}
-                  {addr.thana_name}
-                </p>
-                <p>
-                  <span className="font-semibold">District:</span>{" "}
-                  {addr.district_name}
-                </p>
-                <p>
-                  <span className="font-semibold">Division:</span>{" "}
-                  {addr.division_name}
-                </p>
-                <p>
-                  <span className="font-semibold">Postal Code:</span>{" "}
-                  {addr.postal_code}
-                </p>
-              </div>
-
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation(); // prevent radio selection
-                  onDeleteAddress(addr.id); // call parent handler
-                }}
-                className="absolute right-4 top-1/3 text-3xl text-red-400 hover:scale-125 transition-transform duration-200"
-              >
-                <MdDelete />
-              </button>
-            </label>
-          ))}
-        </div>
+        <AddressCardList
+          addresses={addresses}
+          selectedAddress={selectedAddress}
+          onSelect={setSelectedAddress}
+          onEdit={handleEdit}
+          onDelete={deletedPermission}
+        />
       )}
     </div>
   );

@@ -18,7 +18,7 @@
 
   .checkout_form {
     grid-column: full-start / col-start 6;
-    background-color: #f0f0f0;
+    background: linear-gradient(to bottom, #ffffff, #f0f0f0);
     padding: 2rem;
     border-radius: 8px;
   }
@@ -57,4 +57,3 @@
     width: 100%;
   }
 }
- 

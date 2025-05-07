@@ -1,16 +1,31 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import UserCheckoutHeader from "../../components/UserCheckoutHeader/UserCheckoutHeader";
 import { Modal, Box } from "@mui/material";
+import { useProductStore } from "../../providers/AppProviders";
+import AddressModal from "../../components/AddAddressModal/AddAddressModal";
+import Swal from "sweetalert2";
+import { MdDelete } from "react-icons/md";
 
 const UserCheckoutPage = () => {
-  const [showModal, setShowModal] = useState(false);
+  const {
+    billingAddress,
+    showModal,
+    setShowModal,
+    editAddress,
+    setEditAddress,
+    deleteAddress,
+  } = useProductStore();
+  // const [showModal, setShowModal] = useState(false);s
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [newAddress, setNewAddress] = useState("");
-
-  const userAddresses = [
-    { id: 1, address: "123/A, Gulshan, Dhaka" },
-    { id: 2, address: "456/B, Dhanmondi, Dhaka" },
-  ];
+  const [userAddresses, setUserAddresses] = useState([]);
+  useEffect(() => {
+    if (Array.isArray(billingAddress)) {
+      setUserAddresses(billingAddress);
+    } else {
+      setUserAddresses([]);
+    }
+  }, [billingAddress]);
 
   const cartItems = [
     {
@@ -45,6 +60,48 @@ const UserCheckoutPage = () => {
     }
   };
 
+  // Selection handler
+  const handleSelectAddress = (addressId) => {
+    setSelectedAddress(addressId);
+  };
+  const deletedPermission = (e, addr) => {
+    e.stopPropagation();
+
+    // Show confirmation dialog before proceeding
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
+      reverseButtons: true,
+      customClass: {
+        confirmButton: "swal-confirm-button",
+        cancelButton: "swal-cancel-button",
+        title: "swal-title", // Custom class for title
+        text: "swal-text", // Custom class for text
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Proceed with deletion if confirmed
+        deleteAddress(addr.id);
+
+        // Success message after deleting the address
+        Swal.fire({
+          icon: "success",
+          title: "Address Deleted!",
+          text: "Your shipping address has been successfully deleted.",
+          showConfirmButton: false,
+          timer: 2000,
+          customClass: {
+            title: "swal-success-title",
+            text: "swal-success-text",
+          },
+        });
+      }
+    });
+  };
   return (
     <div className="checkout_content">
       <UserCheckoutHeader />
@@ -64,29 +121,76 @@ const UserCheckoutPage = () => {
           </div>
 
           {/* Radio Card List */}
-          <div className="flex flex-col gap-y-3">
-            {userAddresses.map((addr) => (
-              <label
-                key={addr.id}
-                className={`border p-4 rounded-md cursor-pointer shadow-sm flex items-start gap-3 transition ${
+          <div className="max-h-[400px] overflow-y-auto space-y-3 pr-2 flex flex-col gap-y-3">
+            {userAddresses?.map((addr) => (
+              <div
+                key={addr?.user_id + addr.id}
+                onClick={() => handleSelectAddress(addr.id)} // Select on left click
+                onContextMenu={(e) => {
+                  e.preventDefault(); // Prevent default right-click menu
+                  handleSelectAddress(addr.id); // Select on right click
+                }}
+                className={`relative border rounded-md bg-white p-4 flex flex-col sm:flex-row gap-4 transition-all duration-200 cursor-pointer ${
                   selectedAddress === addr.id
-                    ? "border-green-600 bg-blue-50"
-                    : "border-gray-300"
+                    ? "border-blue-500 bg-blue-50 ring-2 ring-blue-300"
+                    : "border-gray-300 hover:border-blue-400"
                 }`}
               >
+                {/* Radio Button */}
                 <input
                   type="radio"
                   name="address"
                   value={addr.id}
                   checked={selectedAddress === addr.id}
-                  onChange={() => setSelectedAddress(addr.id)}
-                  className="mt-1 accent-green-600"
+                  onChange={() => handleSelectAddress(addr.id)}
+                  className="absolute top-4 left-4 w-4 h-4 accent-blue-600"
                 />
-                <div>
-                  <p className="font-medium text-gray-800">{addr.address}</p>
-                 
+
+                {/* Address Details */}
+                <div className="ml-6 flex-1 text-gray-800">
+                  <h3 className="text-lg font-bold text-gray-900 mb-2">
+                    📦 Shipping Info
+                  </h3>
+                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-y-1 text-base sm:text-lg">
+                    <li>
+                      <strong>👤 Name:</strong> {addr.username}
+                    </li>
+                    <li>
+                      <strong>📞 Phone:</strong> {addr.phone_number}
+                    </li>
+                    <li>
+                      <strong>🏠 Street:</strong> {addr.address}
+                    </li>
+                    <li>
+                      <strong>🏘️ Union:</strong> {addr.union_name}
+                    </li>
+                    <li>
+                      <strong>🏙️ Thana:</strong> {addr.thana_name}
+                    </li>
+                    <li>
+                      <strong>🏡 District:</strong> {addr.district_name}
+                    </li>
+                    <li>
+                      <strong>🗺️ Division:</strong> {addr.division_name}
+                    </li>
+                    <li>
+                      <strong>📮 Postal:</strong> {addr.postal_code}
+                    </li>
+                  </ul>
                 </div>
-              </label>
+                <div>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      deletedPermission(e, addr);
+                    }}
+                    title="Delete Address"
+                    className="text-red-500 hover:text-red-600 transition-transform hover:scale-110"
+                  >
+                    <MdDelete size={20} />
+                  </button>
+                </div>
+              </div>
             ))}
           </div>
         </div>
@@ -140,8 +244,14 @@ const UserCheckoutPage = () => {
           </button>
         </div>
       </div>
-
-      <Modal
+      {showModal && (
+        <AddressModal
+          defaultAddress={editAddress}
+          onClose={() => setShowModal(false)}
+          onSave={handleSaveAddress}
+        />
+      )}
+      {/* <Modal
         open={showModal}
         onClose={() => setShowModal(false)}
         sx={{
@@ -182,7 +292,7 @@ const UserCheckoutPage = () => {
             </button>
           </div>
         </Box>
-      </Modal>
+      </Modal> */}
     </div>
   );
 };

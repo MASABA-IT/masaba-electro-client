@@ -52,3 +52,13 @@
   font-size: 1.1rem;
   cursor: pointer;
 }
+/* Tablet and Mobile: hide sidebar and make content full-width */
+@media (max-width: 425px) {
+  .dashboard__content {
+    grid-template-columns: 1fr; /* Remove sidebar column */
+  }
+
+  .dashboard__content > :first-child {
+    display: none; /* Hide the sidebar (assumed to be the first child) */
+  }
+}

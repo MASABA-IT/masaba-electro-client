@@ -18,14 +18,14 @@
 
   .checkout_form {
     grid-column: full-start / col-start 6;
-    background: linear-gradient(to bottom, #ffffff, #f0f0f0);
+    background: linear-gradient(to bottom, #e1e4e7, #f0f0f0);
     padding: 2rem;
     border-radius: 8px;
   }
 
   .checkout_summary {
     grid-column: col-start 6 / full-end;
-    background-color: #fff8dc;
+    background-color: white;
     padding: 2rem;
     border-radius: 8px;
     height: 100%;
@@ -41,13 +41,13 @@
 
   .order_totals {
     margin-top: 1.5rem;
-    font-size: 1rem;
+    font-size: 1.4rem;
     line-height: 1.8;
   }
 
   .make_order_btn {
     margin-top: 1rem;
-    background-color: #0f766e;
+
     color: white;
     padding: 0.8rem 1.5rem;
     border: none;
@@ -56,4 +56,8 @@
     font-weight: bold;
     width: 100%;
   }
+}
+.swal2-text-custom {
+  color: black !important;
+  font-weight: 500;
 }

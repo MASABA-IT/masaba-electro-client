@@ -811,7 +811,7 @@ export const AppProvider = ({ children }) => {
       union_id: formData.union,
       postal_code: formData.zipCode,
     };
-    console.log("payload", payload);
+
     const isEditing = !!defaultAddress;
     const url = isEditing
       ? `${BASE_URL}/api/user/addresss/update/${defaultAddress?.id}`
@@ -822,7 +822,7 @@ export const AppProvider = ({ children }) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${userData?.token}`,
+          Authorization: `Bearer ${userData.token}`,
         },
         body: JSON.stringify(payload),
       });
@@ -877,6 +877,50 @@ export const AppProvider = ({ children }) => {
   //     alert("Something went wrong.");
   //   }
   // };
+  const [billingSummary, setBillingSummary] = useState(null);
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem("billingSummary");
+      if (stored) {
+        setBillingSummary(JSON.parse(stored));
+      }
+    } catch (error) {
+      console.error("Failed to parse billingSummary:", error);
+    }
+  }, []);
+  const [orderSummary, setOrderSummary] = useState();
+
+  const sendOrderToServer = async (summaryData) => {
+    try {
+      // localStorage.setItem("orderSummary", JSON.stringify(summaryData));
+      const payload = {
+        ...summaryData,
+      };
+      console.log(payload, "payloads");
+      const res = await fetch(`${BASE_URL}/api/order-place`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userData.token}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await res.json();
+
+      if (res.ok) {
+        console.log("Order placed successfully", result);
+        return { success: true, data: result };
+      } else {
+        console.error("Order failed", result.message);
+        return { success: false, error: result.message };
+      }
+    } catch (error) {
+      console.error("API error", error);
+      return { success: false, error: error.message };
+    }
+  };
 
   const appInfo = {
     BASE_URL,
@@ -975,6 +1019,10 @@ export const AppProvider = ({ children }) => {
     setShowModal,
     editAddress,
     setEditAddress,
+    billingSummary,
+    setCartData,
+    //final-order-for user
+    sendOrderToServer,
   };
   return <AppContext.Provider value={appInfo}>{children}</AppContext.Provider>;
 };

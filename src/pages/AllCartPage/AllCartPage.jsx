@@ -10,10 +10,10 @@ import CartLetterSave from "../../components/CartLetterSave/CartLetterSave";
 import { useProductStore } from "../../providers/AppProviders";
 
 const AllCartPage = () => {
-  const { cartItems, removeFromCart } = useProductStore();
+  const { removeFromCart } = useProductStore();
   const [couponCode, setCouponCode] = useState("");
   const [discount, setDiscount] = useState(0);
-  const [cartData, setCartData] = useState(cartItems);
+  const [cartData, setCartData] = useState([]);
 
   const paymentOptions = [
     { src: "/src/assets/imgs/payment1.png", alt: "Payment Option 1" },
@@ -32,9 +32,26 @@ const AllCartPage = () => {
     );
     setCartData(updatedCart);
   };
+
   useEffect(() => {
-    setCartData(cartItems);
-  }, [cartItems]);
+    const getCartFromLocalStorage = () => {
+      try {
+        const storedCart = JSON.parse(localStorage.getItem("cartData")) || [];
+        setCartData(storedCart);
+      } catch (err) {
+        console.error("Error reading cartData from localStorage:", err);
+        setCartData([]);
+      }
+    };
+
+    getCartFromLocalStorage(); // Initial load
+
+    const interval = setInterval(() => {
+      getCartFromLocalStorage();
+    }, 500); // Optional polling
+
+    return () => clearInterval(interval);
+  }, []);
 
   // Remove Item Logic
   // const removeItem = (id) => {

@@ -10,7 +10,7 @@ export default function CartItem({
   saveForLater,
   updateItemQuantity,
 }) {
-  const { BASE_URL, cartItems } = useProductStore();
+  const { BASE_URL, cartItems, setCartData } = useProductStore();
   const [selectedQty, setSelectedQty] = useState(item.quantity || 1);
 
   useEffect(() => {
@@ -27,10 +27,13 @@ export default function CartItem({
         updatedCart[updatedItemIndex].price * selectedQty
       ).toFixed(2);
       localStorage.setItem("cartData", JSON.stringify(updatedCart));
+      // Dispatch event to inform others to re-sync
+      window.dispatchEvent(new Event("cart-updated"));
     }
   }, [selectedQty, item.id, item.price]);
 
   const handleQuantityChange = (newQty) => {
+    console.log("change");
     if (newQty >= 1) {
       setSelectedQty(newQty);
       updateItemQuantity(item.id, newQty);
@@ -43,9 +46,20 @@ export default function CartItem({
 
     return foundItem.quantity < stockLimit;
   };
-  console.log("-------check");
-  console.log(item.id, item.stocks?.[0]?.quantity, "---------qty");
-  console.log(isQtyAllowed(item.id, item.stocks?.[0]?.quantity));
+  useEffect(() => {
+    const syncCartData = () => {
+      const updated = JSON.parse(localStorage.getItem("cartData")) || [];
+      setCartData(updated);
+    };
+
+    syncCartData();
+
+    // Optional: listen to custom events if quantity changes in child
+    window.addEventListener("cart-updated", syncCartData);
+
+    return () => window.removeEventListener("cart-updated", syncCartData);
+  }, []);
+
   return (
     <div className="flex flex-col md:flex-row justify-between items-start gap-6 p-2 border-b-2 m-4 pb-6 bg-gray-50">
       {/* Left */}

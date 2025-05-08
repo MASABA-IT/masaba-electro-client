@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useProductStore } from "../../providers/AppProviders";
 import { useNavigate } from "react-router-dom";
 
@@ -26,7 +26,7 @@ const CartSummary = ({
     selectedDeliveryTitle,
   } = useProductStore();
   const navigate = useNavigate();
-  console.log(selectedDelivery, "selectedDelivery");
+
   const handleCheckout = () => {
     const userData = localStorage.getItem("userData");
 
@@ -88,7 +88,11 @@ const CartSummary = ({
   const total = parseFloat(
     (subtotal - discountAmount + deliveryAmount).toFixed(2)
   );
-
+  useEffect(() => {
+    if (deliveryOptions.length > 0 && selectedDeliveryId === null) {
+      setSelectedDeliveryId(deliveryOptions[0].id);
+    }
+  }, [deliveryOptions]);
   return (
     <div className="carts_totalAmount flex flex-col gap-y-4">
       {/* Coupon section */}

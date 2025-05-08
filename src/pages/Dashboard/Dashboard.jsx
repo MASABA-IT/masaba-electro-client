@@ -63,10 +63,11 @@ const Dashboard = () => {
   const [selectedSection, setSelectedSection] = useState(
     isValidSection ? section : "profile"
   );
-
+ 
   const { user } = userData;
   const profileData = userData.profile?.data;
-
+  console.log(user, "user");
+  console.log(profileData, "profileData");
   const data =
     profileData?.name &&
     profileData.address &&
@@ -216,8 +217,7 @@ const Dashboard = () => {
       setSelectedAddress(null);
     }
   };
-  console.log(selectedAddress);
-  console.log("userAddress", userAddresses);
+
   return (
     <div className="dashboard__content ">
       {/* Left Side: Profile Info */}

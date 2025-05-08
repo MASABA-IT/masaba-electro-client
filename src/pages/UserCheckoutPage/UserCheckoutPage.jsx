@@ -5,16 +5,26 @@ import { useProductStore } from "../../providers/AppProviders";
 import AddressModal from "../../components/AddAddressModal/AddAddressModal";
 import Swal from "sweetalert2";
 import { MdDelete } from "react-icons/md";
+import { FaPercentage } from "react-icons/fa";
 
 const UserCheckoutPage = () => {
   const {
+    BASE_URL,
     billingAddress,
     showModal,
     setShowModal,
     editAddress,
     setEditAddress,
     deleteAddress,
+    cartData,
+    sendOrderToServer,
+    setCartData,
   } = useProductStore();
+  const [billingSmry, setBillingSmry] = useState(() => {
+    const stored = localStorage.getItem("billingSummary");
+    return stored ? JSON.parse(stored) : null;
+  });
+
   // const [showModal, setShowModal] = useState(false);s
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [newAddress, setNewAddress] = useState("");
@@ -27,29 +37,50 @@ const UserCheckoutPage = () => {
     }
   }, [billingAddress]);
 
-  const cartItems = [
-    {
-      id: 1,
-      name: "Cotton T-Shirt",
-      qty: 2,
-      price: 500,
-      image: "https://via.placeholder.com/80x80?text=T-Shirt",
-    },
-    {
-      id: 2,
-      name: "Running Shoes",
-      qty: 1,
-      price: 1500,
-      image: "https://via.placeholder.com/80x80?text=Shoes",
-    },
-  ];
+  const subtotal = cartData.reduce((sum, item) => {
+    const quantity = item.quantity ?? 1;
+    return sum + parseFloat(item.price) * quantity;
+  }, 0);
 
-  const subtotal = cartItems.reduce(
-    (sum, item) => sum + item.qty * item.price,
-    0
+  const appliedCoupon = billingSmry?.appliedCoupon;
+
+  let couponAmount = {
+    type: null,
+    value: 0,
+  };
+
+  if (appliedCoupon) {
+    const percentage = parseFloat(appliedCoupon.discount_percentage);
+    const price = parseFloat(appliedCoupon.discount_price);
+    console.log(percentage, "per");
+    console.log(price, "price");
+    if (!isNaN(percentage) && percentage > 0) {
+      couponAmount = {
+        type: "percentage",
+        value: percentage,
+      };
+    } else if (!isNaN(price) && price > 0) {
+      couponAmount = {
+        type: "price",
+        value: price,
+      };
+    }
+  }
+
+  const delivery = parseFloat(
+    billingSmry?.deliveryAmount ?? billingSmry?.discountAmount ?? 0
   );
-  const delivery = 60;
-  const total = subtotal + delivery;
+
+  // 🧮 Calculate actual discount:
+  let discount = 0;
+  if (couponAmount.type === "percentage") {
+    discount = (subtotal * couponAmount.value) / 100;
+  } else if (couponAmount.type === "price") {
+    discount = couponAmount.value;
+  }
+
+  // 🧾 Final total:
+  const total = subtotal - discount + delivery;
 
   const handleSaveAddress = () => {
     if (newAddress.trim()) {
@@ -102,11 +133,83 @@ const UserCheckoutPage = () => {
       }
     });
   };
+  // In AppProviders.js or your context:
+  const clearCart = () => {
+    setCartData([]);
+    localStorage.removeItem("cartData");
+  };
+
+  // Dynamically build summary data
+  const [finalOrderData, setFinalOrderData] = useState(null);
+  useEffect(() => {
+    const storedCart = JSON.parse(localStorage.getItem("cartData")) || [];
+
+    const formattedProducts = storedCart.map((item) => ({
+      product_id: item.id,
+      quantity: item.quantity,
+    }));
+
+    const updatedSummary = {
+      products: formattedProducts,
+      payment_method: "CashOnDelivery",
+      billing_addresses_id: selectedAddress,
+      delivery_charge_id: billingSmry?.selectedDelivery?.id,
+      coupon_code_id: billingSmry.appliedCoupon?.id,
+    };
+
+    setFinalOrderData(updatedSummary);
+  }, [selectedAddress]);
+  const handleButtonClick = async () => {
+    if (!finalOrderData) {
+      console.warn("⚠️ No order data found.");
+      return;
+    }
+
+    try {
+      console.log("📦 Final Order Data:", finalOrderData);
+
+      const result = await sendOrderToServer(finalOrderData);
+      console.log("✅ API Response:", result);
+
+      if (result?.success) {
+        Swal.fire({
+          icon: "success",
+          title: "Order Placed!",
+          text: "Your order was successfully placed.",
+          showConfirmButton: false,
+          timer: 2000,
+          htmlContainer: "swal2-text-custom",
+        });
+        clearCart();
+      } else {
+        throw new Error(result?.error || "Something went wrong.");
+      }
+    } catch (error) {
+      console.error("❌ Error placing order:", error.message);
+      Swal.fire({
+        icon: "error",
+        title: "Order Failed!",
+        text: error.message || "Unable to place the order. Please try again.",
+      });
+    }
+  };
+
+  // const handleButtonClick = async () => {
+  //   if (!finalOrderData) return;
+  //   console.log(finalOrderData, "finalOrder");
+  //   const result = await sendOrderToServer(finalOrderData);
+  //   if (result?.success) {
+  //     console.log("✅ Order successfully placed");
+  //   } else {
+  //     console.error("❌ Error placing order", result?.error);
+  //   }
+  // };
+
   return (
-    <div className="checkout_content">
+    <div className="checkout_content ">
       <UserCheckoutHeader />
 
-      <div className="checkout_fullForm">
+      <div className="checkout_fullForm py-8">
         {/* Left - Form Section */}
         <div className="checkout_form">
           {/* Top Row: Title + Add New Address */}
@@ -151,7 +254,7 @@ const UserCheckoutPage = () => {
                   <h3 className="text-lg font-bold text-gray-900 mb-2">
                     📦 Shipping Info
                   </h3>
-                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-y-1 text-base sm:text-lg">
+                  <ul className="grid grid-cols-1 sm:grid-cols-2 gap-y-1 text-base sm:text-xl">
                     <li>
                       <strong>👤 Name:</strong> {addr.username}
                     </li>
@@ -200,28 +303,30 @@ const UserCheckoutPage = () => {
           <h2 className="text-2xl font-bold mb-4">Order Summary</h2>
 
           <div className="cart_items space-y-4">
-            {cartItems.map((item) => (
+            {cartData?.map((item) => (
               <div
                 key={item.id}
                 className="flex items-center justify-between border-b pb-4"
               >
                 <div className="flex items-center">
                   <img
-                    src={item.image}
-                    alt={item.name}
+                    src={`${BASE_URL}/${item?.image}`}
+                    alt={item?.title}
                     className="w-16 h-16 object-cover rounded mr-4"
                   />
                   <div>
-                    <p className="font-medium">{item.name}</p>
-                    <p className="text-gray-600">Qty: {item.qty}</p>
+                    <p className="font-medium">{item?.title}</p>
+                    <p className="text-gray-600 text-xl">
+                      Quantity: {item?.quantity}
+                    </p>
                   </div>
                 </div>
-                <p className="font-medium">৳{item.price * item.qty}</p>
+                <p className="font-medium">৳{item.price}</p>
               </div>
             ))}
           </div>
 
-          <div className="order_totals mt-6 space-y-2">
+          <div className="order_totals mt-6 space-y-2 text-xl">
             <div className="flex justify-between">
               <span>Subtotal:</span>
               <span>৳{subtotal}</span>
@@ -230,17 +335,31 @@ const UserCheckoutPage = () => {
               <span>Delivery Charge:</span>
               <span>৳{delivery}</span>
             </div>
-            <div className="flex justify-between font-bold text-lg mt-4 pt-2 border-t">
+            {couponAmount && (
+              <div className="flex justify-between">
+                <span className="">
+                  Discount&nbsp;
+                  {couponAmount?.type}:
+                </span>
+
+                <span>
+                  {couponAmount?.type === "price" ? "৳" : "%"}
+                  {couponAmount.value}
+                </span>
+              </div>
+            )}
+            <div className="flex justify-between font-bold text-2xl mt-4 pt-2 border-t">
               <span>Total:</span>
               <span>৳{total}</span>
             </div>
           </div>
 
           <button
-            className="make_order_btn w-full bg-blue-600 text-white py-3 rounded-lg mt-6 hover:bg-blue-700 transition"
+            onClick={handleButtonClick}
+            className="make_order_btn w-full bg-indigo-400 text-white text-2xl py-3 rounded-lg mt-6 hover:bg-indigo-500 transition"
             disabled={!selectedAddress}
           >
-            {selectedAddress ? "Place Order" : "Please select an address"}
+            {selectedAddress ? "Place Order" : "ℹ️ Please select an address"}
           </button>
         </div>
       </div>

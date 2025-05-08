@@ -15,8 +15,8 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const validateEmail = (value) => {
-    if (!value) return "Email is required.";
-    if (!/\S+@\S+\.\S+/.test(value)) return "Email is invalid.";
+    // if (!value) return "Email is required.";
+    // if (!/\S+@\S+\.\S+/.test(value)) return "Email is invalid.";
     return "";
   };
 
@@ -66,7 +66,7 @@ const Login = () => {
         });
 
         const result = await response.json();
-
+        console.log(result, "mastar result");
         if (!response.ok) {
           console.error("Login failed ❌:", result);
           alert(result.message || "Login failed!");
@@ -83,7 +83,6 @@ const Login = () => {
         });
 
         const profileResult = await profileResponse.json();
-        console.log(profileResponse, "---------PROFILE");
         if (!profileResponse.ok) {
           console.error("Failed to fetch profile data ❌:", profileResult);
           alert(profileResult.message || "Failed to fetch profile data!");
@@ -96,7 +95,7 @@ const Login = () => {
           message: result.message || "Login successful!",
           token: result.token,
           user: {
-            username: result.user.name,
+            name: result.user.name,
             email: result.user.email,
           },
           profile: profileResult, // Add profile data to userData
@@ -149,8 +148,8 @@ const Login = () => {
             <div className="relative">
               <FiMail className="absolute top-5 left-4 text-gray-400 text-2xl" />
               <input
-                type="email"
-                placeholder="Email"
+                type="text"
+                placeholder="Email or Phone Number"
                 value={email}
                 onChange={handleEmailChange}
                 className="w-full pl-12 pr-4 py-3 text-2xl border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"

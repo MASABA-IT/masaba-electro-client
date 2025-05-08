@@ -7,15 +7,31 @@ import { MdMessage } from "react-icons/md";
 import { Link, useNavigate } from "react-router-dom";
 import { useProductStore } from "../../providers/AppProviders";
 const Navbar = ({ showSidebar, setShowSidebar }) => {
-  const { userData, handleLogout, cartItems, logo, BASE_URL, showWishlist } =
+  const { userData, handleLogout, logo, BASE_URL, showWishlist } =
     useProductStore();
   // Your cartItems state (you can replace this with actual data)
-  const [cartCount, setCartCount] = useState(cartItems.length); // Store the cart count for animation
+  const [cartCount, setCartCount] = useState(0);
 
   useEffect(() => {
-    // Whenever cartItems change, update the cart count
-    setCartCount(cartItems.length);
-  }, [cartItems]);
+    const getCartFromLocalStorage = () => {
+      try {
+        const storedCart = JSON.parse(localStorage.getItem("cartData")) || [];
+        setCartCount(storedCart.length);
+      } catch (err) {
+        console.error("Error reading cartData from localStorage:", err);
+        setCartCount(0);
+      }
+    };
+
+    getCartFromLocalStorage(); // Load initially
+
+    // Optional: Poll every few hundred ms if no global context is syncing it
+    const interval = setInterval(() => {
+      getCartFromLocalStorage();
+    }, 500);
+
+    return () => clearInterval(interval);
+  }, []);
   const navigate = useNavigate();
 
   const handleButtonClick = () => {

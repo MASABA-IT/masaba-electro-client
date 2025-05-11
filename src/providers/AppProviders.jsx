@@ -766,6 +766,28 @@ export const AppProvider = ({ children }) => {
 
       const data = await res.json();
       setBillingAddress(data.billingAddresses);
+
+      //
+      /**
+       *     const billingName = data.billingAddresses?.name;
+    const profileName = userData?.profile?.data?.name;
+    const updatedName = billingName || profileName;
+
+    // 👇 Update name only if different
+    if (updatedName && userData?.user?.name !== updatedName) {
+      const updatedUserData = {
+        ...userData,
+        user: {
+          ...userData.user,
+          name: updatedName,
+        },
+      };
+
+      // 👇 Save to localStorage and update state/context
+      localStorage.setItem("userData", JSON.stringify(updatedUserData));
+      setUserData(updatedUserData); // or your context updater
+
+       */
     } catch (err) {
       console.error("Failed to fetch billing address", err);
     }
@@ -921,7 +943,7 @@ export const AppProvider = ({ children }) => {
       return { success: false, error: error.message };
     }
   };
-
+  console.log(showWishlist);
   const appInfo = {
     BASE_URL,
     loading,

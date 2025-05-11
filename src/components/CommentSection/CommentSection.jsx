@@ -144,7 +144,7 @@ const CommentSection = ({ product }) => {
                       }
                       inputStyle={{
                         width: "100%",
-                        padding: "1rem",
+
                         fontSize: "1.1rem",
                         borderRadius: "0.5rem",
                         backgroundColor: "#f9fafb",
@@ -212,7 +212,7 @@ const CommentSection = ({ product }) => {
               comments.map((c) => (
                 <div
                   key={c.id}
-                  className="bg-gray-50 p-4 rounded shadow-sm transition-all duration-200 hover:shadow-md"
+                  className="bg-gray-50 p-4 rounded shadow-sm transition-all duration-200 "
                 >
                   <div className="flex items-start gap-3">
                     <div className="flex-shrink-0">

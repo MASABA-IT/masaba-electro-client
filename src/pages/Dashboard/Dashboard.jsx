@@ -63,7 +63,7 @@ const Dashboard = () => {
   const [selectedSection, setSelectedSection] = useState(
     isValidSection ? section : "profile"
   );
- 
+
   const { user } = userData;
   const profileData = userData.profile?.data;
   console.log(user, "user");
@@ -121,6 +121,10 @@ const Dashboard = () => {
         if (userData) {
           const updatedUserData = {
             ...userData,
+            user: {
+              ...userData.user,
+              name: userData.profile?.data?.name,
+            },
             profile: {
               ...(userData.profile || {}),
 
@@ -130,6 +134,7 @@ const Dashboard = () => {
               },
             },
           };
+
           // Save the updated user data back to localStorage
           localStorage.setItem("userData", JSON.stringify(updatedUserData));
         }
@@ -196,7 +201,6 @@ const Dashboard = () => {
   console.log(userAddresses, "userAddress");
   // To Edit
   const handleEdit = (address) => {
-    console.log(address, "edit");
     setEditAddress(address);
     setShowModal(true);
   };

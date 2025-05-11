@@ -1,79 +1,124 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { IoMdRemoveCircle } from "react-icons/io";
 import { MdOutlineShoppingCart } from "react-icons/md";
-
-const cardsData = [
-  {
-    id: 1,
-    image: "/src/assets/imgs/mobile1.png",
-    title: "GoPro HERO6 4K Action",
-    subTitle: " Camera - Black",
-    price: 299.99,
-  },
-  {
-    id: 2,
-    image: "/src/assets/imgs/mobile2.png",
-    title: "Sony WH-1000XM5",
-    subTitle: "Wireless Headphones",
-    price: 399.0,
-  },
-  {
-    id: 3,
-    image: "/src/assets/imgs/watch.png",
-    title: "Fitbit Inspire 3",
-    subTitle: "Fitness Tracker",
-    price: 89.5,
-  },
-  {
-    id: 4,
-    image: "/src/assets/imgs/laptop.png",
-    title: "JBL Flip 6 ",
-    subTitle: "Portable Speaker",
-    price: 129.95,
-  },
-];
+import { useProductStore } from "../../providers/AppProviders";
+import { useNavigate } from "react-router-dom";
+import { updateWishlistInLocalStorage } from "../../utils/wishlist";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css"; // ✅ import Swiper styles
 
 const CartLetterSave = () => {
+  const { showWishlist, BASE_URL } = useProductStore();
+  const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (showWishlist.length > 0) {
+      setTimeout(() => setIsLoading(false), 800);
+    }
+  }, [showWishlist]);
+
+  const skeletonCount = showWishlist.length || 4;
+
+  const handleCardClick = (productId) => {
+    navigate(`/categories/product/${productId}`);
+  };
+
+  const handleRemoveItem = (e, productId) => {
+    e.stopPropagation();
+    setIsLoading(true);
+    updateWishlistInLocalStorage(productId, "remove");
+    setTimeout(() => setIsLoading(false), 300);
+  };
+
   return (
-    <div className="cartLetterSave   bg-white border-2 rounded-xl">
+    <div className="cartLetterSave bg-white border-2 rounded-xl">
       <h2 className="text-2xl xl:text-3xl p-3 xl:p-6 font-bold">
-        Saved for later
+        Saved for later ({showWishlist.length})
       </h2>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {cardsData.map((card) => (
-          <div
-            key={card.id}
-            className="p-3 xl:p-6  rounded-xl      flex flex-col   hover:shadow-md transition"
-          >
-            <div className="w-full bg-[#eeeeee] h-[240px] flex justify-center items-center overflow-hidden rounded-lg mb-4">
-              <img
-                src={card.image}
-                alt={card.title}
-                className="w-[60%] h-full "
-              />
+
+      {isLoading ? (
+        <div className="flex gap-4 overflow-x-auto p-4">
+          {Array.from({ length: skeletonCount }).map((_, i) => (
+            <div
+              key={i}
+              className="w-[250px] flex-shrink-0 p-4 rounded-xl animate-pulse border border-gray-200"
+            >
+              <div className="w-full h-[150px] bg-gray-200 rounded-lg mb-4" />
+              <div className="h-6 bg-gray-200 rounded w-2/3 mb-2" />
+              <div className="h-5 bg-gray-200 rounded w-1/2 mb-2" />
+              <div className="h-5 bg-gray-200 rounded w-3/4 mb-4" />
+              <div className="flex justify-between">
+                <div className="h-10 bg-gray-200 rounded w-5/12" />
+                <div className="h-10 bg-gray-200 rounded w-5/12" />
+              </div>
             </div>
-            <p className="text-2xl xl:text-3xl font-bold text-[#ad7d3e] mb-1">
-              ${card.price.toFixed(2)}
-            </p>
-            <h2 className="text-xl xl:text-2xl font-medium text-gray-500 mb-3">
-              {card.title}
-            </h2>
-            <p className="text-xl xl:text-2xl font-medium text-gray-500 mb-3">
-              {card.subTitle}
-            </p>
-            <div className="btn_group flex justify-between text-lg xl:text-2xl">
-              <button className="text-blue-500 font-semibold border-2  px-4 py-2 rounded-lg hover:bg-gray-200 transition flex justify-center items-center  gap-x-4">
-                <MdOutlineShoppingCart className="text-3xl " />
-                Move to cart
-              </button>
-              <button className="text-red-400 font-semibold border-2  px-4 py-2 rounded-lg hover:bg-gray-200 transition flex justify-center items-center  gap-x-4">
-                <IoMdRemoveCircle className="text-3xl " />
-                Remove
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      ) : (
+        <Swiper
+          spaceBetween={16}
+          slidesPerView={2}
+          breakpoints={{
+            640: { slidesPerView: 2 },
+            768: { slidesPerView: 3 },
+            1024: { slidesPerView: 4 },
+          }}
+          className="px-4 pb-6"
+        >
+          {showWishlist.map((product) => (
+            <SwiperSlide key={product.id}>
+              <div className="p-4 rounded-xl flex flex-col hover:shadow-md transition border h-full bg-white">
+                <div className="w-full h-[150px] flex justify-center items-center overflow-hidden rounded-lg mb-4">
+                  <img
+                    src={`${BASE_URL}/${product.thumbnail}`}
+                    alt={product.title}
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+
+                {product.discount_price &&
+                parseFloat(product.discount_price) <
+                  parseFloat(product.base_price) ? (
+                  <div className="flex justify-start items-center gap-x-2">
+                    <p className="text-[1.6rem] font-bold text-red-500 mb-1">
+                      ৳&nbsp;{product.discount_price}
+                    </p>
+                    <p className="text-lg line-through text-gray-400 mb-1">
+                      ৳&nbsp;{product.base_price}
+                    </p>
+                  </div>
+                ) : (
+                  <p className="text-[1.6rem] font-bold text-[#ad7d3e] mb-1">
+                    ৳&nbsp;{product.base_price}
+                  </p>
+                )}
+
+                <h2 className="text-2xl font-medium text-gray-600 mb-3 text-center line-clamp-2">
+                  {product.title}
+                </h2>
+
+                <div className="mt-auto btn_group flex justify-between text-xl">
+                  <button
+                    onClick={() => handleCardClick(product.id)}
+                    className="text-blue-500 font-semibold border-2 px-3 py-1 rounded-lg hover:bg-gray-200 transition flex items-center gap-x-2"
+                  >
+                    <MdOutlineShoppingCart className="text-xl" />
+                    <span>View cart</span>
+                  </button>
+                  <button
+                    onClick={(e) => handleRemoveItem(e, product.id)}
+                    className="text-red-400 font-semibold border-2 px-3 py-1 rounded-lg hover:bg-gray-200 transition flex items-center gap-x-2"
+                  >
+                    <IoMdRemoveCircle className="text-xl" />
+                    <span>Remove</span>
+                  </button>
+                </div>
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      )}
     </div>
   );
 };

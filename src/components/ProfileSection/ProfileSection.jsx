@@ -36,6 +36,10 @@ const ProfileSection = ({
       console.log(userData, "userData");
       const updatedUserData = {
         ...userData,
+        user: {
+          ...userData.user,
+          name: editedName,
+        },
         profile: {
           data: {
             ...userData?.profile?.data,

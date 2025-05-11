@@ -1,6 +1,16 @@
 .cartLetterSave {
   grid-column: full-start / full-end;
 }
+.wishlist-swiper {
+  padding: 20px 10px 40px;
+}
+.swiper-button-next,
+.swiper-button-prev {
+  color: #ad7d3e;
+}
+.swiper-pagination-bullet-active {
+  background: #ad7d3e;
+}
 @media (max-width: 425px) {
   .btn_group {
     row-gap: 1rem;

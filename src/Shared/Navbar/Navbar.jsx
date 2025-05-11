@@ -111,49 +111,79 @@ const Navbar = ({ showSidebar, setShowSidebar }) => {
           </div>
           {/* icons */}
           <div className="nav-icons flex gap-x-6 justify-between items-center text-gray-500">
+            {/* Profile Button */}
             <button
-              className="flex flex-col items-center gap-y-3"
+              className="flex flex-col items-center gap-y-3 relative group"
               onClick={handleButtonClick}
             >
-              <FaUser className=" " />
-              <span className="text-sm">
-                {userData?.token ? "Profile" : "Login"}
+              <span className="absolute top-0 -left-20 mt-1 text-xs text-gray-600 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                Profile
+              </span>
+              <FaUser
+                className={`text-xl ${
+                  userData?.token
+                    ? "text-blue-400"
+                    : "group-hover:text-blue-500"
+                }`}
+              />
+              <span
+                className={`text-sm uppercase font-bold font-mono ${
+                  userData?.token
+                    ? "text-blue-700"
+                    : "group-hover:text-blue-500"
+                }`}
+                style={{ textShadow: "0px 1px 4px #f2f2f2" }}
+              >
+                {userData?.token
+                  ? userData?.user?.name?.trim().split(" ").length === 1
+                    ? userData.user.name
+                    : userData.user.name
+                        .trim()
+                        .split(" ")
+                        .map((word) => word[0])
+                        .join("")
+                  : "Login"}
               </span>
             </button>
-            <button className="flex flex-col items-center gap-y-3">
-              <MdMessage className=" " />
+
+            {/* Message Button */}
+            {/* <button className="flex flex-col items-center gap-y-3 group hover:text-green-500">
+              <MdMessage className="text-xl" />
               <span className="text-sm">Message</span>
-            </button>
-            <button className="flex flex-col items-center gap-y-3">
-              <FaHeart className=" " />
+            </button> */}
+
+            {/* Orders Button */}
+            <button className="flex flex-col items-center gap-y-3 group hover:text-purple-500">
+              <FaHeart className="text-xl" />
               <span className="text-sm">Orders</span>
             </button>
+
+            {/* Wishlist Button */}
             <button
-              className="flex flex-col items-center gap-y-3 relative "
+              className="flex flex-col items-center gap-y-3 relative group hover:text-red-500"
               onClick={() => navigate("/wishlist")}
             >
-              <FaHeart className=" " />
+              <FaHeart className="text-xl" />
               <span className="text-sm">Wishlist</span>
-
               {showWishlist.length > 0 && (
                 <span
-                  className="absolute -top-2 right-0 text-white text-xs bg-red-500 rounded-full w-6 h-6 p-3 flex items-center justify-center animate-bounce"
+                  className="absolute -top-2 right-0 text-white text-xs bg-red-500 rounded-full w-6 h-6 p-3 flex items-center justify-center"
                   style={{ transform: "translate(50%, -50%)" }}
                 >
                   {showWishlist.length}
                 </span>
               )}
             </button>
+
+            {/* Cart Button */}
             <button
-              className="flex flex-col items-center gap-y-3 relative"
+              className="flex flex-col items-center gap-y-3 relative group hover:text-orange-500"
               onClick={() => navigate("/cart")}
             >
               <HiMiniShoppingCart className="text-2xl" />
-
-              {/* Cart count notification */}
               {cartCount > 0 && (
                 <span
-                  className="absolute -top-2 right-0 text-white text-xs bg-red-500 rounded-full w-6 h-6 p-3 flex items-center justify-center animate-bounce"
+                  className="absolute -top-2 right-0 text-white text-xs bg-red-500 rounded-full w-6 h-6 p-3 flex items-center justify-center"
                   style={{ transform: "translate(50%, -50%)" }}
                 >
                   {cartCount}

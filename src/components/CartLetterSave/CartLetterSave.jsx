@@ -104,7 +104,7 @@ const CartLetterSave = () => {
                     className="text-blue-500 font-semibold border-2 px-3 py-1 rounded-lg hover:bg-gray-200 transition flex items-center gap-x-2"
                   >
                     <MdOutlineShoppingCart className="text-xl" />
-                    <span>View cart</span>
+                    <span>View Details</span>
                   </button>
                   <button
                     onClick={(e) => handleRemoveItem(e, product.id)}

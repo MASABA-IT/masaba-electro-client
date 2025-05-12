@@ -42,101 +42,147 @@ const CategoriesItems = ({ allData }) => {
     }
     setLoading(false);
   }, [allData]);
-
+  console.log(allProducts);
   // Filtering the products based on selected filters
-  const filteredProducts = allProducts
-    .filter((product) => {
-      const brands = selectedBrands || [];
-      const categories = selectedCategories || [];
-      const features = selectedFeatures || [];
-      const ratings = selectedRatings || [];
-      const conditions = selectedCondition
-        ? Array.isArray(selectedCondition)
-          ? selectedCondition
-          : [selectedCondition]
-        : [];
-      const priceRange = selectedPriceRange || { min: 0, max: Infinity };
+  // const filteredProducts = allProducts
+  //   .filter((product) => {
+  //     const brands = selectedBrands || [];
+  //     const categories = selectedCategories || [];
+  //     const features = selectedFeatures || [];
+  //     const ratings = selectedRatings || [];
+  //     const conditions = selectedCondition
+  //       ? Array.isArray(selectedCondition)
+  //         ? selectedCondition
+  //         : [selectedCondition]
+  //       : [];
+  //     const priceRange = selectedPriceRange || { min: 0, max: Infinity };
 
-      const matchBrand = brands.length ? brands.includes(product.brand) : true;
-      const matchCategory = categories.length
-        ? categories.includes(product.category)
-        : true;
+  //     const matchBrand = brands.length ? brands.includes(product.brand) : true;
+  //     const matchCategory = categories.length
+  //       ? categories.includes(product.category)
+  //       : true;
 
-      const fullFeatureMatch = features.length
-        ? features.every((f) => product.features.includes(f))
-        : true;
+  //     const fullFeatureMatch = features.length
+  //       ? features.every((f) => product.features.includes(f))
+  //       : true;
 
-      const partialFeatureMatch = features.length
-        ? features.some((f) => product.features.includes(f))
-        : true;
+  //     const partialFeatureMatch = features.length
+  //       ? features.some((f) => product.features.includes(f))
+  //       : true;
 
-      const matchPrice =
-        product.price >= priceRange.min && product.price <= priceRange.max;
+  //     const matchPrice =
+  //       product.price >= priceRange.min && product.price <= priceRange.max;
 
-      const matchRating = ratings.length
-        ? ratings.includes(Math.floor(product.rating))
-        : true;
+  //     const matchRating = ratings.length
+  //       ? ratings.includes(Math.floor(product.rating))
+  //       : true;
 
-      const matchCondition = conditions.length
-        ? conditions.includes(product.condition)
-        : true;
+  //     const matchCondition = conditions.length
+  //       ? conditions.includes(product.condition)
+  //       : true;
 
-      return (
-        matchBrand &&
-        matchCategory &&
-        (fullFeatureMatch || partialFeatureMatch) &&
-        matchPrice &&
-        matchRating &&
-        matchCondition
-      );
-    })
-    .sort((a, b) => {
-      const hasPriceFilter =
-        selectedPriceRange &&
-        (selectedPriceRange.min !== 0 || selectedPriceRange.max !== Infinity);
+  //     return (
+  //       matchBrand &&
+  //       matchCategory &&
+  //       (fullFeatureMatch || partialFeatureMatch) &&
+  //       matchPrice &&
+  //       matchRating &&
+  //       matchCondition
+  //     );
+  //   })
+  //   .sort((a, b) => {
+  //     const hasPriceFilter =
+  //       selectedPriceRange &&
+  //       (selectedPriceRange.min !== 0 || selectedPriceRange.max !== Infinity);
 
-      const aFullMatch = selectedFeatures.length
-        ? selectedFeatures.every((f) => a.features.includes(f))
-        : false;
-      const bFullMatch = selectedFeatures.length
-        ? selectedFeatures.every((f) => b.features.includes(f))
-        : false;
+  //     const aFullMatch = selectedFeatures.length
+  //       ? selectedFeatures.every((f) => a.features.includes(f))
+  //       : false;
+  //     const bFullMatch = selectedFeatures.length
+  //       ? selectedFeatures.every((f) => b.features.includes(f))
+  //       : false;
 
-      if (bFullMatch !== aFullMatch) {
-        return bFullMatch - aFullMatch;
-      }
+  //     if (bFullMatch !== aFullMatch) {
+  //       return bFullMatch - aFullMatch;
+  //     }
 
-      if (hasPriceFilter && b.price !== a.price) {
-        return b.price - a.price;
-      }
+  //     if (hasPriceFilter && b.price !== a.price) {
+  //       return b.price - a.price;
+  //     }
 
-      if (b.rating !== a.rating) {
-        return b.rating - a.rating;
-      }
+  //     if (b.rating !== a.rating) {
+  //       return b.rating - a.rating;
+  //     }
 
-      return b.price - a.price;
-    });
-  console.log("allProducts", allProducts);
-  console.log(
-    " selectedCategories  selectedBrands  selectedFeatures  selectedRatings  selectedCondition  selectedPriceRange ",
-    {
-      selectedCategories,
-      selectedBrands,
-      selectedFeatures,
-      selectedRatings,
-      selectedCondition,
-      selectedPriceRange,
+  //     return b.price - a.price;
+  //   });
+  const filteredProducts = allProducts.filter((product) => {
+    // Brand filter
+    if (selectedBrands?.length && !selectedBrands.includes(product.brand)) {
+      return false;
     }
-  );
 
+    // Category filter
+    if (
+      selectedCategories?.length &&
+      !selectedCategories.includes(product.category)
+    ) {
+      return false;
+    }
+
+    // Features filter (all selected features must be present)
+    if (
+      selectedFeatures?.length &&
+      !selectedFeatures.every((f) => product.features.includes(f))
+    ) {
+      return false;
+    }
+
+    // Rating filter
+    if (
+      selectedRatings?.length &&
+      !selectedRatings.includes(Math.floor(product.rating))
+    ) {
+      return false;
+    }
+
+    // Condition filter
+    if (selectedCondition?.length) {
+      const conditions = Array.isArray(selectedCondition)
+        ? selectedCondition
+        : [selectedCondition];
+      if (!conditions.includes(product.condition)) {
+        return false;
+      }
+    }
+
+    // Price range filter
+    if (selectedPriceRange) {
+      const { min = 0, max = Infinity } = selectedPriceRange;
+      if (product.price < min || product.price > max) {
+        return false;
+      }
+    }
+
+    return true;
+  });
   // Calculate pagination values
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
+  console.log("Filtering with:", {
+    selectedBrands,
+    selectedCategories,
+    selectedFeatures,
+    selectedRatings,
+    selectedCondition,
+    selectedPriceRange,
+  });
+  console.log("Filtered products:", filteredProducts);
   const currentProducts = filteredProducts.slice(
     startIndex,
     startIndex + itemsPerPage
   );
-
+  console.log(currentProducts, "currentProducts");
   // Handlers for pagination controls
   const handlePrevPage = () => {
     setCurrentPage((prev) => (prev > 1 ? prev - 1 : prev));

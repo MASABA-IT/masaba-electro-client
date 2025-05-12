@@ -13,6 +13,7 @@ import Dashboard from "../pages/Dashboard/Dashboard";
 import WishlistProducts from "../pages/WishlistProducts/WishlistProducts";
 import GuestCheckoutPage from "../pages/GuestCheckoutPage/GuestCheckoutPage";
 import UserCheckoutPage from "../pages/UserCheckoutPage/UserCheckoutPage";
+import ForgotPassword from "../pages/ForgotPassword/ForgotPassword";
 
 const AppRoutes = () => {
   const router = createBrowserRouter([
@@ -27,7 +28,7 @@ const AppRoutes = () => {
         {
           path: "/categories",
           element: <AllCategories />,
-        },
+        },     
         {
           path: "/categories/:id",
           element: <AllCategories />,
@@ -52,6 +53,10 @@ const AppRoutes = () => {
         {
           path: "/signup",
           element: <SignUp />,
+        },
+        {
+          path: "/password-reset",
+          element: <ForgotPassword />,
         },
         {
           path: "/guest-checkout",

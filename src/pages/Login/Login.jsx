@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FiMail, FiLock } from "react-icons/fi";
 import { HiOutlineEye, HiOutlineEyeOff } from "react-icons/hi";
 import LoginImg from "../../assets/imgs/login.jpg";
@@ -13,9 +13,23 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
+  const [autoFilled, setAutoFilled] = useState(false);
+
+  // Check localStorage for saved credentials when component mounts
+  useEffect(() => {
+    const savedEmail = localStorage.getItem("rememberedEmail");
+    if (savedEmail) {
+      setEmail(savedEmail);
+      setRememberMe(true);
+      setAutoFilled(true);
+      // Focus password field when email is auto-filled
+      document.querySelector("input[type='password']")?.focus();
+    }
+  }, []);
 
   const validateEmail = (value) => {
-    // if (!value) return "Email is required.";
+    if (!value) return "Email is required.";
     // if (!/\S+@\S+\.\S+/.test(value)) return "Email is invalid.";
     return "";
   };
@@ -53,6 +67,12 @@ const Login = () => {
       setIsLoading(true); // Set loading state to true during API call
 
       try {
+        // Handle remember me functionality
+        if (rememberMe) {
+          localStorage.setItem("rememberedEmail", email);
+        } else {
+          localStorage.removeItem("rememberedEmail");
+        }
         // 1. Login API call
         const response = await fetch(`${BASE_URL}/api/login`, {
           method: "POST",
@@ -66,7 +86,7 @@ const Login = () => {
         });
 
         const result = await response.json();
-        console.log(result, "mastar result");
+
         if (!response.ok) {
           console.error("Login failed ❌:", result);
           alert(result.message || "Login failed!");
@@ -100,7 +120,7 @@ const Login = () => {
           },
           profile: profileResult, // Add profile data to userData
         };
-        console.log("user-data", userData, "check");
+
         // Save user data to localStorage
         localStorage.setItem("userData", JSON.stringify(userData));
 
@@ -184,6 +204,25 @@ const Login = () => {
                     {errors.password}
                   </p>
                 )}
+              </div>
+              <div className="flex items-center justify-between mt-4 text-xl md:text-2xl">
+                {/* "Remember Me" Checkbox */}
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    checked={rememberMe} // boolean value
+                    onChange={(e) => setRememberMe(e.target.checked)}
+                    className="mr-2"
+                  />
+                  Remember Me
+                </label>
+
+                <a
+                  href="/password-reset"
+                  className="text-indigo-500 hover:underline"
+                >
+                  Forgot Password?
+                </a>
               </div>
             </div>
 

@@ -5,13 +5,29 @@ import { useNavigate } from "react-router-dom";
 import { FaFaceSmile } from "react-icons/fa6";
 
 const Hero = () => {
-  const { categories, fetchSearchProducts, searchCategories } =
-    useProductStore();
+  const {
+    categories,
+    fetchSearchProducts,
+    searchCategories,
+    userData,
+    BASE_URL,
+  } = useProductStore();
 
   const [activeIndex, setActiveIndex] = useState(0);
   const navigate = useNavigate();
   //-------------------------------------------------------------
 
+  const userProfile = userData?.profile?.data;
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (userProfile && userProfile.name) {
+      // Simulate loading animation for a better UX
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 1500); // You can adjust timing
+    }
+  }, [userProfile]);
   return (
     <div className="hero_content shadow-sm ">
       {/* left side */}
@@ -81,30 +97,55 @@ const Hero = () => {
         {/* 1 */}
         <div className="child-1 flex flex-col items-center gap-y-4 col-span-1 p-5 m-4">
           <div className="item-3-user flex justify-center items-center gap-4">
-            <p className="h-12 aspect-square rounded-full bg-slate-400 flex justify-center items-center">
-              <img
-                className="w-6 aspect-square"
-                src="/src/assets/icons/heroUser.png"
-                alt=""
-              />
+            <p className="h-12 aspect-square rounded-full bg-slate-400 flex justify-center items-center overflow-hidden">
+              {userProfile && userProfile.image ? (
+                <img
+                  className="w-10 h-10 rounded-full object-cover"
+                  src={`${BASE_URL}/${userProfile.image}`}
+                  alt="User"
+                />
+              ) : (
+                <img
+                  className="w-6 aspect-square"
+                  src="/src/assets/icons/heroUser.png"
+                  alt="Default user"
+                />
+              )}
             </p>
             <span className="text-2xl w-auto">
-              Hi, user <br /> Let's get started
+              {userProfile && userProfile.name ? (
+                <>
+                  Hi, {userProfile.name.split(" ")[0]} 👋 <br />
+                  <span className="text-xl text-gray-500">
+                    {userProfile.email || userProfile.phone_number}
+                  </span>
+                </>
+              ) : (
+                <>
+                  Hi, user <br /> Let&apos;s get started
+                </>
+              )}
             </span>
           </div>
-          <button
-            onClick={() => navigate("/signup")}
-            className=" w-[90%] text-xl hover:bg-[#3b83f6e1] transition-colors duration-75 text-white  mx-4 py-3 rounded-lg bg-blue-500"
-          >
-            Join now
-          </button>
-          <button
-            onClick={() => navigate("/login")}
-            className=" w-[90%] text-xl hover:bg-gray-50 transition-colors duration-75 bg-white  mx-4 py-3 rounded-lg text-blue-500"
-          >
-            Log in
-          </button>
+
+          {!userProfile || !userProfile.name ? (
+            <>
+              <button
+                onClick={() => navigate("/signup")}
+                className=" w-[90%] text-xl hover:bg-[#3b83f6e1] transition-colors duration-75 text-white mx-4 py-3 rounded-lg bg-blue-500"
+              >
+                Join now
+              </button>
+              <button
+                onClick={() => navigate("/login")}
+                className=" w-[90%] text-xl hover:bg-gray-50 transition-colors duration-75 bg-white mx-4 py-3 rounded-lg text-blue-500"
+              >
+                Log in
+              </button>
+            </>
+          ) : null}
         </div>
+
         {/* 2 */}
         <motion.p
           className="child-2 flex-1 md:mt-4 md:mr-4 xl:m-4 xl:mt-0 xl:mb-4 w-[90%] mx-auto text-white bg-orange-400 text-[1.4rem] flex justify-center items-center p-4 rounded-lg text-center"

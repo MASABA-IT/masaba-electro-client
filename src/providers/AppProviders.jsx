@@ -943,7 +943,7 @@ export const AppProvider = ({ children }) => {
       return { success: false, error: error.message };
     }
   };
-  console.log(showWishlist);
+
   const appInfo = {
     BASE_URL,
     loading,

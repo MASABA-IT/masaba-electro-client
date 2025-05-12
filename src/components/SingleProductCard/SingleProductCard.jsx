@@ -49,7 +49,6 @@ const SingleProductCard = ({ product, isGridView }) => {
 
     // Prepare data to send all product IDs from localStorage
     const data = { product_ids: wishlistData };
-    console.log(data, "data");
 
     fetch(url, {
       method: "POST",
@@ -59,9 +58,7 @@ const SingleProductCard = ({ product, isGridView }) => {
       body: JSON.stringify(data),
     })
       .then((response) => response.json())
-      .then((data) => {
-        console.log("Product added to wishlist:", data);
-      })
+      .then((data) => {})
       .catch((error) => {
         console.error("Error adding to wishlist:", error);
       });

@@ -64,26 +64,30 @@ const Dashboard = () => {
     isValidSection ? section : "profile"
   );
 
-  const { user } = userData;
-  const profileData = userData.profile?.data;
-  console.log(user, "user");
-  console.log(profileData, "profileData");
+  const user = userData?.user;
+  const profileData = userData?.profile?.data;
+
   const data =
     profileData?.name &&
-    profileData.address &&
+    profileData?.address &&
     profileData &&
     Object.keys(profileData).length > 0
       ? profileData
       : user;
 
   const navigate = useNavigate();
-  const [name, setName] = useState(data.name);
-  const [email, setEmail] = useState(data.email);
-  const [phone, setPhone] = useState(data.phone || data.phone_number);
-  const [address, setAddress] = useState(data.address);
+  const [name, setName] = useState(data?.name);
+  const [email, setEmail] = useState(data?.email);
+  const [phone, setPhone] = useState(
+    data?.phone ? data?.phone : profileData?.phone_number
+  );
+  const [address, setAddress] = useState(
+    data?.address ? data?.address : profileData?.address || ""
+  );
+
   const [profileImg, setProfileImg] = useState(
-    data?.image || userData.profile?.data?.image
-      ? `${BASE_URL}/${data.image || userData.profile?.data.image}`
+    data?.image || userData?.profile?.data?.image
+      ? `${BASE_URL}/${data?.image || userData?.profile?.data?.image}`
       : defaultProfile
   );
 
@@ -121,10 +125,7 @@ const Dashboard = () => {
         if (userData) {
           const updatedUserData = {
             ...userData,
-            user: {
-              ...userData.user,
-              name: userData.profile?.data?.name,
-            },
+
             profile: {
               ...(userData.profile || {}),
 
@@ -198,7 +199,7 @@ const Dashboard = () => {
     setEditAddress(null);
     setShowModal(true);
   };
-  console.log(userAddresses, "userAddress");
+
   // To Edit
   const handleEdit = (address) => {
     setEditAddress(address);

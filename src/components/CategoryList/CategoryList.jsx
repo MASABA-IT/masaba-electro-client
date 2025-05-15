@@ -12,7 +12,7 @@ const CategoryList = () => {
     setSelectedCategories,
     setSelectedBrands,
     setSelectedFeatures,
-    setSelectedRatings,
+    // setSelectedRatings,
     setSelectedCondition,
     setSelectedPriceRange,
     selectedBrands,
@@ -23,15 +23,15 @@ const CategoryList = () => {
     reset,
     setReset,
   } = useProductStore();
-  const { id } = useParams();
+
   const [minPrice, setMinPrice] = useState(100);
-  const [maxPrice, setMaxPrice] = useState(1000);
+  const [maxPrice, setMaxPrice] = useState(5000000);
   const [openCategories, setOpenCategories] = useState({
     Categories: true,
     Brands: true,
     Features: true,
     "Price Range": true,
-    Ratings: true,
+    // Ratings: true,
   });
   const [expandedCategory, setExpandedCategory] = useState(null);
   const [showAllCategories, setShowAllCategories] = useState({});
@@ -72,9 +72,9 @@ const CategoryList = () => {
     }
   };
 
-  const handleSelectRating = (rating) => {
-    setSelectedRatings(rating);
-  };
+  // const handleSelectRating = (rating) => {
+  //   setSelectedRatings(rating);
+  // };
 
   const handlePriceApply = () => {
     setSelectedPriceRange({ min: minPrice, max: maxPrice });
@@ -91,76 +91,82 @@ const CategoryList = () => {
     if (reset) {
       setSelectedBrands([]);
       setSelectedFeatures([]);
-      setSelectedRatings(null);
+      // setSelectedRatings(null);
       setSelectedCondition(null);
       setSelectedCategories([]);
-      setSelectedPriceRange({ min: 0, max: 5000 });
+      setSelectedPriceRange({ min: 0, max: 5000000 });
       setMinPrice(100);
       setMaxPrice(1000);
-      setReset(false); // Reset the trigger
+      setReset(false);
     }
   }, [reset]);
 
   return (
     <div className="categories_list mr-8 ">
-      <ul>
-        {filters?.map((filter, index) => (
-          <li key={index} className="p-3">
-            <button
-              onClick={() => toggleCategory(index, filter.name)}
-              className="w-full text-left flex justify-between items-center font-semibold text-2xl text-gray-800"
-            >
-              {filter.name}
-              <span
-                className={`transform transition-transform ${
-                  openCategories[filter.name] ? "rotate-180" : ""
-                }`}
+      <ul className="bg-white">
+        {[...filters]
+          .sort((a, b) => Number(a.id) - Number(b.id))
+          .map((filter, index) => (
+            <li key={index} className="p-3">
+              <button
+                onClick={() => toggleCategory(index, filter.name)}
+                className="w-full text-left flex justify-between items-center font-semibold text-2xl text-gray-800 "
               >
-                <IoIosArrowDown />
-              </span>
-            </button>
+                {filter.name}
+                <span
+                  className={`transform transition-transform ${
+                    openCategories[filter.name] ? "rotate-180" : ""
+                  }`}
+                >
+                  <IoIosArrowDown />
+                </span>
+              </button>
 
-            {openCategories[filter.name] && (
-              <ul className="mt-2 ml-4 space-y-1 text-gray-700 text-lg">
-                <div className="w-full">
-                  <h3 className="text-xl font-bold mb-2">
-                    Select {filter.name}
-                  </h3>
+              {openCategories[filter.name] && (
+                <ul className="mt-2 ml-4 space-y-1 text-gray-700 text-lg ">
+                  <div className="w-full">
+                    <h3 className="text-xl font-bold mb-2">
+                      Select {filter.name}
+                    </h3>
 
-                  {/* TYPE: checkbox */}
-                  {filter.type === "checkbox" &&
-                    (filter.children?.categories || [])
-                      .slice(
-                        0,
-                        showAllCategories[filter.name]
-                          ? filter.children.categories.length
-                          : 5
+                    {/* TYPE: checkbox */}
+                    {filter.type === "checkbox" &&
+                      (
+                        [...filter.children.categories].sort(
+                          (a, b) => Number(a.id) - Number(b.id)
+                        ) || []
                       )
-                      .map((item, idx) => (
-                        <label
-                          key={idx}
-                          className="mb-4 text-gray-600 text-2xl flex items-center space-x-2 cursor-pointer"
-                        >
-                          <input
-                            type="checkbox"
-                            checked={selectedBrands.some(
-                              (brand) => brand.id === item.id
-                            )}
-                            onChange={() =>
-                              handleMultiSelect(
-                                item,
-                                setSelectedBrands,
-                                selectedBrands
-                              )
-                            }
-                            className="mr-2"
-                          />
-                          {item[filter.labelKey]}
-                        </label>
-                      ))}
+                        .slice(
+                          0,
+                          showAllCategories[filter.name]
+                            ? filter.children.categories.length
+                            : 5
+                        )
+                        .map((item, idx) => (
+                          <label
+                            key={idx}
+                            className="mb-4 text-gray-600 text-2xl flex items-center space-x-2 cursor-pointer "
+                          >
+                            <input
+                              type="checkbox"
+                              checked={selectedBrands.some(
+                                (brand) => brand.id === item.id
+                              )}
+                              onChange={() =>
+                                handleMultiSelect(
+                                  item,
+                                  setSelectedBrands,
+                                  selectedBrands
+                                )
+                              }
+                              className="mr-2"
+                            />
+                            {item[filter.labelKey]}
+                          </label>
+                        ))}
 
-                  {/* TYPE: radio */}
-                  {filter.type === "radio" &&
+                    {/* TYPE: radio */}
+                    {/* {filter.type === "radio" &&
                     (filter.children?.categories || []).map((item, idx) => (
                       <label
                         key={idx}
@@ -176,10 +182,10 @@ const CategoryList = () => {
                         />
                         {item}
                       </label>
-                    ))}
+                    ))} */}
 
-                  {/* TYPE: stars */}
-                  {filter.type === "stars" &&
+                    {/* TYPE: stars */}
+                    {/* {filter.type === "stars" &&
                     (filter.children.categories || []).map((rating, idx) => (
                       <label
                         key={idx}
@@ -202,104 +208,111 @@ const CategoryList = () => {
                           )}
                         </div>
                       </label>
-                    ))}
+                    ))} */}
 
-                  {/* TYPE: range */}
-                  {filter.type === "range" && (
-                    <div className="text-2xl flex flex-col justify-center items-center">
-                      <Slider
-                        value={[minPrice, maxPrice]}
-                        onChange={(e, newValue) => {
-                          setMinPrice(newValue[0]);
-                          setMaxPrice(newValue[1]);
-                        }}
-                        min={0}
-                        max={5000}
-                        valueLabelDisplay="auto"
-                      />
-                      <div className="flex space-x-2 mt-2 w-full">
-                        <div className="w-1/2">
-                          <label htmlFor="minPrice" className="block text-xl">
-                            Min
-                          </label>
-                          <input
-                            type="number"
-                            id="minPrice"
-                            value={minPrice}
-                            onChange={(e) => {
-                              const val = Number(e.target.value);
-                              if (val >= 0 && val <= maxPrice) setMinPrice(val);
-                            }}
-                            className="border outline-none p-2 rounded w-full text-gray-400"
-                          />
+                    {/* TYPE: range */}
+                    {filter.type === "range" && (
+                      <div className="text-2xl flex flex-col justify-center items-center">
+                        <Slider
+                          value={[minPrice, maxPrice]}
+                          onChange={(e, newValue) => {
+                            setMinPrice(newValue[0]);
+                            setMaxPrice(newValue[1]);
+                          }}
+                          min={0}
+                          max={5000}
+                          valueLabelDisplay="auto"
+                        />
+                        <div className="flex space-x-2 mt-2 w-full">
+                          <div className="w-1/2">
+                            <label htmlFor="minPrice" className="block text-xl">
+                              Min
+                            </label>
+                            <input
+                              type="number"
+                              id="minPrice"
+                              value={minPrice}
+                              onChange={(e) => {
+                                const val = Number(e.target.value);
+                                if (val >= 0 && val <= maxPrice)
+                                  setMinPrice(val);
+                              }}
+                              className="border outline-none p-2 rounded w-full text-gray-400"
+                            />
+                          </div>
+                          <div className="w-1/2">
+                            <label htmlFor="maxPrice" className="block text-xl">
+                              Max
+                            </label>
+                            <input
+                              type="number"
+                              id="maxPrice"
+                              value={maxPrice}
+                              onChange={(e) => {
+                                const val = Number(e.target.value);
+                                if (val <= 5000 && val >= minPrice)
+                                  setMaxPrice(val);
+                              }}
+                              className="border outline-none p-2 rounded w-full text-gray-400"
+                            />
+                          </div>
                         </div>
-                        <div className="w-1/2">
-                          <label htmlFor="maxPrice" className="block text-xl">
-                            Max
-                          </label>
-                          <input
-                            type="number"
-                            id="maxPrice"
-                            value={maxPrice}
-                            onChange={(e) => {
-                              const val = Number(e.target.value);
-                              if (val <= 5000 && val >= minPrice)
-                                setMaxPrice(val);
-                            }}
-                            className="border outline-none p-2 rounded w-full text-gray-400"
-                          />
-                        </div>
+                        <button
+                          onClick={handlePriceApply}
+                          className="w-full text-center bg-white text-blue-500 border m-2 p-3 rounded hover:bg-zinc-50"
+                        >
+                          Apply
+                        </button>
                       </div>
-                      <button
-                        onClick={handlePriceApply}
-                        className="w-full text-center bg-white text-blue-500 border m-2 p-3 rounded hover:bg-zinc-50"
-                      >
-                        Apply
-                      </button>
-                    </div>
-                  )}
+                    )}
 
-                  {/* TYPE: list (categories) */}
-                  {filter.type === "list" &&
-                    (filter.children?.categories || [])
-                      .slice(
-                        0,
-                        showAllCategories[filter.name]
-                          ? filter.children.categories.length
-                          : 5
+                    {/* TYPE: list (categories) */}
+                    {filter.type === "list" &&
+                      (
+                        [...filter.children.categories].sort(
+                          (a, b) => Number(a.id) - Number(b.id)
+                        ) || []
                       )
-                      .map((cat, idx) => {
-                        const isSelected =
-                          selectedCategories?.id === cat?.id ||
-                          (!selectedCategories && idx === 0);
+                        .slice(
+                          0,
+                          showAllCategories[filter.name]
+                            ? filter.children.categories.length
+                            : 5
+                        )
+                        .map((cat, idx) => {
+                          const isSelected =
+                            selectedCategories?.id === cat?.id ||
+                            (!selectedCategories && idx === 0);
 
-                        return (
-                          <label
-                            key={idx}
-                            className={`py-2 block text-gray-500 cursor-pointer text-2xl ${
-                              isSelected ? "bg-blue-100 text-blue-600" : ""
-                            } hover:text-blue-500 hover:bg-gray-100`}
-                            onClick={() => handleCategorySelect(cat)}
-                          >
-                            {cat[filter.labelKey]}
-                          </label>
-                        );
-                      })}
+                          return (
+                            <label
+                              key={idx}
+                              className={`py-2 block text-gray-500  cursor-pointer text-2xl  ${
+                                isSelected ? "bg-blue-100 text-blue-600" : ""
+                              } hover:text-blue-500 hover:bg-gray-100`}
+                              onClick={() => handleCategorySelect(cat)}
+                            >
+                              {cat[filter.labelKey]}
+                            </label>
+                          );
+                        })}
 
-                  {/* See All / See Less */}
-                  {filter.children?.categories?.length > 5 && (
-                    <button
-                      onClick={() => toggleSeeAll(filter.name)}
-                      className="text-blue-500 mt-2"
-                    >
-                      {showAllCategories[filter.name] ? "See Less" : "See All"}
-                    </button>
-                  )}
-                </div>
-              </ul>
-            )}
-          </li>
-        ))}
+                    {/* See All / See Less */}
+                    {filter.children?.categories?.length > 5 && (
+                      <button
+                        onClick={() => toggleSeeAll(filter.name)}
+                        className="text-blue-500 mt-2 "
+                      >
+                        {showAllCategories[filter.name]
+                          ? "See Less"
+                          : "See All"}
+                      </button>
+                    )}
+                  </div>
+                </ul>
+              )}
+            </li>
+          ))}
       </ul>
     </div>
   );

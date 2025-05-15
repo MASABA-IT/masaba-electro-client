@@ -20,12 +20,28 @@ const CategoriesItems = ({ allData }) => {
     selectedRatings,
     selectedPriceRange,
     setReset,
+    fetchFilteredProducts,
+    filteredProducts,
+    navCollections = [],
+    setCollectionsId,
+    collectionId,
   } = useProductStore();
   const [allProducts, setAllProducts] = useState([]); // All product data
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(12); // Default items per page
   const [showDropdown, setShowDropdown] = useState(false);
+
+  useEffect(() => {
+    fetchFilteredProducts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    selectedCategories,
+    selectedPriceRange,
+    selectedBrands,
+    selectedFeatures,
+    selectedCondition,
+  ]);
 
   useEffect(() => {
     setLoading(true);
@@ -42,41 +58,41 @@ const CategoriesItems = ({ allData }) => {
     }
     setLoading(false);
   }, [allData]);
-  console.log(allProducts);
-  // Filtering the products based on selected filters
+
   // const filteredProducts = allProducts
   //   .filter((product) => {
-  //     const brands = selectedBrands || [];
-  //     const categories = selectedCategories || [];
-  //     const features = selectedFeatures || [];
-  //     const ratings = selectedRatings || [];
+  //     // Handle brand filter (assuming product has brand_id)
+  //     const matchBrand = selectedBrands?.length
+  //       ? selectedBrands.some((brand) => brand.id === product.brand_id)
+  //       : true;
+
+  //     // Handle category filter
+  //     const matchCategory = selectedCategories
+  //       ? product.category_id === selectedCategories.id
+  //       : true;
+
+  //     // Handle features filter
+  //     const matchFeatures = selectedFeatures?.length
+  //       ? selectedFeatures.every((f) => product.features?.includes(f))
+  //       : true;
+
+  //     // Handle rating filter (proper null checks)
+  //     const matchRating =
+  //       selectedRatings !== undefined && selectedRatings !== null
+  //         ? Math.floor(Number(product.average_rating)) === selectedRatings
+  //         : true;
+
+  //     // Handle price filter (use discount_price if available)
+  //     const productPrice = Number(product.discount_price || product.base_price);
+  //     const { min = 0, max = Infinity } = selectedPriceRange || {};
+  //     const matchPrice = productPrice >= min && productPrice <= max;
+
+  //     // Handle condition filter
   //     const conditions = selectedCondition
   //       ? Array.isArray(selectedCondition)
   //         ? selectedCondition
   //         : [selectedCondition]
   //       : [];
-  //     const priceRange = selectedPriceRange || { min: 0, max: Infinity };
-
-  //     const matchBrand = brands.length ? brands.includes(product.brand) : true;
-  //     const matchCategory = categories.length
-  //       ? categories.includes(product.category)
-  //       : true;
-
-  //     const fullFeatureMatch = features.length
-  //       ? features.every((f) => product.features.includes(f))
-  //       : true;
-
-  //     const partialFeatureMatch = features.length
-  //       ? features.some((f) => product.features.includes(f))
-  //       : true;
-
-  //     const matchPrice =
-  //       product.price >= priceRange.min && product.price <= priceRange.max;
-
-  //     const matchRating = ratings.length
-  //       ? ratings.includes(Math.floor(product.rating))
-  //       : true;
-
   //     const matchCondition = conditions.length
   //       ? conditions.includes(product.condition)
   //       : true;
@@ -84,105 +100,62 @@ const CategoriesItems = ({ allData }) => {
   //     return (
   //       matchBrand &&
   //       matchCategory &&
-  //       (fullFeatureMatch || partialFeatureMatch) &&
-  //       matchPrice &&
+  //       matchFeatures &&
   //       matchRating &&
+  //       matchPrice &&
   //       matchCondition
   //     );
   //   })
   //   .sort((a, b) => {
+  //     // Sorting logic remains similar but updated for correct properties
   //     const hasPriceFilter =
   //       selectedPriceRange &&
   //       (selectedPriceRange.min !== 0 || selectedPriceRange.max !== Infinity);
 
-  //     const aFullMatch = selectedFeatures.length
-  //       ? selectedFeatures.every((f) => a.features.includes(f))
+  //     const aFullMatch = selectedFeatures?.length
+  //       ? selectedFeatures.every((f) => a.features?.includes(f))
   //       : false;
-  //     const bFullMatch = selectedFeatures.length
-  //       ? selectedFeatures.every((f) => b.features.includes(f))
+  //     const bFullMatch = selectedFeatures?.length
+  //       ? selectedFeatures.every((f) => b.features?.includes(f))
   //       : false;
 
   //     if (bFullMatch !== aFullMatch) {
   //       return bFullMatch - aFullMatch;
   //     }
 
-  //     if (hasPriceFilter && b.price !== a.price) {
-  //       return b.price - a.price;
+  //     const aPrice = Number(a.discount_price || a.base_price);
+  //     const bPrice = Number(b.discount_price || b.base_price);
+
+  //     if (hasPriceFilter && bPrice !== aPrice) {
+  //       return bPrice - aPrice;
   //     }
 
-  //     if (b.rating !== a.rating) {
-  //       return b.rating - a.rating;
+  //     const aRating = Number(a.average_rating) || 0;
+  //     const bRating = Number(b.average_rating) || 0;
+
+  //     if (bRating !== aRating) {
+  //       return bRating - aRating;
   //     }
 
-  //     return b.price - a.price;
+  //     return bPrice - aPrice;
   //   });
-  const filteredProducts = allProducts.filter((product) => {
-    // Brand filter
-    if (selectedBrands?.length && !selectedBrands.includes(product.brand)) {
-      return false;
-    }
-
-    // Category filter
-    if (
-      selectedCategories?.length &&
-      !selectedCategories.includes(product.category)
-    ) {
-      return false;
-    }
-
-    // Features filter (all selected features must be present)
-    if (
-      selectedFeatures?.length &&
-      !selectedFeatures.every((f) => product.features.includes(f))
-    ) {
-      return false;
-    }
-
-    // Rating filter
-    if (
-      selectedRatings?.length &&
-      !selectedRatings.includes(Math.floor(product.rating))
-    ) {
-      return false;
-    }
-
-    // Condition filter
-    if (selectedCondition?.length) {
-      const conditions = Array.isArray(selectedCondition)
-        ? selectedCondition
-        : [selectedCondition];
-      if (!conditions.includes(product.condition)) {
-        return false;
-      }
-    }
-
-    // Price range filter
-    if (selectedPriceRange) {
-      const { min = 0, max = Infinity } = selectedPriceRange;
-      if (product.price < min || product.price > max) {
-        return false;
-      }
-    }
-
-    return true;
-  });
   // Calculate pagination values
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  console.log("Filtering with:", {
-    selectedBrands,
-    selectedCategories,
-    selectedFeatures,
-    selectedRatings,
-    selectedCondition,
-    selectedPriceRange,
-  });
-  console.log("Filtered products:", filteredProducts);
-  const currentProducts = filteredProducts.slice(
-    startIndex,
-    startIndex + itemsPerPage
-  );
-  console.log(currentProducts, "currentProducts");
+  // console.log("Filtering with:", {
+  //   selectedBrands,
+  //   selectedCategories,
+  //   selectedFeatures,
+  //   selectedRatings,
+  //   selectedCondition,
+  //   selectedPriceRange,
+  // });
+
+  // const currentProducts = filteredProducts.slice(
+  //   startIndex,
+  //   startIndex + itemsPerPage
+  // );
+  // console.log(currentProducts, "currentProducts");
   // Handlers for pagination controls
   const handlePrevPage = () => {
     setCurrentPage((prev) => (prev > 1 ? prev - 1 : prev));
@@ -211,6 +184,13 @@ const CategoriesItems = ({ allData }) => {
 
   const handleListView = () => {
     if (isGridView) setIsGridView(false);
+  };
+
+  const limitWords = (text, maxWords) => {
+    const words = text.trim().split(" ");
+    return words.length > maxWords
+      ? words.slice(0, maxWords).join(" ") + "..."
+      : text;
   };
 
   return (
@@ -254,17 +234,37 @@ const CategoriesItems = ({ allData }) => {
               </button>
             </div>
           )}
-          <div className="sub_container flex flex-wrap items-center justify-between ">
-            <div className="verified-checkbox">
-              <input type="checkbox" id="verified" />
-              <label htmlFor="verified">Verified only</label>
-            </div>
+          <div className="sub_container flex flex-wrap items-center justify-between   ">
+            {/* collections -all list */}
+            <div className="flex items-center   border border-gray-300 rounded-lg p-3   max-w-sm bg-white">
+              <label className="text-xl font-semibold text-gray-700 whitespace-nowrap">
+                Featured:
+              </label>
 
-            <div className="featured-section border rounded-lg py-3 px-2 border-gray-300 flex items-center">
-              <span>Featured</span>
-              <IoIosArrowDown className="ml-1" />
-            </div>
+              <div className="relative w-full">
+                <select
+                  value={collectionId}
+                  onChange={(e) => setCollectionsId(e.target.value)}
+                  className="w-full appearance-none bg-white rounded-md py-1.5 pl-3   text-xl text-gray-800 outline-none hover:cursor-pointer"
+                >
+                  {/* Default Option */}
+                  <option value="">Select please</option>
 
+                  {/* Dynamic Collections */}
+                  {Array.isArray(navCollections) &&
+                    [...navCollections]
+                      .sort((a, b) => Number(a.id) - Number(b.id))
+                      .map((collection, index) => (
+                        <option key={index} value={collection.id}>
+                          {limitWords(collection.title, 2)}
+                        </option>
+                      ))}
+                </select>
+
+                <IoIosArrowDown className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />
+              </div>
+            </div>
+            {/* end */}
             <div className="box-container flex items-center space-x-2">
               <button
                 className={`p-2 rounded ${
@@ -293,7 +293,7 @@ const CategoriesItems = ({ allData }) => {
 
       <CategoriesBrandFilter />
 
-      {loading ? (
+      {/* {loading ? (
         <div className="text-center py-5">Loading...</div>
       ) : allData?.length > 0 ? (
         <div
@@ -312,6 +312,27 @@ const CategoriesItems = ({ allData }) => {
       ) : (
         <div className="text-center text-2xl py-5 text-gray-500">
           No products available.
+        </div>
+      )} */}
+      {loading ? (
+        <div className="text-center py-5">Loading...</div>
+      ) : filteredProducts?.Products?.data.length > 0 ? (
+        <div
+          className={`product-list grid grid-cols-1 md:grid-cols-${
+            isGridView ? 3 : 1
+          } lg:grid-cols-${isGridView ? 4 : 1} gap-4`}
+        >
+          {filteredProducts?.Products?.data.map((product) => (
+            <SingleProductCard
+              key={product.id}
+              product={product}
+              isGridView={isGridView}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="text-center text-2xl py-5 text-gray-500">
+          No products match your filters.
         </div>
       )}
 

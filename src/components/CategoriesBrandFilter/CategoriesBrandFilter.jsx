@@ -16,6 +16,7 @@ const CategoriesBrandFilter = () => {
     setSelectedFeatures,
     setSelectedCondition,
     setSelectedRatings,
+    searchCategories,
   } = useProductStore();
 
   const scrollContainerRef = useRef(null);

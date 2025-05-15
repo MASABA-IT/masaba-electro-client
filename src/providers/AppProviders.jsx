@@ -27,7 +27,7 @@ export const AppProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const [logo, setLogo] = useState(null);
   const [email, setEmail] = useState("");
-
+  const [collectionId, setCollectionsId] = useState(null);
   //////////////////
   const [selectedCategories, setSelectedCategories] = useState(null);
   const [selectedBrands, setSelectedBrands] = useState([]);
@@ -36,7 +36,7 @@ export const AppProvider = ({ children }) => {
   const [selectedCondition, setSelectedCondition] = useState(null);
   const [selectedPriceRange, setSelectedPriceRange] = useState({
     min: 0,
-    max: 5000,
+    max: 5000000,
   });
   const [selectedItems, setSelectedItems] = useState([]);
   const [reset, setReset] = useState(false);
@@ -145,14 +145,14 @@ export const AppProvider = ({ children }) => {
             children: defaultPriceRanges,
             isAPIData: false,
           },
-          {
-            key: "ratings",
-            name: "Ratings",
-            type: "stars",
-            multiSelect: true,
-            children: { categories: defaultRatings },
-            isAPIData: false,
-          },
+          // {
+          //   key: "ratings",
+          //   name: "Ratings",
+          //   type: "stars",
+          //   multiSelect: true,
+          //   children: { categories: defaultRatings },
+          //   isAPIData: false,
+          // },
           // {
           //   key: "condition",
           //   name: "Condition",
@@ -182,11 +182,12 @@ export const AppProvider = ({ children }) => {
     try {
       const query = buildSearchQuery(params);
       const res = await fetch(`${BASE_URL}/api/product/search?${query}`);
+
       if (!res.ok) throw new Error("Search failed");
 
       const data = await res.json();
 
-      setSearchCategories(data || data.products || []);
+      setSearchCategories(data.Products || []);
     } catch (err) {
       console.error("Search error:", err);
     } finally {
@@ -244,7 +245,8 @@ export const AppProvider = ({ children }) => {
           throw new Error("Failed to fetch DealsOffers");
         }
         const data = await res.json();
-        setNavCollections(data);
+
+        setNavCollections(data.collections);
       } catch (err) {
         setError(err.message);
         console.error("Error fetching DealsOffers:", err);
@@ -943,6 +945,73 @@ export const AppProvider = ({ children }) => {
       return { success: false, error: error.message };
     }
   };
+  /**FILTERS */
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const buildApiUrl = () => {
+    let apiUrl = `${BASE_URL}/api/product/search?`;
+
+    // Dynamically add filters to the URL based on selected options
+    if (selectedCategories) {
+      apiUrl += `category_id=${selectedCategories.id}&`;
+    }
+    if (collectionId) {
+      apiUrl += `collection_id=${collectionId}&`;
+    }
+
+    if (selectedPriceRange) {
+      const { min = 0, max = Infinity } = selectedPriceRange;
+      apiUrl += `min_price=${min}&max_price=${max}&`;
+    }
+
+    // ✅ Add brand_id as array format
+    if (selectedBrands?.length) {
+      const brandIds = selectedBrands.map((brand) => brand.id);
+
+      apiUrl += `"brand_id"=[${brandIds.join(",")}]&`; //must be array for use qottaion
+    }
+
+    if (selectedFeatures?.length) {
+      apiUrl += `features=${selectedFeatures.join(",")}&`;
+    }
+
+    // Remove the ratings filter block
+    // if (selectedRatings) {
+    //   apiUrl += `ratings=${selectedRatings}&`;
+    // }
+
+    if (selectedCondition) {
+      apiUrl += `condition=${selectedCondition}&`;
+    }
+
+    // Remove trailing '&' if any
+    apiUrl = apiUrl.endsWith("&") ? apiUrl.slice(0, -1) : apiUrl;
+
+    // If no filters are selected, fetch random products // !selectedBrands?.length &&
+    if (
+      !selectedCategories &&
+      !selectedPriceRange &&
+      !selectedBrands?.length &&
+      !selectedFeatures?.length &&
+      !selectedCondition
+    ) {
+      apiUrl = `${BASE_URL}/api/product/search/random`;
+    }
+
+    return apiUrl;
+  };
+
+  const fetchFilteredProducts = async () => {
+    const apiUrl = buildApiUrl();
+    try {
+      const response = await fetch(apiUrl);
+      const data = await response.json();
+      setFilteredProducts(data);
+    } catch (error) {
+      console.error("Error fetching filtered products", error);
+    }
+  };
+
+  // Call the fetch function when filters change
 
   const appInfo = {
     BASE_URL,
@@ -1045,6 +1114,12 @@ export const AppProvider = ({ children }) => {
     setCartData,
     //final-order-for user
     sendOrderToServer,
+    //filter
+    fetchFilteredProducts,
+    filteredProducts,
+    //collections
+    collectionId,
+    setCollectionsId,
   };
   return <AppContext.Provider value={appInfo}>{children}</AppContext.Provider>;
 };

@@ -77,6 +77,7 @@ const CollectionItem = ({ item }) => {
 };
 const Collection = ({ collection }) => {
   const { BASE_URL } = useProductStore();
+  console.log(collection, "collection----check");
 
   // Group the items into two rows, each containing 4 items
   const rows = [];
@@ -94,6 +95,14 @@ const Collection = ({ collection }) => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+  //if data length ===0
+  if (
+    !collection?.limited_products ||
+    collection.limited_products.length === 0
+  ) {
+    return null;
+  }
+  
   return (
     <div key={collection.id} className="collection-section shadow-sm ">
       <div className="block md:hidden p-4 bg-white">

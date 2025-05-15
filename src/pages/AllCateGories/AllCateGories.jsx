@@ -6,8 +6,14 @@ import { useProductStore } from "../../providers/AppProviders";
 import { useParams } from "react-router-dom";
 
 const AllCategories = () => {
-  const { loading, fetchSearchProducts, searchCategories, selectedCategories } =
-    useProductStore();
+  const {
+    loading,
+    fetchSearchProducts,
+    searchCategories,
+    selectedCategories,
+    collectionId,
+    setCollectionsId,
+  } = useProductStore();
 
   const breadcrumbItems = [
     { label: "Home", link: "/" },
@@ -31,14 +37,22 @@ const AllCategories = () => {
   // Fetch products when categoryId changes
   useEffect(() => {
     if (categoryId) {
+      setCollectionsId("");
       fetchSearchProducts({ category_id: categoryId });
+      setCategoryId("");
     }
   }, [categoryId]);
+  useEffect(() => {
+    if (collectionId) {
+      setCategoryId("");
+      fetchSearchProducts({ collection_id: collectionId });
+    }
+  }, [collectionId]);
 
   return (
-    <section className="allcategories_content">
+    <section className="allcategories_content ">
       <Breadcrumb items={breadcrumbItems} />
-      <CategoryList allData={searchCategories?.Products} />
+      <CategoryList allData={searchCategories?.Product} />
       {loading ? (
         <div className="categoriesitems_content relative">
           <div className="absolute inset-0 flex flex-col items-center justify-center z-10 space-y-4">
@@ -50,7 +64,7 @@ const AllCategories = () => {
           </div>
         </div>
       ) : (
-        <CategoriesItems allData={searchCategories?.Products?.data} />
+        <CategoriesItems allData={searchCategories?.data} />
       )}
     </section>
   );

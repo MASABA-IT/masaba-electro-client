@@ -91,7 +91,7 @@ const SignUp = () => {
 
         // ✅ Save userData into localStorage
         localStorage.setItem("userData", JSON.stringify(userData));
-
+        localStorage.setItem("showLoginSuccess", "true");
         setUserData(userData);
         // Clear form (✅ matching your actual formData structure)
         setFormData({

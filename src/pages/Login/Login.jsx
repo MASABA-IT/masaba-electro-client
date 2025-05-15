@@ -4,6 +4,7 @@ import { HiOutlineEye, HiOutlineEyeOff } from "react-icons/hi";
 import LoginImg from "../../assets/imgs/login.jpg";
 import { useProductStore } from "../../providers/AppProviders";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const Login = () => {
   const { BASE_URL, setUserData } = useProductStore();
@@ -123,7 +124,7 @@ const Login = () => {
 
         // Save user data to localStorage
         localStorage.setItem("userData", JSON.stringify(userData));
-
+        localStorage.setItem("showLoginSuccess", "true");
         // Set user data globally (AppContext)
         setUserData(userData);
 

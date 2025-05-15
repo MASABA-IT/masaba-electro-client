@@ -16,6 +16,7 @@ import ProfileSection from "../../components/ProfileSection/ProfileSection";
 import ChangePasswordSection from "../../components/ChangePasswordSection/ChangePasswordSection";
 import UserAddressSection from "../../components/UserAddressSection/UserAddressSection";
 import AddAddressModal from "../../components/AddAddressModal/AddAddressModal";
+import Swal from "sweetalert2";
 // import WishlistProducts from "../WishlistProducts/WishlistProducts";
 
 const Dashboard = () => {
@@ -94,6 +95,31 @@ const Dashboard = () => {
   const [image, setImage] = useState(profileImg);
 
   const token = userData?.token;
+  useEffect(() => {
+    const shouldShowPopup = localStorage.getItem("showLoginSuccess");
+
+    if (shouldShowPopup === "true") {
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        icon: "success",
+        html: `
+        <div style="font-size: 18px; font-weight: 600;">
+          Login successful! 🎉<br/>
+          <span style="font-size: 15px; font-weight: 400;">Welcome to your dashboard.</span>
+        </div>
+      `,
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        customClass: {
+          popup: "custom-popup",
+        },
+      });
+
+      localStorage.removeItem("showLoginSuccess");
+    }
+  }, []);
 
   const handleMenuClick = (section, index) => {
     setSelectedSection(section);

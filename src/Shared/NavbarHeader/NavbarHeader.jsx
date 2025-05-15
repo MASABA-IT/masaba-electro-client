@@ -10,16 +10,17 @@ const NavbarHeader = () => {
 
   // Optional: Add artificial delay to simulate loading (if needed)
   useEffect(() => {
-    if (!loading && navCollections?.collections?.length > 0) {
+    if (!loading && navCollections?.length > 0) {
       setWaitCollections(false);
     }
   }, [loading, navCollections]);
 
   const isLoading = loading || waitCollections;
+
   return (
     <div className="navbar_header">
       <div className="navbar_content flex justify-between px-2 overflow-x-auto lg:overflow-visible text-sm">
-        <div className="flex justify-between items-center gap-x-4 mr-4">
+        <div className="flex justify-between items-center gap-x-4 mr-4 ">
           <button className="hidden lg:flex">
             <IoMdMenu />
           </button>
@@ -38,7 +39,7 @@ const NavbarHeader = () => {
                   className="h-4 w-24 bg-gray-300 rounded animate-pulse mr-4"
                 />
               ))
-            : navCollections?.collections
+            : navCollections
                 ?.slice()
                 .reverse()
                 .map((collection, index) => (

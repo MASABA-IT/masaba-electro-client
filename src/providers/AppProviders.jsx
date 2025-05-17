@@ -28,6 +28,7 @@ export const AppProvider = ({ children }) => {
   const [logo, setLogo] = useState(null);
   const [email, setEmail] = useState("");
   const [collectionId, setCollectionsId] = useState(null);
+  const [categoryId, setCategoryId] = useState(null);
   //////////////////
   const [selectedCategories, setSelectedCategories] = useState(null);
   const [selectedBrands, setSelectedBrands] = useState([]);
@@ -1120,6 +1121,8 @@ export const AppProvider = ({ children }) => {
     //collections
     collectionId,
     setCollectionsId,
+    categoryId,
+    setCategoryId,
   };
   return <AppContext.Provider value={appInfo}>{children}</AppContext.Provider>;
 };

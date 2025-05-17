@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { IoIosArrowDown } from "react-icons/io";
 import { FaStar, FaRegStar } from "react-icons/fa";
 import Slider from "@mui/material/Slider";
 import { useProductStore } from "../../providers/AppProviders";
-import { li } from "framer-motion/client";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const CategoryList = () => {
   const {
@@ -23,7 +22,9 @@ const CategoryList = () => {
     reset,
     setReset,
   } = useProductStore();
-
+  const { id } = useParams();
+  const navigate = useNavigate();
+  console.log(id, "id");
   const [minPrice, setMinPrice] = useState(100);
   const [maxPrice, setMaxPrice] = useState(5000000);
   const [openCategories, setOpenCategories] = useState({
@@ -47,7 +48,9 @@ const CategoryList = () => {
   // }, [id]);
   // Update selected categories
   const handleCategorySelect = (category) => {
+    console.log(category, "ca-check");
     setSelectedCategories(category);
+    navigate(`/categories/${category.id}`);
   };
 
   // Update selected condition
@@ -100,6 +103,7 @@ const CategoryList = () => {
       setReset(false);
     }
   }, [reset]);
+  console.log(filters, "test");
 
   return (
     <div className="categories_list mr-8 ">
@@ -107,7 +111,7 @@ const CategoryList = () => {
         {[...filters]
           .sort((a, b) => Number(a.id) - Number(b.id))
           .map((filter, index) => (
-            <li key={index} className="p-3">
+            <li key={index} className="p-3 ">
               <button
                 onClick={() => toggleCategory(index, filter.name)}
                 className="w-full text-left flex justify-between items-center font-semibold text-2xl text-gray-800 "
@@ -165,51 +169,7 @@ const CategoryList = () => {
                           </label>
                         ))}
 
-                    {/* TYPE: radio */}
-                    {/* {filter.type === "radio" &&
-                    (filter.children?.categories || []).map((item, idx) => (
-                      <label
-                        key={idx}
-                        className="block cursor-pointer text-2xl text-gray-600"
-                      >
-                        <input
-                          type="radio"
-                          name={filter.key}
-                          value={item}
-                          checked={selectedCondition === item}
-                          onChange={() => handleConditionSelect(item)}
-                          className="mr-2"
-                        />
-                        {item}
-                      </label>
-                    ))} */}
-
-                    {/* TYPE: stars */}
-                    {/* {filter.type === "stars" &&
-                    (filter.children.categories || []).map((rating, idx) => (
-                      <label
-                        key={idx}
-                        className="mb-4 text-gray-600 text-2xl flex items-center space-x-2 cursor-pointer"
-                      >
-                        <input
-                          type="radio"
-                          name="rating"
-                          checked={selectedRatings === rating}
-                          onChange={() => handleSelectRating(rating)}
-                          className="mr-2"
-                        />
-                        <div className="flex gap-1 text-orange-500 text-2xl">
-                          {[...Array(5)].map((_, i) =>
-                            i < rating ? (
-                              <FaStar key={i} />
-                            ) : (
-                              <FaRegStar key={i} className="text-gray-300" />
-                            )
-                          )}
-                        </div>
-                      </label>
-                    ))} */}
-
+                    {/* ---comment----- */}
                     {/* TYPE: range */}
                     {filter.type === "range" && (
                       <div className="text-2xl flex flex-col justify-center items-center">
@@ -275,19 +235,19 @@ const CategoryList = () => {
                       )
                         .slice(
                           0,
-                          showAllCategories[filter.name]
+                          showAllCategories[filter.name] || parseInt(id) > 5
                             ? filter.children.categories.length
                             : 5
                         )
                         .map((cat, idx) => {
-                          const isSelected =
+                          let isSelected =
                             selectedCategories?.id === cat?.id ||
-                            (!selectedCategories && idx === 0);
-
+                            (!selectedCategories && idx === 0) ||
+                            parseInt(id) === cat?.id;
                           return (
                             <label
                               key={idx}
-                              className={`py-2 block text-gray-500  cursor-pointer text-2xl  ${
+                              className={`py-2 block text-gray-500  cursor-pointer text-2xl   ${
                                 isSelected ? "bg-blue-100 text-blue-600" : ""
                               } hover:text-blue-500 hover:bg-gray-100`}
                               onClick={() => handleCategorySelect(cat)}
@@ -301,9 +261,13 @@ const CategoryList = () => {
                     {filter.children?.categories?.length > 5 && (
                       <button
                         onClick={() => toggleSeeAll(filter.name)}
-                        className="text-blue-500 mt-2 "
+                        className="text-blue-500 mt-2  "
                       >
-                        {showAllCategories[filter.name]
+                        {(
+                          showAllCategories[filter.name] || parseInt(id) > 5
+                            ? "Categoires"
+                            : null
+                        )
                           ? "See Less"
                           : "See All"}
                       </button>
@@ -319,3 +283,47 @@ const CategoryList = () => {
 };
 
 export default CategoryList;
+
+/*         
+                   {filter.type === "radio" &&
+                    (filter.children?.categories || []).map((item, idx) => (
+                      <label
+                        key={idx}
+                        className="block cursor-pointer text-2xl text-gray-600"
+                      >
+                        <input
+                          type="radio"
+                          name={filter.key}
+                          value={item}
+                          checked={selectedCondition === item}
+                          onChange={() => handleConditionSelect(item)}
+                          className="mr-2"
+                        />
+                        {item}
+                      </label>
+                    ))}  
+          
+                    {/* {filter.type === "stars" &&
+                    (filter.children.categories || []).map((rating, idx) => (
+                      <label
+                        key={idx}
+                        className="mb-4 text-gray-600 text-2xl flex items-center space-x-2 cursor-pointer"
+                      >
+                        <input
+                          type="radio"
+                          name="rating"
+                          checked={selectedRatings === rating}
+                          onChange={() => handleSelectRating(rating)}
+                          className="mr-2"
+                        />
+                        <div className="flex gap-1 text-orange-500 text-2xl">
+                          {[...Array(5)].map((_, i) =>
+                            i < rating ? (
+                              <FaStar key={i} />
+                            ) : (
+                              <FaRegStar key={i} className="text-gray-300" />
+                            )
+                          )}
+                        </div>
+                      </label>
+                    ))}  */

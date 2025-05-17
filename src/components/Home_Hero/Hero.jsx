@@ -11,6 +11,7 @@ const Hero = () => {
     searchCategories,
     userData,
     BASE_URL,
+    setSelectedCategories,
   } = useProductStore();
 
   const [activeIndex, setActiveIndex] = useState(0);
@@ -51,7 +52,11 @@ const Hero = () => {
                   key={category.id}
                   onClick={() => {
                     setActiveIndex(index);
-                    navigate(`/categories/${category?.id}`);
+                    navigate(`/categories/${category.id}`);
+                    setSelectedCategories({
+                      id: category.id,
+                      title: category.title,
+                    });
                   }}
                   role="button"
                   className={`item-1 cursor-pointer hover:text-blue-400 duration-75 ${

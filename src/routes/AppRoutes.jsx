@@ -28,7 +28,7 @@ const AppRoutes = () => {
         {
           path: "/categories",
           element: <AllCategories />,
-        },     
+        },
         {
           path: "/categories/:id",
           element: <AllCategories />,

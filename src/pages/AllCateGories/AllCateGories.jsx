@@ -13,17 +13,42 @@ const AllCategories = () => {
     selectedCategories,
     collectionId,
     setCollectionsId,
+    categoryId,
+    setCategoryId,
+    setSelectedCategories,
   } = useProductStore();
 
   const breadcrumbItems = [
     { label: "Home", link: "/" },
     { label: "Category", link: "/categories" },
   ];
-
   const { id } = useParams();
-  const [categoryId, setCategoryId] = useState(() => {
-    return id ? parseInt(id) : 1;
-  });
+  console.log(selectedCategories, " selectedCategories");
+  console.log(id, " chck");
+  useEffect(() => {
+    // Only set categoryId if no collection is selected
+    if (!collectionId & categoryId) {
+      const categoryFromParam = parseInt(id) ? parseInt(id) : 1;
+      setCategoryId(categoryFromParam);
+      setCollectionsId(null); // ensure collection is cleared
+    } else if (collectionId & !categoryId) {
+      setCollectionsId(null);
+    }
+  }, []);
+  console.log("collectionId ", collectionId, " categoryId", categoryId);
+  // Fetch when category changes
+  // useEffect(() => {
+  //   if (categoryId) {
+  //     fetchSearchProducts({ category_id: categoryId });
+  //   }
+  // }, [categoryId]);
+
+  // // Fetch when collection changes
+  // useEffect(() => {
+  //   if (collectionId) {
+  //     fetchSearchProducts({ collection_id: collectionId });
+  //   }
+  // }, [collectionId]);
 
   // If selected category changes from UI, override categoryId
   useEffect(() => {

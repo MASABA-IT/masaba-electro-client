@@ -1,11 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { IoMdMenu } from "react-icons/io";
 import { MdOutlineKeyboardArrowDown } from "react-icons/md";
-import { Link } from "react-router-dom"; // Import Link from react-router-dom
+import { Link, useParams } from "react-router-dom"; // Import Link from react-router-dom
 import { useProductStore } from "../../providers/AppProviders";
 
 const NavbarHeader = () => {
-  const { navCollections = [], loading } = useProductStore();
+  const {
+    navCollections = [],
+    loading,
+    fetchSearchProducts,
+    setCollectionsId,
+    setCategoryId,
+    setSelectedCategories,
+  } = useProductStore();
+
   const [waitCollections, setWaitCollections] = useState(true);
 
   // Optional: Add artificial delay to simulate loading (if needed)
@@ -16,7 +24,16 @@ const NavbarHeader = () => {
   }, [loading, navCollections]);
 
   const isLoading = loading || waitCollections;
+  const handleCollectionClick = (id) => {
+    setSelectedCategories(null);
+    setCollectionsId(id);
 
+    // setTimeout(() => {
+    //   setCollectionsId(null);
+    // }, 1000);
+  };
+
+  // fetchSearchProducts({ collection_id: collectionId });
   return (
     <div className="navbar_header">
       <div className="navbar_content flex justify-between px-2 overflow-x-auto lg:overflow-visible text-sm">
@@ -26,6 +43,7 @@ const NavbarHeader = () => {
           </button>
           <Link
             to="/categories"
+            onClick={() => setCategoryId(1)}
             className="whitespace-nowrap   hover:text-blue-600 transition-all duration-300"
           >
             All Category
@@ -45,7 +63,8 @@ const NavbarHeader = () => {
                 .map((collection, index) => (
                   <Link
                     key={index}
-                    to="/"
+                    to="/categories"
+                    onClick={() => handleCollectionClick(collection.id)}
                     className="whitespace-nowrap hover:text-blue-600 transition-all duration-300"
                   >
                     {collection.title}

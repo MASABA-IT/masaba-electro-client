@@ -87,20 +87,6 @@ const Navbar = ({ showSidebar, setShowSidebar }) => {
               className="w-full  h-full text-2xl py-3 px-4 rounded-lg focus:outline-none  "
             />
 
-            {/* Divider */}
-            <span className="w-0  h-full border-r border-blue-500"></span>
-
-            {/* Category Select */}
-            <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className=" h-full px-2 rounded-sm focus:outline-none  "
-            >
-              <option value="All">All</option>
-              <option value="Category 1">Category 1</option>
-              <option value="Category 2">Category 2</option>
-              <option value="Category 3">Category 3</option>
-            </select>
             {/* Search Button */}
             <button
               onClick={handleSearch}

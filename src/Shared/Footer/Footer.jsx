@@ -15,9 +15,12 @@ import {
 } from "react-icons/md";
 import { useProductStore } from "../../providers/AppProviders";
 import { Link } from "react-router-dom";
+import appImg from "../../assets/imgs/Group.png";
+import googleImg from "../../assets/imgs/market-button.png";
 
 const Footer = () => {
-  const { siteMeta, email, setEmail, BASE_URL } = useProductStore(); 
+  const { siteMeta, email, setEmail, BASE_URL, logo } = useProductStore();
+
   const MySwal = withReactContent(Swal);
   const handleSubscribe = async () => {
     if (!email) {
@@ -175,7 +178,7 @@ const Footer = () => {
           <div className=" xs:col-span-3 md:col-span-2 lg:col-span-3 flex flex-col ">
             <div className="brand flex   items-center gap-2 text-xl md:text-3xl   font-black">
               <img
-                src="/src/assets/logo/nav-logo.svg"
+                src={`${BASE_URL}/${logo}`}
                 alt="Brand Logo"
                 className="brand-logo w-12 aspect-square"
               />
@@ -282,15 +285,15 @@ const Footer = () => {
             <ul className="flex flex-col gap-y-2">
               <li className="hover:scale-110 cursor-pointer transition-all duration-500 ease-in-out">
                 <img
-                  src="/src/assets/imgs/Group.png"
-                  alt=""
+                  src={appImg}
+                  alt="app Icon"
                   className="h-14 transition-all duration-500 ease-in-out"
                 />
               </li>
               <li className="hover:scale-110 cursor-pointer transition-all duration-500 ease-in-out">
                 <img
-                  src="/src/assets/imgs/market-button.png"
-                  alt=""
+                  src={googleImg}
+                  alt="google playstore Icon"
                   className="h-14 transition-all duration-500 ease-in-out"
                 />
               </li>

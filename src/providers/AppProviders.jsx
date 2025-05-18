@@ -947,9 +947,11 @@ export const AppProvider = ({ children }) => {
     }
   };
   /**FILTERS */
+  const [currentPage, setCurrentPage] = useState(); //currentPage, setCurrentPage,totalPages, setTotalPages
+  const [totalPages, setTotalPages] = useState(1);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const buildApiUrl = () => {
-    let apiUrl = `${BASE_URL}/api/product/search?`;
+    let apiUrl = `${BASE_URL}/api/product/search?`; //api/product/search?page=1
 
     // Dynamically add filters to the URL based on selected options
     if (selectedCategories) {
@@ -983,11 +985,15 @@ export const AppProvider = ({ children }) => {
     if (selectedCondition) {
       apiUrl += `condition=${selectedCondition}&`;
     }
+    // Add pagination
+    apiUrl += `page=${currentPage}&`;
 
     // Remove trailing '&' if any
     apiUrl = apiUrl.endsWith("&") ? apiUrl.slice(0, -1) : apiUrl;
 
-    // If no filters are selected, fetch random products // !selectedBrands?.length &&
+    // apiUrl = `${BASE_URL}/api/product/search?page=${currentPage}&`;
+
+    // // If no filters are selected, fetch random products // !selectedBrands?.length &&
     if (
       !selectedCategories &&
       !selectedPriceRange &&
@@ -995,7 +1001,7 @@ export const AppProvider = ({ children }) => {
       !selectedFeatures?.length &&
       !selectedCondition
     ) {
-      apiUrl = `${BASE_URL}/api/product/search/random`;
+      apiUrl = `${BASE_URL}/api/product/search/random?page=${currentPage}`;
     }
 
     return apiUrl;
@@ -1006,7 +1012,10 @@ export const AppProvider = ({ children }) => {
     try {
       const response = await fetch(apiUrl);
       const data = await response.json();
+
+      setCurrentPage(data?.Products?.current_page);
       setFilteredProducts(data);
+      setTotalPages(data?.Products?.last_page);
     } catch (error) {
       console.error("Error fetching filtered products", error);
     }
@@ -1123,6 +1132,11 @@ export const AppProvider = ({ children }) => {
     setCollectionsId,
     categoryId,
     setCategoryId,
+    //pagination
+    currentPage,
+    setCurrentPage,
+    totalPages,
+    setTotalPages,
   };
   return <AppContext.Provider value={appInfo}>{children}</AppContext.Provider>;
 };

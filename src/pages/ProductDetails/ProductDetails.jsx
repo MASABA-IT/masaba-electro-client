@@ -210,7 +210,7 @@ const ProductDetails = () => {
       {/* 4th Column */}
       <ProductDetailsRelated relatedProducts={relatedProducts} />
       {/* 5th  column */}
-      <ProductDetailsDiscount />
+      {/* <ProductDetailsDiscount /> */}
     </div>
   );
 };

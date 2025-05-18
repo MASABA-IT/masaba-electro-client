@@ -109,7 +109,7 @@ const OfferItem = ({ item }) => {
   const navigate = useNavigate();
   // State to track when the image has finished loading
   const [imageLoaded, setImageLoaded] = useState(!item);
- 
+
   const handleProductClick = () => {
     navigate(`/categories/product/${item?.product_id}`);
   };
@@ -162,7 +162,6 @@ const OfferItem = ({ item }) => {
 // Main ProductMainOffers Component
 const ProductMainOffers = () => {
   const { dealsOffers } = useProductStore();
-  console.log(dealsOffers);
   if (!dealsOffers || !dealsOffers.deals_offers_products) {
     return <div className="min-h-[300px]"></div>;
   }

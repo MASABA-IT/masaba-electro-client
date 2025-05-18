@@ -48,8 +48,8 @@ const NavbarHeader = () => {
           >
             All Category
           </Link>
-          {/* Map through buttonData and render each button as a link */}
-          {isLoading || waitCollections
+          {/* Map through buttonData and render each button as a link //isLoading ||*/}
+          {waitCollections
             ? // Show placeholder skeletons when loading
               Array.from({ length: 5 }).map((_, index) => (
                 <div

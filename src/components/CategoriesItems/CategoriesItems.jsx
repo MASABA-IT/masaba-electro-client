@@ -25,10 +25,11 @@ const CategoriesItems = ({ allData }) => {
     navCollections = [],
     setCollectionsId,
     collectionId,
+    currentPage,
   } = useProductStore();
   const [allProducts, setAllProducts] = useState([]); // All product data
   const [loading, setLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
+
   const [itemsPerPage, setItemsPerPage] = useState(12); // Default items per page
   const [showDropdown, setShowDropdown] = useState(false);
 
@@ -41,6 +42,7 @@ const CategoriesItems = ({ allData }) => {
     selectedBrands,
     selectedFeatures,
     selectedCondition,
+    currentPage,
   ]);
 
   useEffect(() => {
@@ -140,8 +142,8 @@ const CategoriesItems = ({ allData }) => {
   //     return bPrice - aPrice;
   //   });
   // Calculate pagination values
-  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
+
+  // const startIndex = (currentPage - 1) * itemsPerPage;
   // console.log("Filtering with:", {
   //   selectedBrands,
   //   selectedCategories,
@@ -157,23 +159,23 @@ const CategoriesItems = ({ allData }) => {
   // );
   // console.log(currentProducts, "currentProducts");
   // Handlers for pagination controls
-  const handlePrevPage = () => {
-    setCurrentPage((prev) => (prev > 1 ? prev - 1 : prev));
-  };
+  // const handlePrevPage = () => {
+  //   setCurrentPage((prev) => (prev > 1 ? prev - 1 : prev));
+  // };
 
-  const handleNextPage = () => {
-    setCurrentPage((prev) => (prev < totalPages ? prev + 1 : prev));
-  };
+  // const handleNextPage = () => {
+  //   setCurrentPage((prev) => (prev < totalPages ? prev + 1 : prev));
+  // };
 
-  // Handler for changing items per page from the dropdown
-  const handleItemsPerPageChange = (value) => {
-    setItemsPerPage(value);
-    setCurrentPage(1); // reset to first page when value changes
-    setShowDropdown(false);
-  };
-  const handleToggleDropdown = () => {
-    setShowDropdown((prev) => !prev);
-  };
+  // // Handler for changing items per page from the dropdown
+  // const handleItemsPerPageChange = (value) => {
+  //   setItemsPerPage(value);
+  //   setCurrentPage(1); // reset to first page when value changes
+  //   setShowDropdown(false);
+  // };
+  // const handleToggleDropdown = () => {
+  //   setShowDropdown((prev) => !prev);
+  // };
   const isMobile = useIsMobile();
 
   // //////////change columns
@@ -337,20 +339,8 @@ const CategoriesItems = ({ allData }) => {
       )}
 
       {/* Pagination */}
-      {allData?.length > 0 ? (
-        <PaginationsBtn
-          currentPage={currentPage}
-          totalPages={totalPages}
-          itemsPerPage={itemsPerPage}
-          showDropdown={showDropdown}
-          onToggleDropdown={handleToggleDropdown}
-          onItemsPerPageChange={handleItemsPerPageChange}
-          onPrevPage={handlePrevPage}
-          onNextPage={handleNextPage}
-        />
-      ) : (
-        <></>
-      )}
+
+      <PaginationsBtn />
     </div>
   );
 };

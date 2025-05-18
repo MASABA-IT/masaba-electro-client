@@ -16,15 +16,15 @@ const CategoryList = () => {
     setSelectedPriceRange,
     selectedBrands,
     selectedCategories,
-    selectedCondition,
-    selectedRatings,
-    selectedItems,
+    // selectedCondition,
+    // selectedRatings,
+    // selectedItems,
     reset,
     setReset,
   } = useProductStore();
   const { id } = useParams();
   const navigate = useNavigate();
-  console.log(id, "id");
+
   const [minPrice, setMinPrice] = useState(100);
   const [maxPrice, setMaxPrice] = useState(5000000);
   const [openCategories, setOpenCategories] = useState({
@@ -34,7 +34,7 @@ const CategoryList = () => {
     "Price Range": true,
     // Ratings: true,
   });
-  const [expandedCategory, setExpandedCategory] = useState(null);
+  // const [expandedCategory, setExpandedCategory] = useState(null);
   const [showAllCategories, setShowAllCategories] = useState({});
 
   // Update the selected price range when the slider changes
@@ -48,15 +48,14 @@ const CategoryList = () => {
   // }, [id]);
   // Update selected categories
   const handleCategorySelect = (category) => {
-    console.log(category, "ca-check");
     setSelectedCategories(category);
     navigate(`/categories/${category.id}`);
   };
 
   // Update selected condition
-  const handleConditionSelect = (condition) => {
-    setSelectedCondition(condition);
-  };
+  // const handleConditionSelect = (condition) => {
+  //   setSelectedCondition(condition);
+  // };
   // console.log("categoryList", allData);
   const toggleCategory = (index, categoryName) => {
     setOpenCategories((prev) => ({
@@ -96,14 +95,13 @@ const CategoryList = () => {
       setSelectedFeatures([]);
       // setSelectedRatings(null);
       setSelectedCondition(null);
-      setSelectedCategories([]);
+      // setSelectedCategories([]);
       setSelectedPriceRange({ min: 0, max: 5000000 });
       setMinPrice(100);
-      setMaxPrice(1000);
+      setMaxPrice(50000);
       setReset(false);
     }
   }, [reset]);
-  console.log(filters, "test");
 
   return (
     <div className="categories_list mr-8 ">
@@ -171,13 +169,14 @@ const CategoryList = () => {
 
                     {/* ---comment----- */}
                     {/* TYPE: range */}
+
                     {filter.type === "range" && (
                       <div className="text-2xl flex flex-col justify-center items-center">
                         <Slider
-                          value={[minPrice, maxPrice]}
+                          value={[Number(minPrice), Number(maxPrice)]}
                           onChange={(e, newValue) => {
-                            setMinPrice(newValue[0]);
-                            setMaxPrice(newValue[1]);
+                            setMinPrice(newValue[0].toString());
+                            setMaxPrice(newValue[1].toString());
                           }}
                           min={0}
                           max={5000}
@@ -193,13 +192,26 @@ const CategoryList = () => {
                               id="minPrice"
                               value={minPrice}
                               onChange={(e) => {
-                                const val = Number(e.target.value);
-                                if (val >= 0 && val <= maxPrice)
+                                const val = e.target.value;
+                                if (
+                                  val === "" ||
+                                  (!isNaN(Number(val)) && Number(val) >= 0)
+                                ) {
                                   setMinPrice(val);
+                                }
+                              }}
+                              onBlur={() => {
+                                const num = Number(minPrice);
+                                if (!isNaN(num) && num <= Number(maxPrice)) {
+                                  setMinPrice(num.toString());
+                                } else {
+                                  setMinPrice("0");
+                                }
                               }}
                               className="border outline-none p-2 rounded w-full text-gray-400"
                             />
                           </div>
+
                           <div className="w-1/2">
                             <label htmlFor="maxPrice" className="block text-xl">
                               Max
@@ -209,14 +221,27 @@ const CategoryList = () => {
                               id="maxPrice"
                               value={maxPrice}
                               onChange={(e) => {
-                                const val = Number(e.target.value);
-                                if (val <= 5000 && val >= minPrice)
+                                const val = e.target.value;
+                                if (
+                                  val === "" ||
+                                  (!isNaN(Number(val)) && Number(val) <= 5000)
+                                ) {
                                   setMaxPrice(val);
+                                }
+                              }}
+                              onBlur={() => {
+                                const num = Number(maxPrice);
+                                if (!isNaN(num) && num >= Number(minPrice)) {
+                                  setMaxPrice(num.toString());
+                                } else {
+                                  setMaxPrice("5000"); // default fallback
+                                }
                               }}
                               className="border outline-none p-2 rounded w-full text-gray-400"
                             />
                           </div>
                         </div>
+
                         <button
                           onClick={handlePriceApply}
                           className="w-full text-center bg-white text-blue-500 border m-2 p-3 rounded hover:bg-zinc-50"
@@ -326,4 +351,60 @@ export default CategoryList;
                           )}
                         </div>
                       </label>
-                    ))}  */
+                    ))}  
+                    ------------------------
+                      {filter.type === "range" && (
+                      <div className="text-2xl flex flex-col justify-center items-center">
+                        <Slider
+                          value={[minPrice, maxPrice]}
+                          onChange={(e, newValue) => {
+                            setMinPrice(newValue[0]);
+                            setMaxPrice(newValue[1]);
+                          }}
+                          min={0}
+                          max={5000}
+                          valueLabelDisplay="auto"
+                        />
+                        <div className="flex space-x-2 mt-2 w-full">
+                          <div className="w-1/2">
+                            <label htmlFor="minPrice" className="block text-xl">
+                              Min
+                            </label>
+                            <input
+                              type="number"
+                              id="minPrice"
+                              value={minPrice}
+                              onChange={(e) => {
+                                const val = Number(e.target.value);
+                                if (val >= 0 && val <= maxPrice)
+                                  setMinPrice(val);
+                              }}
+                              className="border outline-none p-2 rounded w-full text-gray-400"
+                            />
+                          </div>
+                          <div className="w-1/2">
+                            <label htmlFor="maxPrice" className="block text-xl">
+                              Max
+                            </label>
+                            <input
+                              type="number"
+                              id="maxPrice"
+                              value={maxPrice}
+                              onChange={(e) => {
+                                const val = Number(e.target.value);
+                                if (val <= 5000 && val >= minPrice)
+                                  setMaxPrice(val);
+                              }}
+                              className="border outline-none p-2 rounded w-full text-gray-400"
+                            />
+                          </div>
+                        </div>
+                        <button
+                          onClick={handlePriceApply}
+                          className="w-full text-center bg-white text-blue-500 border m-2 p-3 rounded hover:bg-zinc-50"
+                        >
+                          Apply
+                        </button>
+                      </div>
+                    )}   
+                    */

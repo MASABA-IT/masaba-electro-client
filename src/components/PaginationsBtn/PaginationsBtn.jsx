@@ -1,95 +1,132 @@
-import React, { useEffect, useRef } from "react";
-import { FaChevronDown, FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import React, { useState, useEffect } from "react";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { useProductStore } from "../../providers/AppProviders";
 
-const PaginationsBtn = ({
-  currentPage,
-  totalPages,
-  itemsPerPage,
-  dropdownOptions = [12, 24, 36],
-  showDropdown,
-  onToggleDropdown,
-  onItemsPerPageChange,
-  onPrevPage,
-  onNextPage,
-}) => {
-  // Create a ref for the dropdown container
-  const containerRef = useRef(null);
+const PaginationsBtn = () => {
+  const {
+    currentPage,
+    setCurrentPage,
+    totalPages,
+    setTotalPages,
+    filteredProducts,
+  } = useProductStore();
 
-  useEffect(() => {
-    // This function checks for outside clicks
-    const handleClickOutside = (event) => {
-      if (
-        showDropdown &&
-        containerRef.current &&
-        !containerRef.current.contains(event.target)
-      ) {
-        onToggleDropdown();
+  const hasProducts =
+    Array.isArray(filteredProducts?.Products?.data) &&
+    filteredProducts.Products?.data.length > 0;
+
+  console.log(
+    filteredProducts,
+    "filteredProducts",
+    filteredProducts.Products?.data,
+    hasProducts
+  );
+  const handlePrevPage = () => {
+    setCurrentPage((prev) => Math.max(prev - 1, 1));
+  };
+
+  const handleNextPage = () => {
+    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+  };
+
+  const renderPageNumbers = () => {
+    const maxVisiblePages = 10;
+    const pages = [];
+
+    if (totalPages <= maxVisiblePages) {
+      // Show all pages if total is less than max visible
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
       }
-    };
+    } else {
+      // Always show first 5 pages
+      for (let i = 1; i <= 5; i++) {
+        pages.push(i);
+      }
 
-    // Attach event listener on mount
-    document.addEventListener("mousedown", handleClickOutside);
-    // Clean up the event listener on unmount
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [showDropdown, onToggleDropdown]);
+      // Add ellipsis if current page is far from start
+      if (currentPage > 5 + 2) {
+        pages.push("...");
+      }
+
+      // Add some pages around current page
+      const start = Math.max(6, currentPage - 2);
+      const end = Math.min(totalPages - 1, currentPage + 2);
+
+      for (let i = start; i <= end; i++) {
+        if (!pages.includes(i)) {
+          pages.push(i);
+        }
+      }
+
+      // Add ellipsis if current page is far from end
+      if (currentPage < totalPages - 5) {
+        pages.push("...");
+      }
+
+      // Always show last page
+      pages.push(totalPages);
+    }
+
+    return pages.map((page, index) => {
+      if (page === "...") {
+        return (
+          <span key={`ellipsis-${index}`} className="px-2 py-1">
+            ...
+          </span>
+        );
+      }
+
+      return (
+        <button
+          key={page}
+          onClick={() => setCurrentPage(page)}
+          className={`px-3 py-1 rounded-md border font-medium transition-all duration-300 ${
+            currentPage === page
+              ? "border-blue-600 bg-blue-50 text-blue-600 shadow"
+              : "border-gray-300 text-gray-700 hover:bg-gray-100"
+          }`}
+        >
+          {page}
+        </button>
+      );
+    });
+  };
 
   return (
-    <div className="flex justify-end items-center space-x-4 mt-6 text-xl">
-      {/* "Show" Dropdown */}
-      <div ref={containerRef} className="relative h-full">
+    <div
+      className={`text-2xl   flex-col sm:flex-row justify-between items-center gap-4 mt-8 pt-4 border-t border-gray-200 ${
+        hasProducts ? "flex" : "hidden"
+      }`}
+    >
+      {/* Left: Prev & Next with page numbers */}
+      <div className="flex items-center gap-2">
         <button
-          onClick={onToggleDropdown}
-          className="w-[10rem] h-full flex justify-between items-center border px-4 py-2 rounded-md shadow-sm focus:outline-none transition-all duration-200 hover:shadow-md"
+          onClick={handlePrevPage}
+          disabled={currentPage === 1}
+          className="p-2 rounded-md border border-gray-300 text-gray-700 disabled:opacity-30 hover:bg-blue-50 transition-colors"
+          aria-label="Previous page"
         >
-          <span>Show</span>
-          <span>{itemsPerPage}</span>
-          <FaChevronDown className="transition-transform duration-200 transform" />
+          <FaChevronLeft size={14} />
         </button>
-        {showDropdown && (
-          <ul className="absolute z-10 mt-1 w-full border bg-white rounded-md shadow-lg transition-opacity duration-300 animate-fadeIn">
-            {dropdownOptions.map((option) => (
-              <li key={option}>
-                <button
-                  onClick={() => onItemsPerPageChange(option)}
-                  className="w-full text-left px-4 py-2 hover:bg-gray-100 transition-colors duration-200"
-                >
-                  {option}
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
+
+        <div className="flex gap-1 flex-wrap">{renderPageNumbers()}</div>
+
+        <button
+          onClick={handleNextPage}
+          disabled={currentPage === totalPages}
+          className="p-2 rounded-md border border-gray-300 text-gray-700 disabled:opacity-30 hover:bg-blue-50 transition-colors"
+          aria-label="Next page"
+        >
+          <FaChevronRight size={14} />
+        </button>
       </div>
 
-      {/* Pagination Navigation */}
-      <nav
-        aria-label="Pagination"
-        className="flex items-center border px-4 py-2 rounded-md shadow-sm transition-all duration-200 hover:shadow-md"
-      >
-        <button
-          onClick={onPrevPage}
-          className="text-xl p-2 flex items-center disabled:opacity-50 transition-transform duration-200 hover:scale-105"
-          aria-label="Previous Page"
-          disabled={currentPage === 1}
-        >
-          <FaChevronLeft />
-        </button>
-
-        <span className="px-4">
-          {currentPage} of {totalPages}
-        </span>
-
-        <button
-          onClick={onNextPage}
-          className="text-xl p-2 flex items-center disabled:opacity-50 transition-transform duration-200 hover:scale-105"
-          aria-label="Next Page"
-          disabled={currentPage === totalPages}
-        >
-          <FaChevronRight />
-        </button>
-      </nav>
+      {/* Right: Page x of y */}
+      <div className="text-gray-600">
+        Page <span className="font-medium">{currentPage}</span> of{" "}
+        <span className="font-medium">{totalPages}</span>
+      </div>
     </div>
   );
 };

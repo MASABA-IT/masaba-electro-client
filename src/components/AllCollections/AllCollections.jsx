@@ -13,7 +13,6 @@ const CollectionItem = ({ item }) => {
     item.discount_price &&
     parseFloat(item.discount_price) < parseFloat(item.base_price);
   const handleProductClick = () => {
-    console.log("click");
     navigate(`/categories/product/${item.id}`);
   };
   return (
@@ -77,7 +76,6 @@ const CollectionItem = ({ item }) => {
 };
 const Collection = ({ collection }) => {
   const { BASE_URL } = useProductStore();
-  console.log(collection, "collection----check");
 
   // Group the items into two rows, each containing 4 items
   const rows = [];
@@ -102,7 +100,7 @@ const Collection = ({ collection }) => {
   ) {
     return null;
   }
-  
+
   return (
     <div key={collection.id} className="collection-section shadow-sm ">
       <div className="block md:hidden p-4 bg-white">

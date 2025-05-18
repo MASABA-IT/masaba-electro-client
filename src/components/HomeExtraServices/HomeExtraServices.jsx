@@ -4,35 +4,39 @@ import { GoPaperAirplane } from "react-icons/go";
 import { IoIosSearch } from "react-icons/io";
 import { MdOutlineInventory2 } from "react-icons/md";
 import { PiShieldCheckeredFill } from "react-icons/pi";
-import { motion } from "framer-motion"; // Import framer-motion
+import { motion } from "framer-motion";
+import service1 from "../../assets/imgs/service1.png";
+import service2 from "../../assets/imgs/service2.png";
+import service3 from "../../assets/imgs/service3.png";
+import service4 from "../../assets/imgs/service4.png";
 
 const services = [
   {
     id: 1,
     title: "Fast Delivery",
     description: "Source from Industry Hubs.",
-    image: "/src/assets/imgs/service1.png",
+    image: service1,
     icon: <IoIosSearch />,
   },
   {
     id: 2,
     title: "24/7 Support",
     description: "Customize Your Products",
-    image: "/src/assets/imgs/service2.png",
+    image: service2,
     icon: <MdOutlineInventory2 />,
   },
   {
     id: 3,
     title: "Secure Payment",
     description: "Fast, reliable shipping by ocean or air",
-    image: "/src/assets/imgs/service3.png",
+    image: service3,
     icon: <GoPaperAirplane />,
   },
   {
     id: 4,
     title: "Easy Returns",
     description: "Product monitoring and inspection",
-    image: "/src/assets/imgs/service4.png",
+    image: service4,
     icon: <PiShieldCheckeredFill />,
   },
 ];

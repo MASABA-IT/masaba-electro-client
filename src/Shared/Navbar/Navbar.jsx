@@ -99,12 +99,9 @@ const Navbar = ({ showSidebar, setShowSidebar }) => {
           <div className="nav-icons flex gap-x-6 justify-between items-center text-gray-500">
             {/* Profile Button */}
             <button
-              className="flex flex-col items-center gap-y-3 relative group"
+              className="flex flex-col items-center gap-y-3"
               onClick={handleButtonClick}
             >
-              <span className="absolute top-0 -left-20 mt-1 text-xs text-gray-600 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                Profile
-              </span>
               <FaUser
                 className={`text-xl ${
                   userData?.token

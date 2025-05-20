@@ -172,7 +172,7 @@ const AllCartPage = () => {
         paymentOptions={paymentOptions}
       />
       <SecureInfoPanel />
-      <CartLetterSave />
+      {<CartLetterSave />}
       <div className="cart_discount">
         <ProductDetailsDiscount />
       </div>

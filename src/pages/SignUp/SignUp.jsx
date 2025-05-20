@@ -64,24 +64,24 @@ const SignUp = () => {
           },
           body: JSON.stringify({
             name: formData.username,
-            phone_number: formData.phone_number, // Keep as formData.phone_number if that's your field
+            phone_number: formData.phone_number,
             email: formData.email,
             password: formData.password,
             password_confirmation: formData.password_confirmation,
           }),
         });
 
-        const result = await response.json(); // 👉 first get full server response
+        const result = await response.json();
 
         if (!response.ok) {
           console.error("Registration failed ❌:", result);
-          alert(result.message || "Registration failed!");
+
           return;
         }
 
         const userData = {
           message: result.message || "Registration successful!",
-          token: result.token, // Assumed token from server response
+          token: result.token,
           user: {
             name: result.user.name,
             email: result.user.email,
@@ -104,19 +104,14 @@ const SignUp = () => {
 
         setErrors({});
 
-        // Show server success message
-        alert(result.message || "Registration successful! 🎉");
-
         // Navigate after success
         navigate("/dashboard");
       } catch (error) {
         console.error("Error during registration ❌:", error);
-        alert("Something went wrong! Try again later.");
       }
     }
   };
 
-  console.log(formData, "formData---------------");
   return (
     <div className="signup_content xl:min-h-screen bg-gradient-to-br from-pink-100 via-white to-blue-100 flex items-center justify-center p-8">
       <div className="signup_form my-10  bg-white/90 backdrop-blur-md shadow-2xl rounded-3xl overflow-hidden flex items-center flex-col md:flex-row xl:h-[60vh] xl:max-h-[800px]">

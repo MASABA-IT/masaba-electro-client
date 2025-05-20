@@ -15,12 +15,12 @@ const PaginationsBtn = () => {
     Array.isArray(filteredProducts?.Products?.data) &&
     filteredProducts.Products?.data.length > 0;
 
-  console.log(
-    filteredProducts,
-    "filteredProducts",
-    filteredProducts.Products?.data,
-    hasProducts
-  );
+  // console.log(
+  //   filteredProducts,
+  //   "filteredProducts",
+  //   filteredProducts.Products?.data,
+  //   hasProducts
+  // );
   const handlePrevPage = () => {
     setCurrentPage((prev) => Math.max(prev - 1, 1));
   };

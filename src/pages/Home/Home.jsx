@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 
 import Hero from "../../components/Home_Hero/Hero";
 import HomeCollections from "../../components/HomeCollections/HomeCollections";
@@ -8,10 +8,16 @@ import HomeExtraServices from "../../components/HomeExtraServices/HomeExtraServi
 import HomeSuppliers from "../../components/HomeSuppliers/HomeSuppliers";
 
 const Home = () => {
+  const collectionsRef = useRef(null);
+
+  const scrollToCollections = () => {
+    collectionsRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <div className="home_content">
-      <Hero />
-      <HomeCollections />
+      <Hero onScrollToCollections={scrollToCollections} />
+      <HomeCollections collectionsRef={collectionsRef} />
       <HomeEmail />
       <HomeRecommendedItems />
       <HomeExtraServices />

@@ -4,6 +4,7 @@ import { FaStar, FaRegStar } from "react-icons/fa";
 import Slider from "@mui/material/Slider";
 import { useProductStore } from "../../providers/AppProviders";
 import { useNavigate, useParams } from "react-router-dom";
+import MobileCategoryList from "../MobileCategoryList/MobileCategoryList";
 
 const CategoryList = () => {
   const {
@@ -20,7 +21,7 @@ const CategoryList = () => {
     // selectedRatings,
     // selectedItems,
     reset,
-    setReset,
+    setReset, 
   } = useProductStore();
   const { id } = useParams();
   const navigate = useNavigate();
@@ -111,7 +112,7 @@ const CategoryList = () => {
           .map((filter, index) => (
             <li key={index} className="p-3 ">
               <button
-                onClick={() => toggleCategory(index, filter.name)}
+                onClick={() => toggleCategory(index, filter.name)}  
                 className="w-full text-left flex justify-between items-center font-semibold text-2xl text-gray-800 "
               >
                 {filter.name}
@@ -303,6 +304,7 @@ const CategoryList = () => {
             </li>
           ))}
       </ul>
+   
     </div>
   );
 };

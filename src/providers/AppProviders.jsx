@@ -29,6 +29,7 @@ export const AppProvider = ({ children }) => {
   const [email, setEmail] = useState("");
   const [collectionId, setCollectionsId] = useState(null);
   const [categoryId, setCategoryId] = useState(null);
+  const [mobileSidebarFilter, setMobileSidebarFilter] = useState(false);
   //////////////////
   const [selectedCategories, setSelectedCategories] = useState(null);
   const [selectedBrands, setSelectedBrands] = useState([]);
@@ -1020,8 +1021,37 @@ export const AppProvider = ({ children }) => {
       console.error("Error fetching filtered products", error);
     }
   };
+  const [clientOrders, setClientOrders] = useState([]);
+  const fetchOrderList = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/api/my/order-list`, {
+        headers: {
+          Authorization: `Bearer ${userData.token}`,
+        },
+      });
 
-  // Call the fetch function when filters change
+      setClientOrders(response.data.orders.data);
+    } catch (error) {
+      console.error("Error fetching order list:", error);
+    }
+  };
+  const getStatusColor = (status) => {
+    switch (status.toLowerCase()) {
+      case "pending":
+        return "text-orange-400";
+      case "processing":
+        return "text-blue-500";
+      case "shipped":
+        return "text-purple-500";
+      case "delivered":
+        return "text-green-500";
+      case "cancelled":
+      case "canceled":
+        return "text-red-500";
+      default:
+        return "text-gray-500";
+    }
+  };
 
   const appInfo = {
     BASE_URL,
@@ -1137,6 +1167,13 @@ export const AppProvider = ({ children }) => {
     setCurrentPage,
     totalPages,
     setTotalPages,
+    //client orders
+    fetchOrderList,
+    clientOrders,
+    getStatusColor,
+    //mobile sidebar-filter
+    mobileSidebarFilter,
+    setMobileSidebarFilter,
   };
   return <AppContext.Provider value={appInfo}>{children}</AppContext.Provider>;
 };

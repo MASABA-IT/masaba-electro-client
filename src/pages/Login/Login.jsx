@@ -157,7 +157,7 @@ const Login = () => {
         </div>
 
         {/* Right Form */}
-        <div className="w-full md:w-1/2 p-12 space-y-8 flex flex-col justify-center">
+        <div className="w-full md:w-1/2 p-4 sm:p-12 space-y-8 flex flex-col justify-center">
           <div className="text-center space-y-2">
             <h2 className="text-4xl font-bold text-gray-800">Welcome Back</h2>
             <p className="text-2xl text-gray-500">

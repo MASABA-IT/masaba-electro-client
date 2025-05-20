@@ -10,6 +10,7 @@ import { MdOutlineSort } from "react-icons/md";
 import { CiFilter } from "react-icons/ci";
 import { iconButtonClasses } from "@mui/material";
 import { useProductStore } from "../../providers/AppProviders";
+import MobileCategoryList from "../MobileCategoryList/MobileCategoryList";
 
 const CategoriesItems = ({ allData }) => {
   const {
@@ -26,6 +27,8 @@ const CategoriesItems = ({ allData }) => {
     setCollectionsId,
     collectionId,
     currentPage,
+    mobileSidebarFilter,
+    setMobileSidebarFilter,
   } = useProductStore();
   const [allProducts, setAllProducts] = useState([]); // All product data
   const [loading, setLoading] = useState(true);
@@ -194,17 +197,22 @@ const CategoriesItems = ({ allData }) => {
       ? words.slice(0, maxWords).join(" ") + "..."
       : text;
   };
-
+  const handleToggle = () => {
+    setMobileSidebarFilter(!mobileSidebarFilter);
+  };
   return (
-    <div className="categoriesitems_content">
+    <div className="categoriesitems_content ">
       {isMobile ? (
         <div className="w-full flex  justify-between gap-x-3 items-center text-xl md:text-2xl py-3">
           <div className="  flex  items-center space-x-2">
-            <button className=" border py-3 px-2 flex  gap-x-4 items-center  ">
+            {/* <button className=" border py-3 px-2 flex  gap-x-4 items-center  ">
               Sort&nbsp;Newest
               <MdOutlineSort />
-            </button>
-            <button className=" border py-3 px-2 flex gap-x-4 items-center  ">
+            </button> */}
+            <button
+              className="border py-3 px-2 flex gap-x-4 items-center"
+              onClick={handleToggle}
+            >
               Filter&nbsp;<span>{`(${3})`}</span>
               <CiFilter />
             </button>
@@ -341,6 +349,7 @@ const CategoriesItems = ({ allData }) => {
       {/* Pagination */}
 
       <PaginationsBtn />
+      {mobileSidebarFilter && <MobileCategoryList />}
     </div>
   );
 };

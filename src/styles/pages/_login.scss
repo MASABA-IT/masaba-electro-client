@@ -20,7 +20,7 @@
 }
 /* Custom class for the confirm button */
 .custom-confirm-button {
-  background-color: #91B0F4 !important; /* Set button background color */
+  background-color: #91b0f4 !important; /* Set button background color */
   color: white !important; /* Set button text color */
   border-radius: 5px; /* Rounded corners */
   padding: 10px 20px; /* Button padding */
@@ -66,5 +66,8 @@
   .login_content {
     padding: 0 !important;
     grid-template-rows: 25vh repeat(7, min-content);
+  }
+  .login_form {
+    width: 95%;
   }
 }

@@ -29,8 +29,12 @@ const Dashboard = () => {
     setShowModal,
     editAddress,
     setEditAddress,
+    fetchOrderList,
+    clientOrders,
+    getStatusColor,
   } = useProductStore();
   const [activeIndex, setActiveIndex] = useState(0);
+  const { orders, index } = useParams();
   const menuItems = [
     { name: "Profile", icon: <FaUser />, section: "profile" },
     {
@@ -120,10 +124,21 @@ const Dashboard = () => {
       localStorage.removeItem("showLoginSuccess");
     }
   }, []);
-
+  useEffect(() => {
+    if (orders && index) {
+      setSelectedSection(orders);
+      setActiveIndex(Number(index));
+      if (orders === "orders") {
+        fetchOrderList();
+      }
+    }
+  }, [orders, index]);
   const handleMenuClick = (section, index) => {
     setSelectedSection(section);
     setActiveIndex(index);
+    if (section === "orders") {
+      fetchOrderList();
+    }
   };
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
@@ -131,7 +146,7 @@ const Dashboard = () => {
     if (!file) return;
 
     const formData = new FormData();
-    formData.append("image", file); // Append the image file
+    formData.append("image", file);
 
     try {
       const response = await fetch(`${BASE_URL}/api/change-image`, {
@@ -321,6 +336,61 @@ const Dashboard = () => {
           <div>
             <h3 className="text-xl mb-4">Orders</h3>
             <p>Your orders will be displayed here.</p>
+
+            {clientOrders && (
+              <div className="orders-list space-y-4 p-4">
+                {clientOrders.map((order) => (
+                  <div
+                    key={order.id}
+                    className="order-card border rounded p-4 shadow-sm flex flex-col sm:flex-row justify-between sm:items-center gap-4 bg-white"
+                  >
+                    <div className="w-full sm:w-1/2">
+                      <p>
+                        <strong>Order ID:</strong> {order.id}
+                      </p>
+                      <p>
+                        <strong>Status:</strong>{" "}
+                        <span
+                          className={`font-semibold ${getStatusColor(
+                            order.status
+                          )}`}
+                        >
+                          {order.status}
+                        </span>
+                      </p>
+                      <p>
+                        <strong>Payment Method:</strong> {order.payment_method}
+                      </p>
+                    </div>
+
+                    <div className="w-full sm:w-1/2 text-left sm:text-right space-y-1">
+                      <div className="flex justify-between sm:justify-end gap-2 sm:gap-4 text-xl">
+                        <span className="text-gray-500 font-medium">
+                          Subtotal:
+                        </span>
+                        <span className="font-semibold text-gray-700">
+                          ৳ {order.sub_total}
+                        </span>
+                      </div>
+                      <div className="flex justify-between sm:justify-end gap-2 sm:gap-4 text-xl">
+                        <span className="text-gray-500 font-medium">
+                          Delivery:
+                        </span>
+                        <span className="text-gray-700">
+                          + ৳ {order.delivery_charge}
+                        </span>
+                      </div>
+                      <div className="border-t pt-1 mt-1 flex justify-between sm:justify-end gap-2 sm:gap-4 text-2xl">
+                        <span className="text-gray-600 font-bold">Total:</span>
+                        <span className="text-2xl font-bold text-green-600">
+                          ৳ {order.total_amount}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
         {selectedSection === "address" && (

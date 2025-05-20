@@ -30,9 +30,14 @@ const CartLetterSave = () => {
     updateWishlistInLocalStorage(productId, "remove");
     setTimeout(() => setIsLoading(false), 300);
   };
-
+  console.log(showWishlist); // ${
+  //   showWishlist.length !== 0 ? "block" : "none"
+  // }
   return (
-    <div className="cartLetterSave bg-white border-2 rounded-xl">
+    <div
+      className={`cartLetterSave bg-white border-2 rounded-xl `}
+      style={{ display: showWishlist.length !== 0 ? "block" : "none" }}
+    >
       <h2 className="text-2xl xl:text-3xl p-3 xl:p-6 font-bold">
         Saved for later ({showWishlist.length})
       </h2>

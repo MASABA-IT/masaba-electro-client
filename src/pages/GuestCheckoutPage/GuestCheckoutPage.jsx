@@ -95,7 +95,7 @@ const GuestCheckoutPage = () => {
       setSelectedUnion(value);
     }
   };
- 
+
   const handlePlaceOrder = async () => {
     const cartData = JSON.parse(localStorage.getItem("cartData")) || [];
 
@@ -130,8 +130,6 @@ const GuestCheckoutPage = () => {
 
       const result = await response.json();
       const orderId = result.order.id;
-      console.log("orderId", orderId);
-      console.log("✅ Order Success:", result);
 
       // Clear localStorage and form
       localStorage.removeItem("cartData");

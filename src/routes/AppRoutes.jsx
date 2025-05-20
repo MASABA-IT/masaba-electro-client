@@ -78,6 +78,14 @@ const AppRoutes = () => {
             </PrivateRoute>
           ),
         },
+        {
+          path: "/dashboard/:orders/:index",
+          element: (
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          ),
+        },
       ],
     },
   ]);

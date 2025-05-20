@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion"; // Import framer-motion
+import { motion } from "framer-motion";
 import { useProductStore } from "../../providers/AppProviders";
 import { useNavigate } from "react-router-dom";
 
@@ -162,9 +162,28 @@ const OfferItem = ({ item }) => {
 // Main ProductMainOffers Component
 const ProductMainOffers = () => {
   const { dealsOffers } = useProductStore();
-  if (!dealsOffers || !dealsOffers.deals_offers_products) {
-    return <div className="min-h-[300px]"></div>;
-  }
+  const [isExpired, setIsExpired] = useState(false);
+
+  useEffect(() => {
+    if (!dealsOffers || !dealsOffers.expire) return;
+
+    const checkExpired = () => {
+      const now = new Date();
+      const expireTime = new Date(dealsOffers.expire);
+      setIsExpired(expireTime < now);
+    };
+
+    checkExpired(); // Initial check
+
+    const interval = setInterval(() => {
+      checkExpired();
+    }, 1000); // keep checking every second
+
+    return () => clearInterval(interval);
+  }, [dealsOffers?.expire]);
+
+  // If no offer or expired, do not render
+  if (!dealsOffers || isExpired) return null;
 
   return (
     <motion.div className="product-main-offers">

@@ -3,8 +3,8 @@ import { motion } from "framer-motion"; // Import framer-motion
 import { useProductStore } from "../../providers/AppProviders";
 import { useNavigate } from "react-router-dom";
 import { FaFaceSmile } from "react-icons/fa6";
-
-const Hero = () => {
+import userImg from "../../assets/icons/heroUser.png";
+const Hero = ({ onScrollToCollections }) => {
   const {
     categories,
     fetchSearchProducts,
@@ -79,14 +79,20 @@ const Hero = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
       >
-        <h3 className="text-2xl md:text-4xl font-sans font-normal">
+        <h3 className="text-2xl md:text-4xl font-sans font-normal text-gray-600">
           Latest trending
         </h3>
-        <h1 className="text-4xl md:text-6xl text-gray-800 font-normal mt-2">
+        <h1
+          className=" text-4xl md:text-6xl text-zinc-700 font-normal mt-2"
+          style={{
+            textShadow: "0 2px 4px #f4f3f2",
+            fontFamily: "cursive",
+          }}
+        >
           Electronics items
         </h1>
         <button
-          onClick={() => navigate("/categories")}
+          onClick={onScrollToCollections}
           className="text-blue-500 text-3xl md:text-gray-500  px-4 py-3 bg-white my-4 rounded-lg hover:text-gray-600 hover:bg-gray-50 transition-all duration-75 shadow-md hover:shadow-sm hover:cursor-pointer "
         >
           Learn More
@@ -112,7 +118,7 @@ const Hero = () => {
               ) : (
                 <img
                   className="w-6 aspect-square"
-                  src="/src/assets/icons/heroUser.png"
+                  src={userImg}
                   alt="Default user"
                 />
               )}
@@ -152,14 +158,14 @@ const Hero = () => {
         </div>
 
         {/* 2 */}
-        <motion.p
+        <motion.div
           className="child-2 flex-1 md:mt-4 md:mr-4 xl:m-4 xl:mt-0 xl:mb-4 w-[90%] mx-auto text-white bg-orange-400 text-[1.4rem] flex justify-center items-center p-4 rounded-lg text-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
           "Discover Deals, Delivered Daily."
-        </motion.p>
+        </motion.div>
         {/* 3 */}
         <motion.p
           className="child-3 flex-1 md:mt-4 md:mr-4 xl:m-4 xl:mt-0 xl:mb-4 w-[90%] mx-auto text-white bg-[#55BDC3] text-[1.4rem] flex justify-center items-center p-4 rounded-lg text-center"

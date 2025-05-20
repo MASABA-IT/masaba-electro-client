@@ -44,7 +44,12 @@ const CollectionItem = ({ item }) => {
         // ✅ Real Content after image is loaded
         <div className="">
           <div className="item-info space-y-2 ">
-            <h4 className="text-lg md:text-2xl font-serif">{item.title}</h4>
+            <h4 className="text-lg md:text-2xl font-serif ">
+              {" "}
+              {item.title.length > 20
+                ? item.title.slice(0, 20) + "..."
+                : item.title}
+            </h4>
 
             {hasDiscount ? (
               <div className="flex flex-col lg:flex-row items-center gap-2">
@@ -104,7 +109,7 @@ const Collection = ({ collection }) => {
   return (
     <div key={collection.id} className="collection-section shadow-sm ">
       <div className="block md:hidden p-4 bg-white">
-        <h2 className="text-xl font-semibold">{collection.title}</h2>
+        <h2 className="text-xl font-semibold ">{collection.title}</h2>
       </div>
       <div
         className="collection-left hidden md:block"
@@ -117,8 +122,11 @@ const Collection = ({ collection }) => {
           height: "100%",
         }}
       >
-        <h2 className="text-2xl md:text-3xl mb-6 font-semibold">
-          {collection.title}
+        <h2 className="text-2xl md:text-3xl mb-6 font-semibold ">
+          {" "}
+          {collection.title.length > 20
+            ? collection.title.slice(0, 20) + "..."
+            : collection.title}
         </h2>
         <Link
           to="/categories"

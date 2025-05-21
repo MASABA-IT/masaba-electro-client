@@ -35,8 +35,8 @@ const NavbarHeader = () => {
 
   // fetchSearchProducts({ collection_id: collectionId });
   return (
-    <div className="navbar_header">
-      <div className="navbar_content flex justify-between px-2 overflow-x-auto lg:overflow-visible text-sm">
+    <div className="navbar_header hidden sm:block">
+      <div className="navbar_content flex justify-between px-2 overflow-x-auto lg:overflow-visible text-sm  ">
         <div className="flex justify-between items-center gap-x-4 mr-4 ">
           <button className="hidden lg:flex">
             <IoMdMenu />

@@ -82,20 +82,21 @@ const ProfileSection = ({
   // console.log(result, "result");
 
   return (
-    <div className="profile-edit-form text-2xl">
-      <div className="relative w-32 h-32 sm:w-40  sm:h-40">
+    <div className="profile-edit-form text-2xl p-4 bg-white">
+      <div className="relative  w-full p-4">
         {/* Profile Image */}
-        <img
-          src={image}
-          alt="Profile"
-          className="rounded-full w-full h-full object-cover cursor-pointer transition-all duration-300"
-          onClick={handleImageClick}
-        />
-
+        <div className="w-full h-full  p-1 flex  justify-center  sm:justify-start  ">
+          <img
+            src={image}
+            alt="Profile"
+            className="   w-44 h-44 border-orange-50  rounded-full border-4 object-cover cursor-pointer transition-all duration-300 shadow-md"
+            onClick={handleImageClick}
+          />
+        </div>
         {/* Edit Icon */}
         <div
           onClick={handleImageClick}
-          className="absolute bottom-0 right-0 bg-white p-2 rounded-full shadow-lg cursor-pointer"
+          className="absolute bottom-0 right-5 sm:left-48 bg-white p-2 rounded-full   cursor-pointer"
         >
           <FaEdit className="text-blue-500" />
         </div>

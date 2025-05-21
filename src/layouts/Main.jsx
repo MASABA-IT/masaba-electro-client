@@ -5,6 +5,7 @@ import Navbar from "../shared/Navbar/Navbar";
 import Sidebar from "../Shared/Sidebar/Sidebar";
 import Footer from "../shared/Footer/Footer";
 import NavbarHeader from "../Shared/NavbarHeader/NavbarHeader";
+import MobileBottomNav from "../Shared/MobileBottom/MobileBottom";
 
 export default function Main() {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -22,6 +23,7 @@ export default function Main() {
       </main>
       {/* Footer */}
       <Footer />
+      <MobileBottomNav />
     </div>
   );
 }

@@ -21,7 +21,7 @@ const CategoryList = () => {
     // selectedRatings,
     // selectedItems,
     reset,
-    setReset, 
+    setReset,
   } = useProductStore();
   const { id } = useParams();
   const navigate = useNavigate();
@@ -35,6 +35,7 @@ const CategoryList = () => {
     "Price Range": true,
     // Ratings: true,
   });
+ 
   // const [expandedCategory, setExpandedCategory] = useState(null);
   const [showAllCategories, setShowAllCategories] = useState({});
 
@@ -74,7 +75,7 @@ const CategoryList = () => {
       setSelectedItems([...selectedItems, item]);
     }
   };
-
+  console.log(selectedBrands);
   // const handleSelectRating = (rating) => {
   //   setSelectedRatings(rating);
   // };
@@ -112,7 +113,7 @@ const CategoryList = () => {
           .map((filter, index) => (
             <li key={index} className="p-3 ">
               <button
-                onClick={() => toggleCategory(index, filter.name)}  
+                onClick={() => toggleCategory(index, filter.name)}
                 className="w-full text-left flex justify-between items-center font-semibold text-2xl text-gray-800 "
               >
                 {filter.name}
@@ -304,7 +305,6 @@ const CategoryList = () => {
             </li>
           ))}
       </ul>
-   
     </div>
   );
 };

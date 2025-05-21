@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FaHeart, FaShoppingCart, FaUser } from "react-icons/fa";
 import { HiMiniShoppingCart } from "react-icons/hi2";
 
@@ -42,7 +42,7 @@ const Navbar = ({ showSidebar, setShowSidebar }) => {
 
   const handleButtonClick = () => {
     if (userData?.token) {
-      navigate("/dashboard");
+      navigate("/dashboard/profile/0");
       // handleLogout(navigate);
     } else {
       navigate("/login");
@@ -137,6 +137,19 @@ const Navbar = ({ showSidebar, setShowSidebar }) => {
   const handleOrder = () => {
     navigate(`/dashboard/orders/1`);
   };
+  const dropdownRef = useRef(null);
+  // useEffect(() => {
+  //   function handleClickOutside(event) {
+  //     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+  //       setSearchProducts("");
+  //     }
+  //   }
+
+  //   document.addEventListener("mousedown", handleClickOutside);
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleClickOutside);
+  //   };
+  // }, []);
   return (
     <nav className="navbar shadow-sm">
       {/* Desktop View */}
@@ -164,7 +177,7 @@ const Navbar = ({ showSidebar, setShowSidebar }) => {
             </Link>
           </div>
           {/* Input field */}
-          <div className="relative md:w-[40%]  w-full">
+          <div className="relative md:w-[40%] w-full">
             <div className="h-14 flex items-center border-[1px] border-blue-500 rounded-lg overflow-hidden shadow-sm transform transition-transform duration-300 focus-within:scale-105">
               <input
                 type="text"
@@ -189,7 +202,7 @@ const Navbar = ({ showSidebar, setShowSidebar }) => {
                     Searching...
                   </div>
                 ) : (
-                  <div>
+                  <div ref={dropdownRef}>
                     {matchedProducts && notFound ? (
                       <ul className="max-h-80 overflow-y-auto custom-scrollbar divide-y divide-gray-100">
                         {matchedProducts.map((product) => (
@@ -355,11 +368,11 @@ const Navbar = ({ showSidebar, setShowSidebar }) => {
           {/* icons */}
           <div className="nav-icons flex gap-x-6 justify-between items-center text-gray-500">
             <button
-              className="flex flex-col items-center gap-y-3"
+              className="flex flex-col  items-center gap-y-3"
               onClick={handleButtonClick}
             >
               <FaUser
-                className={`text-xl ${
+                className={`text-2xl ${
                   userData?.token
                     ? "text-blue-400"
                     : "group-hover:text-blue-500"

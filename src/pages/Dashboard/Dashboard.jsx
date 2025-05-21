@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import defaultProfile from "../../assets/imgs/fake_profile.jpg";
 import {
@@ -10,6 +10,7 @@ import {
   FaSignOutAlt,
   FaEdit,
   FaAddressCard,
+  FaTimes,
 } from "react-icons/fa"; // Import icons from react-icons
 import { useProductStore } from "../../providers/AppProviders";
 import ProfileSection from "../../components/ProfileSection/ProfileSection";
@@ -17,6 +18,9 @@ import ChangePasswordSection from "../../components/ChangePasswordSection/Change
 import UserAddressSection from "../../components/UserAddressSection/UserAddressSection";
 import AddAddressModal from "../../components/AddAddressModal/AddAddressModal";
 import Swal from "sweetalert2";
+import { IoMdSettings } from "react-icons/io";
+import { MdPageview } from "react-icons/md";
+import { CiViewList } from "react-icons/ci";
 // import WishlistProducts from "../WishlistProducts/WishlistProducts";
 
 const Dashboard = () => {
@@ -34,7 +38,8 @@ const Dashboard = () => {
     getStatusColor,
   } = useProductStore();
   const [activeIndex, setActiveIndex] = useState(0);
-  const { orders, index } = useParams();
+  const { orders, profile, index } = useParams();
+  console.log(clientOrders, "clientOrders");
   const menuItems = [
     { name: "Profile", icon: <FaUser />, section: "profile" },
     {
@@ -131,6 +136,8 @@ const Dashboard = () => {
       if (orders === "orders") {
         fetchOrderList();
       }
+      // if (orders !== "profile") {
+      // }
     }
   }, [orders, index]);
   const handleMenuClick = (section, index) => {
@@ -263,11 +270,46 @@ const Dashboard = () => {
       setSelectedAddress(null);
     }
   };
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const toggleSidebar = () => {
+    console.log("click");
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+  const sidebarRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (
+        isSidebarOpen &&
+        sidebarRef.current &&
+        !sidebarRef.current.contains(e.target)
+      ) {
+        setIsSidebarOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isSidebarOpen]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedOrderId, setSelectedOrderId] = useState(null);
+  // Function to open and close the modal
+  const toggleModal = (orderID = null) => {
+    setIsModalOpen(!isModalOpen);
+    setSelectedOrderId(orderID);
+  };
 
   return (
-    <div className="dashboard__content ">
+    <div className="dashboard__content relative">
+      <button
+        onClick={toggleSidebar}
+        className={` absolute left-8 top-8 text-4xl text-amber-700 sm:hidden z-10 ${
+          orders === "profile" ? "block" : "hidden"
+        }`}
+      >
+        <IoMdSettings className="rounded-full backdrop-blur-sm bg-transparent  " />
+      </button>
       {/* Left Side: Profile Info */}
-      <div className="dashboard_left-listArea bg-white relative">
+      <div className="dashboard_left-listArea bg-white relative hidden md:block">
         <div className="profile-info p-4">
           {/* Title */}
           <h2 className="text-2xl font-bold">Profile</h2>
@@ -315,9 +357,53 @@ const Dashboard = () => {
           Logout
         </button>
       </div>
+      {/* Mobile Sidebar */}
+      {/* Sidebar */}
+      <div
+        ref={sidebarRef}
+        className={`md:hidden pt-10 fixed top-0 left-0 h-full  bg-white shadow-lg z-40 transform transition-transform duration-300
+        ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
+      >
+        <div className="p-4 relative">
+          {/* ❌ Close Button */}
+          <button
+            onClick={() => setIsSidebarOpen(false)}
+            className="absolute top-2 right-2 text-2xl text-gray-600 hover:text-red-500"
+          >
+            <FaTimes />
+          </button>
 
+          <h2 className="text-2xl font-bold mb-4 ">Menu</h2>
+
+          <div className="mt-6 flex flex-col gap-4">
+            {menuItems.map((item, index) => (
+              <button
+                key={index}
+                onClick={() => handleMenuClick(item.section, index)}
+                className={`flex items-center text-gray-700 gap-3 text-xl p-3 rounded transition
+                  ${
+                    activeIndex === index
+                      ? "bg-blue-300 text-white"
+                      : "hover:bg-blue-100"
+                  }
+                `}
+              >
+                {item.icon}
+                <span>{item.name}</span>
+              </button>
+            ))}
+          </div>
+
+          <button
+            onClick={handleLogout}
+            className="w-full text-2xl mt-8 bg-gray-600 hover:bg-blue-400 text-white p-3 rounded"
+          >
+            Logout
+          </button>
+        </div>
+      </div>
       {/* Right Side: Editable Profile or Other Sections */}
-      <div className="dashboard_right-profileArea bg-gray-100 p-4 rounded-lg ">
+      <div className={`dashboard_right-profileArea bg-white p-10 rounded-lg `}>
         {/* Conditional Rendering Based on Selected Section */}
         {selectedSection === "profile" && (
           <ProfileSection
@@ -333,34 +419,51 @@ const Dashboard = () => {
         )}
 
         {selectedSection === "orders" && (
-          <div>
-            <h3 className="text-xl mb-4">Orders</h3>
-            <p>Your orders will be displayed here.</p>
+          <div className="py-10 ">
+            <h3 className="text-2xl mb-4 ">Orders</h3>
+
+            <div className="flex flex-col sm:flex-row sm:justify-between ">
+              <p>Your orders will be displayed here.</p>
+              {clientOrders.length > 0 && (
+                <p>Total Orders: {clientOrders.length}</p>
+              )}
+            </div>
 
             {clientOrders && (
-              <div className="orders-list space-y-4 p-4">
+              <div className="orders-list space-y-4 p-4 max-h-[400px] overflow-y-auto">
                 {clientOrders.map((order) => (
                   <div
                     key={order.id}
                     className="order-card border rounded p-4 shadow-sm flex flex-col sm:flex-row justify-between sm:items-center gap-4 bg-white"
                   >
                     <div className="w-full sm:w-1/2">
-                      <p>
-                        <strong>Order ID:</strong> {order.id}
-                      </p>
-                      <p>
-                        <strong>Status:</strong>{" "}
-                        <span
-                          className={`font-semibold ${getStatusColor(
-                            order.status
-                          )}`}
+                      <div>
+                        {" "}
+                        <p>
+                          <strong>Order ID:</strong> #{order.id}
+                        </p>
+                        <p>
+                          <strong>Status:</strong>{" "}
+                          <span
+                            className={`font-semibold ${getStatusColor(
+                              order.status
+                            )}`}
+                          >
+                            {order.status}
+                          </span>
+                        </p>
+                        <p>
+                          <strong>Payment Method:</strong>{" "}
+                          {order.payment_method}
+                        </p>
+                        <button
+                          onClick={() => toggleModal(order.id)}
+                          className="flex justify-center items-center gap-x-2 text-2xl border-2 px-2 py-3 bg-blue-500 text-white rounded-xl"
                         >
-                          {order.status}
-                        </span>
-                      </p>
-                      <p>
-                        <strong>Payment Method:</strong> {order.payment_method}
-                      </p>
+                          <CiViewList className="text-3xl text-black" />
+                          <span>Views</span>
+                        </button>
+                      </div>
                     </div>
 
                     <div className="w-full sm:w-1/2 text-left sm:text-right space-y-1">
@@ -426,6 +529,48 @@ const Dashboard = () => {
 
         {selectedSection === "change-password" && <ChangePasswordSection />}
       </div>
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-md w-[90%] md:w-[600px] max-h-[80vh] overflow-y-auto relative">
+            <h2 className="text-2xl font-semibold mb-4">Order Products</h2>
+
+            {/* Filter and display products */}
+            {clientOrders
+              ?.filter((order) => order.id === selectedOrderId)
+              ?.map((order) => (
+                <div key={order.id} className="space-y-4">
+                  {order.order_details.map((item) => (
+                    <div
+                      key={item.id}
+                      className="flex gap-4 border rounded-md p-3 shadow-sm"
+                    >
+                      <img
+                        src={` ${BASE_URL}/${item.product.thumbnail}`}
+                        alt={item.product.title}
+                        className="w-20 h-20 object-cover rounded-md border"
+                      />
+                      <div>
+                        <h3 className="font-semibold">{item.product.title}</h3>
+                        <p className="text-gray-700">Price: ৳{item.price}</p>
+                        <p className="text-gray-700">
+                          Quantity: {item.quantity}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ))}
+
+            {/* Close Modal Button */}
+            <button
+              onClick={() => toggleModal()}
+              className="absolute top-2 right-4 text-4xl text-gray-600 hover:text-black"
+            >
+              &times;
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -53,7 +53,7 @@ const UserAddressSection = ({
   };
 
   return (
-    <div className="bg-white p-5 rounded-lg shadow-md">
+    <div className="bg-white  rounded-lg  p-5">
       {/* Header */}
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-semibold text-gray-800">Your Address</h2>

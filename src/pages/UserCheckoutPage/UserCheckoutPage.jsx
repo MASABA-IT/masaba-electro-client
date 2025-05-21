@@ -169,7 +169,6 @@ const UserCheckoutPage = () => {
       console.log("📦 Final Order Data:", finalOrderData);
 
       const result = await sendOrderToServer(finalOrderData);
- 
 
       if (result?.success) {
         Swal.fire({

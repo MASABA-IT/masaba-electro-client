@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { RxCross1 } from "react-icons/rx";
 import {
   FaHome,
@@ -8,21 +8,33 @@ import {
   FaEnvelope,
   FaInfoCircle,
   FaRegHeart,
+  FaListAlt,
+  FaFolderOpen,
 } from "react-icons/fa";
 import { ImUser } from "react-icons/im";
 import { useProductStore } from "../../providers/AppProviders";
 import { Link, useNavigate } from "react-router-dom";
 import CategoryList from "../../components/CategoryList/CategoryList";
 import MobileCategoryList from "../../components/MobileCategoryList/MobileCategoryList";
+import { TbPoint, TbPointFilled } from "react-icons/tb";
 
 const Sidebar = ({ showSidebar, setShowSidebar }) => {
-  const { userData, BASE_URL, setUserData, searchCategories } =
-    useProductStore();
+  const {
+    userData,
+    BASE_URL,
+    setUserData,
+    searchCategories,
+    navCollections = [],
+    loading,
+    setCollectionsId,
+    setCategoryId,
+    setSelectedCategories,
+  } = useProductStore();
   const profileData = userData?.profile?.data;
   const user = userData?.user;
 
   const imagePath = profileData?.image || user?.image;
-  const profileImg = imagePath ? `${BASE_URL}/${imagePath}` : null;
+
   const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.removeItem("userData");
@@ -49,9 +61,29 @@ const Sidebar = ({ showSidebar, setShowSidebar }) => {
       document.removeEventListener("mousedown", handleOutsideClick);
     };
   }, [showSidebar, setShowSidebar]);
+  //  const {
+  //   navCollections = [],
+  //   loading,
+  //   setCollectionsId,
+  //   setCategoryId,
+  //   setSelectedCategories,
+  // } = useProductStore();
+
+  const [waitCollections, setWaitCollections] = useState(true);
+
+  useEffect(() => {
+    if (!loading && navCollections?.length > 0) {
+      setWaitCollections(false);
+    }
+  }, [loading, navCollections]);
+
+  const handleCollectionClick = (id) => {
+    setSelectedCategories(null);
+    setCollectionsId(id);
+  };
   return (
     <aside
-      className={`sidebar ${showSidebar ? "show" : ""} bg-white  `}
+      className={`sidebar border ${showSidebar ? "show" : ""} bg-white  `}
       ref={sidebarRef}
     >
       <div className="flex flex-col px-10 relative backdrop-blur-md bg-white/20 border border-white/20 shadow-sm rounded-xl">
@@ -76,7 +108,7 @@ const Sidebar = ({ showSidebar, setShowSidebar }) => {
           <div className="profile-section bg-[#eaecec] flex justify-center items-center">
             {userData?.token ? (
               <img
-                src={profileImg}
+                src={imagePath ? `${BASE_URL}/${imagePath}` : null}
                 alt="Profile"
                 className="w-12 h-12 rounded-full object-cover shadow-md"
               />
@@ -87,19 +119,98 @@ const Sidebar = ({ showSidebar, setShowSidebar }) => {
 
           {/* Right Side - Name and Text */}
           <div className="text-left overflow-hidden">
-            <p className="text-lg font-semibold text-gray-800 truncate">
+            <p className="text-2xl font-semibold text-gray-800 truncate">
               {userData?.token ? userData.user?.name?.split(" ")[0] : "Guest"}
             </p>
-            <p className="text-sm text-gray-500 truncate">
-              {userData?.token ? "View Profile" : "Click to Login"}
-            </p>
+            <div
+              className="cursor-pointer"
+              onClick={() => {
+                if (userData?.token) {
+                  navigate("/dashboard");
+                } else {
+                  navigate("/login");
+                }
+                setShowSidebar(false);
+              }}
+            >
+              <p className="text-lg text-red-400 truncate">
+                {userData?.token ? "Welcome Back!" : "Click to Login ℹ️"}
+              </p>
+            </div>
           </div>
         </div>
 
         {/* Sign In/Register */}
+      </div>
+      <div className="w-full   px-6 py-6 bg-white   rounded-lg">
+        {/* All Category Section */}
+        <div className="mb-6">
+          <h3 className="text-2xl font-semibold text-gray-800 mb-3">
+            All Category
+          </h3>
+          <Link
+            to="/categories"
+            onClick={() => setCategoryId(1)}
+            className="group flex items-center gap-3 text-xl text-gray-700 hover:text-blue-600 transition font-medium underline"
+          >
+            <FaListAlt className="text-blue-400 group-hover:text-blue-600" />
+            All Categories
+          </Link>
+        </div>
+
+        {/* All Collections Section */}
+        <div>
+          <h3 className="text-xl font-semibold text-gray-800 mb-3 border-b pb-1">
+            All Collections
+          </h3>
+
+          <div className="flex flex-col gap-3  overflow-y-auto custom-scrollbar pr-1">
+            {waitCollections
+              ? Array.from({ length: 5 }).map((_, index) => (
+                  <div
+                    key={index}
+                    className="h-4 w-3/4 bg-gray-200 rounded animate-pulse "
+                  />
+                ))
+              : navCollections
+                  ?.slice()
+                  .reverse()
+                  .map((collection, index) => (
+                    <Link
+                      key={index}
+                      to="/categories"
+                      onClick={() => handleCollectionClick(collection.id)}
+                      className="group flex items-center gap-3 text-xl text-gray-600 hover:text-blue-600 transition underline"
+                    >
+                      <TbPoint className="text-orange-600 " />
+                      {collection.title.length > 25
+                        ? collection.title.slice(0, 25) + "..."
+                        : collection.title}
+                    </Link>
+                  ))}
+          </div>
+        </div>
+      </div>
+      {/* Main Navigation Sections */}
+      <div className="nav-section px-10 text-xl border-t py-2">
+        <div className="nav-group border-b">
+          <div className="flex gap-x-4 py-1">
+            <FaGlobe className="icon" /> <span>Bangladesh</span>
+          </div>
+          <div className="flex gap-x-4 py-1">
+            <FaEnvelope className="icon" /> <span>Contact Us</span>
+          </div>
+          <div className="flex gap-x-4 py-1">
+            <FaInfoCircle className="icon" /> <span>About</span>
+          </div>
+        </div>
+
         <div className="auth-section text-2xl">
           {userData?.token ? (
-            <button className="auth-btn text-red-500" onClick={handleLogout}>
+            <button
+              className="auth-btn text-red-50 w-full bg-gray-500 p-4"
+              onClick={handleLogout}
+            >
               Logout
             </button>
           ) : (
@@ -113,42 +224,6 @@ const Sidebar = ({ showSidebar, setShowSidebar }) => {
               </button>
             </>
           )}
-        </div>
-      </div>
-
-      {/* Main Navigation Sections */}
-      <div className="nav-section px-10 text-2xl">
-        <div className="nav-group border-b">
-          <Link to="/" className="nav-item">
-            <FaHome className="icon" /> <span>Home</span>
-          </Link>
-          <Link to="/categories" className="nav-item">
-            <FaThList className="icon" /> <span>Categories</span>
-          </Link>
-          <Link to="/wishlist" className="nav-item">
-            <FaRegHeart className="icon" /> <span>Favoriest</span>
-          </Link>
-          <Link to="/dashboard/orders/1" className="nav-item">
-            <FaBoxOpen className="icon" /> <span>My Orders</span>
-          </Link>
-        </div>
-
-        <div className="nav-group border-b">
-          <div className="nav-item">
-            <FaGlobe className="icon" /> <span>English | USD</span>
-          </div>
-          <div className="nav-item">
-            <FaEnvelope className="icon" /> <span>Contact Us</span>
-          </div>
-          <div className="nav-item">
-            <FaInfoCircle className="icon" /> <span>About</span>
-          </div>
-        </div>
-
-        <div className="nav-group text-only ml-10">
-          <button className="text-link text-start ">User Agreement</button>
-          <button className="text-link text-start ">Partnership</button>
-          <button className="text-link text-start ">Privacy Policy</button>
         </div>
       </div>
     </aside>

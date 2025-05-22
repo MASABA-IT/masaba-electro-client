@@ -11,6 +11,8 @@ import {
   FaEdit,
   FaAddressCard,
   FaTimes,
+  FaBars,
+  FaChevronRight,
 } from "react-icons/fa"; // Import icons from react-icons
 import { useProductStore } from "../../providers/AppProviders";
 import ProfileSection from "../../components/ProfileSection/ProfileSection";
@@ -361,8 +363,8 @@ const Dashboard = () => {
       {/* Sidebar */}
       <div
         ref={sidebarRef}
-        className={`md:hidden pt-10 fixed top-0 left-0 h-full  bg-white shadow-lg z-40 transform transition-transform duration-300
-        ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
+        className={`md:hidden pt-10 fixed top-0 left-0 h-full w-64 bg-white shadow-lg z-40 transform transition-transform duration-300
+    ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
       >
         <div className="p-4 relative">
           {/* ❌ Close Button */}
@@ -373,7 +375,7 @@ const Dashboard = () => {
             <FaTimes />
           </button>
 
-          <h2 className="text-2xl font-bold mb-4 ">Menu</h2>
+          <h2 className="text-2xl font-bold mb-4">Menu</h2>
 
           <div className="mt-6 flex flex-col gap-4">
             {menuItems.map((item, index) => (
@@ -381,12 +383,11 @@ const Dashboard = () => {
                 key={index}
                 onClick={() => handleMenuClick(item.section, index)}
                 className={`flex items-center text-gray-700 gap-3 text-xl p-3 rounded transition
-                  ${
-                    activeIndex === index
-                      ? "bg-blue-300 text-white"
-                      : "hover:bg-blue-100"
-                  }
-                `}
+            ${
+              activeIndex === index
+                ? "bg-blue-300 text-white"
+                : "hover:bg-blue-100"
+            }`}
               >
                 {item.icon}
                 <span>{item.name}</span>
@@ -402,6 +403,7 @@ const Dashboard = () => {
           </button>
         </div>
       </div>
+
       {/* Right Side: Editable Profile or Other Sections */}
       <div className={`dashboard_right-profileArea bg-white p-10 rounded-lg `}>
         {/* Conditional Rendering Based on Selected Section */}
@@ -445,7 +447,7 @@ const Dashboard = () => {
                         <p>
                           <strong>Status:</strong>{" "}
                           <span
-                            className={`font-semibold ${getStatusColor(
+                            className={`font-semibold text-2xl ${getStatusColor(
                               order.status
                             )}`}
                           >
@@ -458,9 +460,9 @@ const Dashboard = () => {
                         </p>
                         <button
                           onClick={() => toggleModal(order.id)}
-                          className="flex justify-center items-center gap-x-2 text-2xl border-2 px-2 py-3 bg-blue-500 text-white rounded-xl"
+                          className="flex justify-center items-center gap-x-2 text-xl  sm:text-2xl border-2 px-2 py-1 bg-blue-500 text-white rounded-xl"
                         >
-                          <CiViewList className="text-3xl text-black" />
+                          <CiViewList className="text-2xl sm:text-3xl text-white" />
                           <span>Views</span>
                         </button>
                       </div>

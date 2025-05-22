@@ -1,10 +1,9 @@
-@use "../utils/variables" as *;
-.home_content {
+.aboutUs_content {
   max-width: 140rem;
   width: 100%;
   height: auto;
   margin: 0 auto;
-  padding: 5px 20px;
+
   display: grid;
   grid-template-rows: minmax(45vh, auto) repeat(7, min-content);
   grid-template-columns:
@@ -15,16 +14,11 @@
     minmax(6rem, 1fr) [full-end];
 
   row-gap: 1rem;
-}
-@media (max-width: 768px) {
-  .home_content {
-    padding: 5px;
-    row-gap: 1rem; 
+
+  &--childOne {
+    grid-column: full-start/full-end;
   }
-}
-@media (max-width: 425px) {
-  .home_content {
-    padding: 0 !important;
-    grid-template-rows: 25vh repeat(7, min-content);
+  &--childTwo {
+    grid-column: full-start/full-end;
   }
 }

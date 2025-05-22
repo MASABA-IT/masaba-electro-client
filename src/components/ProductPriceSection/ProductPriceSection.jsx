@@ -66,17 +66,13 @@ const ProductPriceSection = ({
   // };
   const foundItem = cartItems.find((item) => item.id === parseInt(id));
   const isQtyAllowed = (id, stockLimit) => {
-    // If no item is found in cart, allow (true)
     if (!foundItem) return true;
-    console.log("quantity", quantity);
-    // Total quantity if user tries to increase
+
     const totalDesiredQty = foundItem.quantity + quantity;
-    console.log(totalDesiredQty, "");
-    // Allow only if total desired quantity is less than stock
+
     return totalDesiredQty < stockLimit;
   };
-  console.log(foundItem, "FoundItem");
-  console.log("-check ---", isQtyAllowed(id, stock));
+
   return (
     <div className="product_supplier w-full">
       <div className="flex flex-col border-2 rounded-2xl shadow-sm overflow-hidden px-5 py-6 gap-4">

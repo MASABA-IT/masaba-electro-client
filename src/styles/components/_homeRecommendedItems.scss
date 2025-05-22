@@ -28,7 +28,7 @@
   background-color: #fff;
   padding: 1.5rem;
   border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
   opacity: 0;
   transform: translateY(20px);
   transition: opacity 0.5s ease, transform 0.5s ease, box-shadow 0.3s ease;
@@ -43,7 +43,7 @@
 .home_recommendedItems .item-card.fade-in {
   opacity: 1;
   transform: translateY(0);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional: Stronger shadow on visible */
+   
 }
 
 /* Image Styling */

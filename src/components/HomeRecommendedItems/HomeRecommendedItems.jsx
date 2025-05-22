@@ -44,7 +44,7 @@ const HomeRecommendedItems = () => {
           <div
             key={item.id}
             id={`item-${item.id}`}
-            className={`item-card bg-white rounded-lg overflow-hidden shadow hover:shadow-xl transition-all duration-300 transform hover:scale-105 cursor-pointer ${
+            className={`item-card bg-white rounded-lg overflow-hidden shadow-md  hover:shadow-xl transition-all duration-300 transform hover:scale-105 cursor-pointer ${
               visibleItems.includes(`item-${item.id}`) ? "fade-in" : ""
             }`}
             onClick={() => handleProductClick(item.id)}

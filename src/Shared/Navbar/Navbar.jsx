@@ -312,7 +312,7 @@ const Navbar = ({ showSidebar, setShowSidebar }) => {
               <span className="text-sm">Wishlist</span>
               {showWishlist.length > 0 && (
                 <span
-                  className="absolute -top-2 right-0 text-white text-xs bg-red-500 rounded-full w-6 h-6 p-3 flex items-center justify-center"
+                  className="absolute -top-1 right-5 text-white text-xs bg-red-500 rounded-full w-6 h-6 p-3 flex items-center justify-center"
                   style={{ transform: "translate(50%, -50%)" }}
                 >
                   {showWishlist.length}
@@ -328,7 +328,7 @@ const Navbar = ({ showSidebar, setShowSidebar }) => {
               <HiMiniShoppingCart className="text-2xl" />
               {cartCount > 0 && (
                 <span
-                  className="absolute -top-2 right-0 text-white text-xs bg-red-500 rounded-full w-6 h-6 p-3 flex items-center justify-center"
+                  className="absolute -top-1 sm:right-5 text-white text-xs bg-red-500 rounded-full w-6 h-6 p-3 flex items-center justify-center"
                   style={{ transform: "translate(50%, -50%)" }}
                 >
                   {cartCount}
@@ -341,7 +341,7 @@ const Navbar = ({ showSidebar, setShowSidebar }) => {
       </div>
       {/* Mobile View */}
       <div className="md:hidden nav-content">
-        <div className="w-full flex-wrap flex gap-y-4 md:gap-y-0  justify-between items-center  ">
+        <div className="w-full px-2 flex-wrap flex gap-y-4 md:gap-y-0  justify-between items-center  ">
           <div>
             <div
               className="  flex justify-center items-center gap-2 text-3xl md:text-5xl font-black"
@@ -386,7 +386,7 @@ const Navbar = ({ showSidebar, setShowSidebar }) => {
               <HiMiniShoppingCart className="text-2xl" />
               {cartCount > 0 && (
                 <span
-                  className="absolute -top-2 right-0 text-white text-xs bg-red-500 rounded-full w-6 h-6 p-3 flex items-center justify-center"
+                  className="absolute -top-1 -right-1 text-white text-xs bg-red-500 rounded-full w-6 h-6 p-3 flex items-center justify-center"
                   style={{ transform: "translate(50%, -50%)" }}
                 >
                   {cartCount}

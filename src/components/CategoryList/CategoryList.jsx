@@ -35,7 +35,7 @@ const CategoryList = () => {
     "Price Range": true,
     // Ratings: true,
   });
- 
+
   // const [expandedCategory, setExpandedCategory] = useState(null);
   const [showAllCategories, setShowAllCategories] = useState({});
 
@@ -75,7 +75,7 @@ const CategoryList = () => {
       setSelectedItems([...selectedItems, item]);
     }
   };
-  console.log(selectedBrands);
+
   // const handleSelectRating = (rating) => {
   //   setSelectedRatings(rating);
   // };

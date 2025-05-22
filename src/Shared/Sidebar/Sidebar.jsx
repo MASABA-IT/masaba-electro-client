@@ -29,6 +29,7 @@ const Sidebar = ({ showSidebar, setShowSidebar }) => {
     setCollectionsId,
     setCategoryId,
     setSelectedCategories,
+    scrollToEmail,
   } = useProductStore();
   const profileData = userData?.profile?.data;
   const user = userData?.user;
@@ -81,6 +82,11 @@ const Sidebar = ({ showSidebar, setShowSidebar }) => {
     setSelectedCategories(null);
     setCollectionsId(id);
   };
+  const handleContactClick = () => {
+    setShowSidebar(false); // optional: close sidebar
+    scrollToEmail(); // scroll to HomeEmail section
+  };
+
   return (
     <aside
       className={`sidebar border ${showSidebar ? "show" : ""} bg-white  `}
@@ -197,12 +203,16 @@ const Sidebar = ({ showSidebar, setShowSidebar }) => {
           <div className="flex gap-x-4 py-1">
             <FaGlobe className="icon" /> <span>Bangladesh</span>
           </div>
-          <div className="flex gap-x-4 py-1">
-            <FaEnvelope className="icon" /> <span>Contact Us</span>
-          </div>
-          <div className="flex gap-x-4 py-1">
+          <button
+            onClick={handleContactClick}
+            className="flex items-center gap-x-4 py-1 text-left w-full"
+          >
+            <FaEnvelope className="icon" />
+            <span>Contact Us</span>
+          </button>
+          <Link to="/about" className="flex gap-x-4 py-1">
             <FaInfoCircle className="icon" /> <span>About</span>
-          </div>
+          </Link>
         </div>
 
         <div className="auth-section text-2xl">

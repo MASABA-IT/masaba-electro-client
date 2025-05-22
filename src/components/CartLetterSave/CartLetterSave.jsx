@@ -16,7 +16,7 @@ const CartLetterSave = () => {
     if (showWishlist.length > 0) {
       setTimeout(() => setIsLoading(false), 800);
     }
-  }, [showWishlist]);
+  }, []);
 
   const skeletonCount = showWishlist.length || 4;
 
@@ -30,9 +30,7 @@ const CartLetterSave = () => {
     updateWishlistInLocalStorage(productId, "remove");
     setTimeout(() => setIsLoading(false), 300);
   };
-  console.log(showWishlist); // ${
-  //   showWishlist.length !== 0 ? "block" : "none"
-  // }
+
   return (
     <div
       className={`cartLetterSave bg-white border-2 rounded-xl `}

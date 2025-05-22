@@ -1,5 +1,5 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { buildSearchQuery } from "../utils/buildSearchQuery";
 import axios from "axios";
 import Swal from "sweetalert2";
@@ -15,6 +15,7 @@ export const AppProvider = ({ children }) => {
   //1 GLOBAL STATES
   const [categories, setCategories] = useState([]);
   const [showWishlist, setShowWishlist] = useState([]);
+
   const [cartData, setCartData] = useState(
     JSON.parse(localStorage.getItem("cartData")) || []
   );
@@ -53,7 +54,11 @@ export const AppProvider = ({ children }) => {
   const [selectedDeliveryId, setSelectedDeliveryId] = useState(
     deliveryOptions.length > 0 ? deliveryOptions[0].id : null
   );
+  const emailRef = useRef(null); // 👈 Create ref
 
+  const scrollToEmail = () => {
+    emailRef.current?.scrollIntoView({ behavior: "smooth" }); // 👈 Scroll to HomeEmail
+  };
   ///LOGIN&SIGNUP
   const [formData, setFormData] = useState({
     username: "",
@@ -267,7 +272,7 @@ export const AppProvider = ({ children }) => {
     try {
       const response = await fetch(`${BASE_URL}/api/product/view/${id}`);
       const data = await response.json();
-      console.log(data);
+
       setProductData(data);
     } catch (error) {
       console.error("Error fetching product data:", error);
@@ -433,7 +438,6 @@ export const AppProvider = ({ children }) => {
     // const { products } = allData;
     // const { id } = selectedFilters;
     // // const { id, category, condition } = selectedFilters;
-    // console.log(products, id);
     // return products.filter((product) => {
     //   // Filter by category (single string match)
     //   // if (category && product.category !== category) {
@@ -469,7 +473,6 @@ export const AppProvider = ({ children }) => {
       });
 
       if (response.ok) {
-        console.log("Logout successful ✅");
       } else {
         console.warn("Logout request failed, but clearing local data anyway.");
       }
@@ -923,7 +926,7 @@ export const AppProvider = ({ children }) => {
       const payload = {
         ...summaryData,
       };
-      console.log(payload, "payloads");
+
       const res = await fetch(`${BASE_URL}/api/order-place`, {
         method: "POST",
         headers: {
@@ -936,7 +939,6 @@ export const AppProvider = ({ children }) => {
       const result = await res.json();
 
       if (res.ok) {
-        console.log("Order placed successfully", result);
         return { success: true, data: result };
       } else {
         console.error("Order failed", result.message);
@@ -971,7 +973,7 @@ export const AppProvider = ({ children }) => {
     if (selectedBrands?.length) {
       const brandIds = selectedBrands.map((brand) => brand.id);
 
-      apiUrl += `"brand_id"=[${brandIds.join(",")}]&`; //must be array for use qottaion
+      apiUrl += `brand_id=${brandIds.join(",")}&`; //must be array for use qottaion
     }
 
     if (selectedFeatures?.length) {
@@ -1016,6 +1018,7 @@ export const AppProvider = ({ children }) => {
 
       setCurrentPage(data?.Products?.current_page);
       setFilteredProducts(data);
+
       setTotalPages(data?.Products?.last_page);
     } catch (error) {
       console.error("Error fetching filtered products", error);
@@ -1046,12 +1049,28 @@ export const AppProvider = ({ children }) => {
       case "delivered":
         return "text-green-500";
       case "cancelled":
-      case "canceled":
         return "text-red-500";
       default:
         return "text-gray-500";
     }
   };
+  const [contactDetails, setContactDetails] = useState(null);
+
+  useEffect(() => {
+    const fetchContactDetails = async () => {
+      try {
+        const response = await axios.get(`${BASE_URL}/api/frontends`);
+        const frontendData = response.data?.frontends?.[0];
+        if (frontendData) {
+          setContactDetails(frontendData);
+        }
+      } catch (error) {
+        console.error("Error fetching contact details:", error);
+      }
+    };
+
+    fetchContactDetails();
+  }, []);
 
   const appInfo = {
     BASE_URL,
@@ -1174,6 +1193,10 @@ export const AppProvider = ({ children }) => {
     //mobile sidebar-filter
     mobileSidebarFilter,
     setMobileSidebarFilter,
+    //contactus
+    emailRef,
+    scrollToEmail,
+    contactDetails,
   };
   return <AppContext.Provider value={appInfo}>{children}</AppContext.Provider>;
 };

@@ -185,7 +185,7 @@ const Footer = () => {
               <span className="">{siteMeta?.site_name}</span>
             </div>
             <p className="py-4 text-gray-500">{siteMeta?.site_description}</p>
-            <ul className="social-links flex lg:justify-start items-center sm:gap-x-4 lg:gap-x-10">
+            <ul className="social-links flex lg:justify-start items-center gap-x-2 sm:gap-x-4 lg:gap-x-10">
               {socialLinks.map((link, index) => (
                 <li key={index} className="group hover:cursor-pointer">
                   <a

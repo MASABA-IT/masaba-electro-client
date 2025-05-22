@@ -14,6 +14,7 @@ import WishlistProducts from "../pages/WishlistProducts/WishlistProducts";
 import GuestCheckoutPage from "../pages/GuestCheckoutPage/GuestCheckoutPage";
 import UserCheckoutPage from "../pages/UserCheckoutPage/UserCheckoutPage";
 import ForgotPassword from "../pages/ForgotPassword/ForgotPassword";
+import AboutUs from "../pages/AboutUs/AboutUs";
 
 const AppRoutes = () => {
   const router = createBrowserRouter([
@@ -44,6 +45,10 @@ const AppRoutes = () => {
         {
           path: "/wishlist",
           element: <WishlistProducts />,
+        },
+        {
+          path: "/about",
+          element: <AboutUs />,
         },
         {
           path: "/login",
@@ -80,6 +85,14 @@ const AppRoutes = () => {
         },
         {
           path: "/dashboard/:orders/:index",
+          element: (
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          ),
+        },
+        {
+          path: "/dashboard/:profile/:index",
           element: (
             <PrivateRoute>
               <Dashboard />

@@ -83,9 +83,7 @@ const ProductDetails = () => {
       body: JSON.stringify(data),
     })
       .then((response) => response.json())
-      .then((data) => {
-        console.log("Product added to wishlist:", data);
-      })
+      .then((data) => {})
       .catch((error) => {
         console.error("Error adding to wishlist:", error);
       });

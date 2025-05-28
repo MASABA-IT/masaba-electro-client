@@ -1,16 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import checkout from "../../assets/imgs/shoppingBag.webp";  
+import checkout from "../../assets/imgs/shoppingBag.webp";
 
 const GuestCheckoutHeader = () => {
   return (
     <div className="w-full guestCheckout_header bg-gradient-to-br from-cyan-600 to-teal-500 text-white shadow-md min-h-[200px] flex justify-center items-center relative overflow-hidden">
       {/* Left Side - Image (object-contain) */}
-      <div className="absolute top-1/2 left-1/3 transform -translate-x-[60%] -translate-y-1/2 h-full p-4">
+      <div className="absolute top-[67%] left-[25%]   sm:top-1/2 sm:left-1/3 transform -translate-x-[60%] -translate-y-1/2 h-full p-4">
         <img
           src={checkout}
           alt="Checkout"
-          className="w-[70%] h-[90%] object-contain"
+          className="w-[65%] h-[55%] sm:w-[70%] sm:h-[90%] object-contain"
         />
       </div>
 

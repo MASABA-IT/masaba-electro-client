@@ -32,6 +32,17 @@
 .cart_discount {
   grid-column: full-start/full-end;
 }
+.my-custom-btn {
+  background-color: #9facd4 !important; /* Blue background */
+  color: white !important; /* White text */
+  border: 2px solid #ced1da !important; /* Blue border */
+  border-radius: 6px !important; /* Rounded corners */
+  padding: 8px 20px !important;
+}
+.my-custom-btn:hover {
+  background-color: #7488c0 !important; /* Darker blue on hover */
+  border-color: #262b3b !important;
+}
 /* For screen ≤ 1024px (laptop/tablet) */
 @media (max-width: 1024px) {
 }

@@ -1,13 +1,12 @@
 @use "../utils/variables" as *;
 .footer {
   width: 100%;
-
   text-align: center;
+  background-color: rgb(7, 31, 56);
 }
 
 .footer_content {
- 
-  color: rgb(31, 29, 29);
+  color: rgb(252, 248, 248);
   max-width: 140rem;
   width: 100%;
   margin: 0 auto;

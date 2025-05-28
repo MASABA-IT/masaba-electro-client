@@ -41,7 +41,12 @@ const CategoryList = () => {
 
   // Update the selected price range when the slider changes
   useEffect(() => {
-    setSelectedPriceRange({ min: minPrice, max: maxPrice });
+    const handler = setTimeout(() => {
+      setSelectedPriceRange({ min: minPrice, max: maxPrice });
+    }, 500);
+
+    return () => clearTimeout(handler);
+    // setSelectedPriceRange({ min: minPrice, max: maxPrice });
   }, [minPrice, maxPrice, setSelectedPriceRange]);
   // useEffect(() => {
   //   if (id) {
@@ -173,7 +178,7 @@ const CategoryList = () => {
                     {/* TYPE: range */}
 
                     {filter.type === "range" && (
-                      <div className="text-2xl flex flex-col justify-center items-center">
+                      <div className="text-2xl flex flex-col justify-center items-center ">
                         <Slider
                           value={[Number(minPrice), Number(maxPrice)]}
                           onChange={(e, newValue) => {
@@ -181,7 +186,7 @@ const CategoryList = () => {
                             setMaxPrice(newValue[1].toString());
                           }}
                           min={0}
-                          max={5000}
+                          max={50000}
                           valueLabelDisplay="auto"
                         />
                         <div className="flex space-x-2 mt-2 w-full">
@@ -274,7 +279,7 @@ const CategoryList = () => {
                           return (
                             <label
                               key={idx}
-                              className={`py-2 block text-gray-500  cursor-pointer text-2xl   ${
+                              className={`py-2 block text-gray-500  cursor-pointer text-2xl ${
                                 isSelected ? "bg-blue-100 text-blue-600" : ""
                               } hover:text-blue-500 hover:bg-gray-100`}
                               onClick={() => handleCategorySelect(cat)}

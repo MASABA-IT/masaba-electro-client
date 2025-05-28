@@ -10,10 +10,14 @@ import CartLetterSave from "../../components/CartLetterSave/CartLetterSave";
 import { useProductStore } from "../../providers/AppProviders";
 
 const AllCartPage = () => {
-  const { removeFromCart } = useProductStore();
+  const { removeFromCart, fetchDeliveryOptions, deliveryOptions } =
+    useProductStore();
   const [couponCode, setCouponCode] = useState("");
   const [discount, setDiscount] = useState(0);
   const [cartData, setCartData] = useState([]);
+  useEffect(() => {
+    fetchDeliveryOptions();
+  }, []);
 
   const paymentOptions = [
     { src: "/src/assets/imgs/payment1.png", alt: "Payment Option 1" },
@@ -32,26 +36,47 @@ const AllCartPage = () => {
     );
     setCartData(updatedCart);
   };
-
   useEffect(() => {
-    const getCartFromLocalStorage = () => {
+    let prevCart = null;
+
+    const checkCart = () => {
       try {
         const storedCart = JSON.parse(localStorage.getItem("cartData")) || [];
-        setCartData(storedCart);
+        if (JSON.stringify(storedCart) !== JSON.stringify(prevCart)) {
+          setCartData(storedCart);
+          prevCart = storedCart;
+        }
       } catch (err) {
-        console.error("Error reading cartData from localStorage:", err);
-        setCartData([]);
+        console.error(err);
       }
     };
 
-    getCartFromLocalStorage(); // Initial load
+    checkCart();
 
-    const interval = setInterval(() => {
-      getCartFromLocalStorage();
-    }, 500); // Optional polling
+    const interval = setInterval(checkCart, 2000);  
 
     return () => clearInterval(interval);
   }, []);
+ 
+  // useEffect(() => {
+  //   const getCartFromLocalStorage = () => {
+  //     try {
+  //       const storedCart = JSON.parse(localStorage.getItem("cartData")) || [];
+  //       setCartData(storedCart);
+  //     } catch (err) {
+  //       console.error("Error reading cartData from localStorage:", err);
+  //       setCartData([]);
+  //     }
+  //   };
+
+  //   getCartFromLocalStorage(); // Initial load
+
+  //   const interval = setInterval(() => {
+  //     getCartFromLocalStorage();
+  //   }, 500);
+
+  //   return () => clearInterval(interval);
+  // }, []);
 
   // Remove Item Logic
   // const removeItem = (id) => {
@@ -69,7 +94,6 @@ const AllCartPage = () => {
 
   // Save for Later (Placeholder)
   const saveForLater = (id) => {
-    console.log(`Item ${id} saved for later`);
     setNotification("Item saved for later.");
     setTimeout(() => setNotification(null), 3000);
   };
@@ -98,12 +122,11 @@ const AllCartPage = () => {
   };
 
   const onCheckout = () => {
-    console.log("Proceeding to checkout");
     navigate("/user-checkout");
   };
   return (
     <div className="carts">
-      <h2 className="carts_count text-2xl xl:text-4xl py-4 px-6 font-semibold text-gray-600">
+      <h2 className="carts_count text-xl xl:text-2xl py-4 px-6 font-semibold text-gray-600">
         My cart <span>&#40;{cartData.length}&#41;</span>
       </h2>
 

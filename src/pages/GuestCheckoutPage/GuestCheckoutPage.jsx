@@ -80,18 +80,15 @@ const GuestCheckoutPage = () => {
     const stringDivisions = divisions?.divisions[value];
 
     setFormData((prev) => ({ ...prev, [id]: value }));
-    console.log(divisions, "-----");
 
     // Updating context on input change
     if (id === "division") {
       setSelectedDivision(stringDivisions.id);
     } else if (id === "district") {
       setSelectedDistrict(value);
-      console.log("district", value);
     } else if (id === "thana") {
       setSelectedThana(value);
     } else if (id === "union") {
-      console.log("uinon", value);
       setSelectedUnion(value);
     }
   };
@@ -155,17 +152,16 @@ const GuestCheckoutPage = () => {
         orderId
       );
     } catch (err) {
-      console.error("❌ Order Error:", err);
       alert("Failed to place order.");
     }
   };
 
   const showSuccessAlert = (title, message, logo, orderId) => {
     Swal.fire({
-      title: `<strong style="font-size: 18px;">${title}</strong>`,
+      title: `<strong style="font-size: 18px;">${title}Your order details and tracking information have been sent to your email.</strong>`,
       html: `
       <p style="margin-bottom: 6px;">${message}</p>
-      <p style="font-size: 14px; color: #065f46;"><strong>Order ID:</strong> #Masaba-${orderId}</p>
+      <p style="font-size: 14px; color: #065f46;"><strong>Order ID:</strong> #${orderId}</p>
     `,
       text: message,
       icon: "success",
@@ -201,7 +197,7 @@ const GuestCheckoutPage = () => {
         {/* Left: Scrollable Form */}
         <div className="guestCheckout_form max-h-[80vh] overflow-y-auto rounded-lg">
           <h2
-            className="text-4xl font-semibold mb-4"
+            className="text-3xl text-gray-600 font-semibold mb-4"
             style={{ fontFamily: "cursive" }}
           >
             Billing details
@@ -210,18 +206,18 @@ const GuestCheckoutPage = () => {
           {/* Sample form inputs */}
           <form className="space-y-6 text-base md:text-lg mx-auto">
             {/* Full Name */}
-            <div className="relative">
+            <div className="relative ">
               <input
                 type="text"
                 id="fullName"
                 value={formData.fullName}
                 onChange={handleChange}
                 placeholder=" "
-                className="peer w-full border text-2xl border-gray-300 p-4 pt-8 rounded-md focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
+                className="peer w-full border text-2xl border-gray-300  p-3 pt-8 rounded-md focus:outline-none "
               />
               <label
                 htmlFor="fullName"
-                className="absolute left-4 top-2 text-gray-500 text-2xl transition-all
+                className="absolute left-4 top-3 text-gray-500 text-2xl transition-all
                 peer-placeholder-shown:top-4
                 peer-placeholder-shown:text-2xl
                 peer-placeholder-shown:text-gray-400
@@ -241,7 +237,7 @@ const GuestCheckoutPage = () => {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder=" "
-                className="peer w-full border text-2xl border-gray-300 p-4 pt-8 rounded-md focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
+                className="peer w-full border text-2xl border-gray-300 p-4 pt-8 rounded-md focus:outline-none  "
               />
               <label
                 htmlFor="email"
@@ -265,7 +261,7 @@ const GuestCheckoutPage = () => {
                 value={formData.phone}
                 onChange={handleChange}
                 placeholder=" "
-                className="peer w-full border text-2xl border-gray-300 p-4 pt-8 rounded-md focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
+                className="peer w-full border text-2xl border-gray-300 p-4 pt-8 rounded-md focus:outline-none  "
               />
               <label
                 htmlFor="phone"
@@ -288,7 +284,7 @@ const GuestCheckoutPage = () => {
                 value={formData.address}
                 onChange={handleChange}
                 placeholder=" "
-                className="peer w-full border text-2xl border-gray-300 p-4 pt-8 rounded-md focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
+                className="peer w-full border text-2xl border-gray-300 p-4 pt-8 rounded-md focus:outline-none  "
               />
               <label
                 htmlFor="address"
@@ -311,7 +307,7 @@ const GuestCheckoutPage = () => {
                 value={formData.zipCode}
                 onChange={handleChange}
                 placeholder=" "
-                className="peer w-full border text-2xl border-gray-300 p-4 pt-8 rounded-md focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
+                className="peer w-full border text-2xl border-gray-300 p-4 pt-8 rounded-md focus:outline-none  "
               />
               <label
                 htmlFor="zipCode"
@@ -335,7 +331,7 @@ const GuestCheckoutPage = () => {
                   id="division"
                   value={formData?.divisions}
                   onChange={handleChange}
-                  className="peer w-full border text-2xl border-gray-300 p-4 pt-8 rounded-md bg-white focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
+                  className="peer w-full border text-2xl border-gray-300 p-4 pt-8 rounded-md bg-white focus:outline-none  "
                 >
                   <option value="">Select Division</option>
                   {divisions?.divisions?.map((item) => (
@@ -364,7 +360,7 @@ const GuestCheckoutPage = () => {
                   id="district"
                   value={formData?.districts}
                   onChange={handleChange}
-                  className="peer w-full border text-2xl border-gray-300 p-4 pt-8 rounded-md bg-white focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
+                  className="peer w-full border text-2xl border-gray-300 p-4 pt-8 rounded-md bg-white focus:outline-none  "
                 >
                   <option value="">Select District</option>
                   {districts?.districts?.map((item) => (
@@ -393,7 +389,7 @@ const GuestCheckoutPage = () => {
                   id="thana"
                   value={formData.thanas}
                   onChange={handleChange}
-                  className="peer w-full border text-2xl border-gray-300 p-4 pt-8 rounded-md bg-white focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
+                  className="peer w-full border text-2xl border-gray-300 p-4 pt-8 rounded-md bg-white focus:outline-none  "
                 >
                   <option value="">Select Thana</option>
                   {thanas?.thanas?.map((item) => (
@@ -422,7 +418,7 @@ const GuestCheckoutPage = () => {
                   id="union"
                   value={formData.union}
                   onChange={handleChange}
-                  className="peer w-full border text-2xl  border-gray-300 p-4 pt-8 rounded-md bg-white focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500"
+                  className="peer w-full border text-2xl  border-gray-300 p-4 pt-8 rounded-md bg-white focus:outline-none  "
                 >
                   <option value="">Select Union</option>
                   {unions?.unions?.map((item) => (

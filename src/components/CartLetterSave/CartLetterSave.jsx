@@ -6,18 +6,26 @@ import { useNavigate } from "react-router-dom";
 import { updateWishlistInLocalStorage } from "../../utils/wishlist";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css"; // ✅ import Swiper styles
+import { AiOutlineInfoCircle } from "react-icons/ai";
 
 const CartLetterSave = () => {
   const { showWishlist, BASE_URL } = useProductStore();
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
-
+  // useEffect(() => {
+  //   if (showWishlist.length > 0) {
+  //     setTimeout(() => setIsLoading(false), 800);
+  //   }
+  // }, []);
   useEffect(() => {
     if (showWishlist.length > 0) {
-      setTimeout(() => setIsLoading(false), 800);
+      setIsLoading(true);
+      const timeout = setTimeout(() => setIsLoading(false), 300);
+      return () => clearTimeout(timeout); // cleanup
+    } else {
+      setIsLoading(false);
     }
-  }, []);
-
+  }, [showWishlist]);
   const skeletonCount = showWishlist.length || 4;
 
   const handleCardClick = (productId) => {
@@ -80,7 +88,7 @@ const CartLetterSave = () => {
                   />
                 </div>
 
-                {product.discount_price &&
+                {/* {product.discount_price &&
                 parseFloat(product.discount_price) <
                   parseFloat(product.base_price) ? (
                   <div className="flex justify-start items-center gap-x-2">
@@ -95,26 +103,27 @@ const CartLetterSave = () => {
                   <p className="text-[1.6rem] font-bold text-[#ad7d3e] mb-1">
                     ৳&nbsp;{product.base_price}
                   </p>
-                )}
-
-                <h2 className="text-2xl font-medium text-gray-600 mb-3 text-center line-clamp-2">
+                )} */}
+                <p className="text-2xl sm:text-xl text-center   text-gray-600 mb-1">
+                  ৳&nbsp;{product.base_price}
+                </p>
+                <h2 className="text-xl sm:text-2xl font-medium text-gray-600 mb-3 text-center line-clamp-2">
                   {product.title}
                 </h2>
-
                 <div className="mt-auto btn_group flex justify-between text-xl">
                   <button
                     onClick={() => handleCardClick(product.id)}
                     className="text-blue-500 font-semibold border-2 px-3 py-1 rounded-lg hover:bg-gray-200 transition flex items-center gap-x-2"
                   >
-                    <MdOutlineShoppingCart className="text-xl" />
-                    <span>View Details</span>
+                    <AiOutlineInfoCircle className="text-2xl mx-4 sm:mx-0" />
+                    <span className="hidden sm:block">View Details</span>
                   </button>
                   <button
                     onClick={(e) => handleRemoveItem(e, product.id)}
                     className="text-red-400 font-semibold border-2 px-3 py-1 rounded-lg hover:bg-gray-200 transition flex items-center gap-x-2"
                   >
-                    <IoMdRemoveCircle className="text-xl" />
-                    <span>Remove</span>
+                    <IoMdRemoveCircle className="text-2xl mx-4 sm:mx-0" />
+                    <span className="hidden sm:block">Remove</span>
                   </button>
                 </div>
               </div>

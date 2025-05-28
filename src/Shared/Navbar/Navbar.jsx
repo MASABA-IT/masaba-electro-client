@@ -12,7 +12,6 @@ const Navbar = ({ showSidebar, setShowSidebar }) => {
     useProductStore();
   // Your cartItems state (you can replace this with actual data)
   const [cartCount, setCartCount] = useState(0);
-
   const location = useLocation();
   const [matchedProducts, setMatchedProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -167,11 +166,14 @@ const Navbar = ({ showSidebar, setShowSidebar }) => {
               className="flex justify-center items-center gap-2 "
               style={{ textShadow: "1px 1px #333" }}
             >
-              <img
-                src={`${BASE_URL}/${logo}`}
-                alt="Brand Logo"
-                className="brand-logo md:w-12"
-              />
+              {logo && (
+                <img
+                  src={`${BASE_URL}/${logo}`}
+                  alt="Brand Logo"
+                  className="brand-logo md:w-12"
+                />
+              )}
+
               <span className="text-stone-600">Masaba </span>
               <span className="text-orange-400"> Bazar </span>
             </Link>
@@ -269,21 +271,29 @@ const Navbar = ({ showSidebar, setShowSidebar }) => {
                 }`}
               />
               <span
-                className={`text-sm uppercase font-bold font-mono ${
+                className={`text-sm uppercase font-semibold font-mono ${
                   userData?.token
-                    ? "text-blue-700"
+                    ? "text-yellow-700"
                     : "group-hover:text-blue-500"
                 }`}
                 style={{ textShadow: "0px 1px 4px #f2f2f2" }}
               >
                 {userData?.token
-                  ? userData?.user?.name?.trim().split(" ").length === 1
-                    ? userData.user.name
-                    : userData.user.name
-                        .trim()
-                        .split(" ")
-                        .map((word) => word[0])
-                        .join("")
+                  ? (() => {
+                      const name = userData.user.name?.trim();
+                      const words = name.split(" ");
+                      if (words.length === 1) {
+                        return name.length > 6
+                          ? name.slice(0, 6).toUpperCase()
+                          : name;
+                      } else {
+                        // Show initials
+                        return words
+                          .map((w) => w[0])
+                          .join("")
+                          .toUpperCase();
+                      }
+                    })()
                   : "Login"}
               </span>
             </button>

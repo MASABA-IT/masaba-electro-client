@@ -25,7 +25,7 @@ const GuestBillingSummary = ({ handlePlaceOrder }) => {
         className="overflow-y-auto pr-2 mb-4"
         style={{
           maxHeight: "384px", // Height for 3 items (128px per item)
-          minHeight: "384px", // Ensures consistent height even if <3 items
+          minHeight: "44px", // Ensures consistent height even if <3 items
         }}
       >
         <div className="grid grid-cols-1 gap-2">
@@ -58,9 +58,9 @@ const GuestBillingSummary = ({ handlePlaceOrder }) => {
       </div>
 
       {/* Billing Summary & Button (Sticky Bottom) */}
-      <div className="sticky bottom-0 bg-white p-6 rounded-lg shadow-lg mt-auto">
-        <ul className="space-y-4 text-base sm:text-xl">
-          <li className="flex justify-between text-gray-700">
+      <div className="sticky bottom-20 bg-white p-6 rounded-lg shadow-lg mt-auto">
+        <ul className="space-y-4 text-lg sm:text-xl">
+          <li className="flex justify-between text-gray-700 ">
             <span className="font-medium">Subtotal</span>
             <span className="font-semibold">৳{subtotal.toFixed(2)}</span>
           </li>
@@ -81,7 +81,7 @@ const GuestBillingSummary = ({ handlePlaceOrder }) => {
         </ul>
         <button
           onClick={handlePlaceOrder}
-          className="w-full text-3xl p-4 border rounded-lg bg-[#010B40] my-4 text-white hover:bg-[#020E50] transition-colors"
+          className="w-full text-2xl p-4 border rounded-lg bg-[#010B40] my-4 text-white hover:bg-[#020E50] transition-colors"
           style={{ textShadow: "0 3px 4px #333" }}
         >
           Place Order

@@ -1,12 +1,19 @@
-import React from "react";
-import { IoCheckmark, IoClose } from "react-icons/io5";
+import React, { useState } from "react";
+import { IoCheckmark, IoClose, IoCloseSharp } from "react-icons/io5";
 import { GoDotFill } from "react-icons/go";
 import { CgComment } from "react-icons/cg";
 import { MdOutlineShoppingBasket } from "react-icons/md";
 import StarRating from "../StarRating/StarRating";
+import { useProductStore } from "../../providers/AppProviders";
 
 const ProductInfo = ({ product }) => {
+  const { BASE_URL } = useProductStore();
+  const [showModal, setShowModal] = useState(false);
+  const [hovered, setHovered] = useState(false);
   if (!product) return null;
+
+  const categoryBook =
+    product?.category?.title?.trim()?.toLowerCase() === "book";
 
   return (
     <div className="product_info md:px-4 xl:px-10 py-2 mt-10 md:mt-0 xl:mt-0">
@@ -69,11 +76,89 @@ const ProductInfo = ({ product }) => {
           </div>
         </>
       </div>
+      {categoryBook && product?.pdf_file && (
+        <div className="mt-4 flex flex-col sm:flex-row justify-start items-start sm:items-center gap-2">
+          <p className="text-xl sm:text-2xl">
+            এই বই সম্পর্কে আরেকটু ধারণা পাবার জন্য{" "}
+          </p>
+          <button
+            onClick={() => setShowModal(true)}
+            className="px-4 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition"
+          >
+            একটু পড়ুন
+          </button>
+        </div>
+      )}
+
+      {/* PDF Modal */}
+      {showModal && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            backgroundColor: "rgba(0, 0, 0, 0.6)",
+            zIndex: 1000,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: "white",
+              padding: "20px",
+              borderRadius: "8px",
+              maxWidth: "90%",
+              width: "800px",
+              height: "90vh",
+              position: "relative",
+            }}
+          >
+            <button
+              onClick={() => setShowModal(false)}
+              onMouseEnter={() => setHovered(true)}
+              onMouseLeave={() => setHovered(false)}
+              style={{
+                position: "absolute",
+                top: "-5px",
+                right: "-10px",
+                fontSize: "3rem",
+                color: "red",
+                border: "none",
+                padding: "6px 10px",
+                borderRadius: "4px",
+                cursor: "pointer",
+                transform: hovered ? "scale(1.1)" : "scale(1)",
+                transition: "transform 0.2s ease-in-out",
+              }}
+            >
+              <IoCloseSharp />
+            </button>
+
+            <iframe
+              src={`${BASE_URL}/${product?.pdf_file}#toolbar=0&navpanes=0&scrollbar=0`}
+              title="PDF Preview"
+              width="100%"
+              height="100%"
+              style={{ border: "none" }}
+            />
+          </div>
+        </div>
+      )}
 
       {/* Price / Brand / Material / Warranty */}
       <div className="px-4 py-6 text-[1.6rem] bg-white rounded-2xl mt-6">
         {product?.base_price && (
-          <div className="flex justify-between items-center border-b border-gray-100 py-3">
+          <div
+            className={`flex ${
+              !categoryBook ? "justify-between" : "justify-start gap-x-4"
+            } items-center ${
+              !categoryBook ? "border-b" : "border-t"
+            } border-gray-100 py-3`}
+          >
             <span className="text-gray-500 font-medium">Price:</span>
             <span className="text-gray-900 font-semibold">
               ৳ {parseFloat(product.base_price)}
@@ -81,21 +166,21 @@ const ProductInfo = ({ product }) => {
           </div>
         )}
 
-        {product?.brand?.name && (
+        {product?.brand?.name && !categoryBook && (
           <div className="flex justify-between items-center border-b border-gray-100 py-3">
             <span className="text-gray-500 font-medium">Brand:</span>
             <span className="text-gray-800">{product.brand.name}</span>
           </div>
         )}
 
-        {product?.material && (
+        {product?.material && !categoryBook && (
           <div className="flex justify-between items-center border-b border-gray-100 py-3">
             <span className="text-gray-500 font-medium">Material:</span>
             <span className="text-gray-800">{product.material}</span>
           </div>
         )}
 
-        {product?.warranty && (
+        {product?.warranty && !categoryBook && (
           <div className="flex justify-between items-center py-3   ">
             <span className="text-gray-500 font-medium">Warranty:</span>
             <span className="text-gray-800">{product.warranty} year(s)</span>

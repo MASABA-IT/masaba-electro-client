@@ -10,7 +10,7 @@ const ReviewsWithComments = ({ product }) => {
       {product?.reviews?.data?.length > 0 && (
         <ReviewSection product={product} />
       )}
-      <CommentSection  product={product}/>
+      <CommentSection product={product} />
     </div>
   );
 };

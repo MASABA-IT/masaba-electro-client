@@ -1,5 +1,12 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useEffect, useRef, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { buildSearchQuery } from "../utils/buildSearchQuery";
 import axios from "axios";
 import Swal from "sweetalert2";
@@ -28,7 +35,7 @@ export const AppProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const [logo, setLogo] = useState(null);
   const [email, setEmail] = useState("");
-  const [collectionId, setCollectionsId] = useState(null);
+  const [collectionId, setCollectionsId] = useState(""); //remove null
   const [categoryId, setCategoryId] = useState(null);
   const [mobileSidebarFilter, setMobileSidebarFilter] = useState(false);
   //////////////////
@@ -54,11 +61,7 @@ export const AppProvider = ({ children }) => {
   const [selectedDeliveryId, setSelectedDeliveryId] = useState(
     deliveryOptions.length > 0 ? deliveryOptions[0].id : null
   );
-  const emailRef = useRef(null); // 👈 Create ref
 
-  const scrollToEmail = () => {
-    emailRef.current?.scrollIntoView({ behavior: "smooth" }); // 👈 Scroll to HomeEmail
-  };
   ///LOGIN&SIGNUP
   const [formData, setFormData] = useState({
     username: "",
@@ -70,23 +73,26 @@ export const AppProvider = ({ children }) => {
   const [userData, setUserData] = useState(null);
   // /////LOGO
 
-  const fetchFrontendSettings = async () => {
-    try {
-      const response = await fetch(`${BASE_URL}/api/frontends`);
-      const data = await response.json();
+  // const fetchFrontendSettings = async () => {
+  //   try {
+  //     const response = await fetch(`${BASE_URL}/api/frontends`);
+  //     const data = await response.json();
 
-      setLogo(data.frontends[0].site_logo_black);
-    } catch (error) {
-      console.error("Error fetching frontend settings:", error);
-    }
-  };
+  //     setLogo(data.frontends[0].site_logo_black);
+  //   } catch (error) {
+  //     console.error("Error fetching frontend settings:", error);
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchFrontendSettings();
-  }, []);
+  // useEffect(() => {
+  //   fetchFrontendSettings();
+  // }, []);
   ///
   //1 FILTER DATA MULTI OR SINGLE
+  const hasFetchedF = useRef(false);
   useEffect(() => {
+    if (hasFetchedF.current) return;
+    hasFetchedF.current = true;
     const fetchFilterData = async () => {
       setLoading(true);
 
@@ -203,16 +209,20 @@ export const AppProvider = ({ children }) => {
   };
 
   //2 collections-with-all-products
+
+  const hasFetchedP = useRef(false);
+
   useEffect(() => {
+    if (hasFetchedP.current) return;
+    hasFetchedP.current = true;
+
     const fetchCollections = async () => {
       try {
         const res = await fetch(`${BASE_URL}/api/collection/with/all-products`);
-
         if (!res.ok) {
           throw new Error("Failed to fetch collections");
         }
         const data = await res.json();
-
         setCollections(data);
       } catch (err) {
         setError(err.message);
@@ -221,10 +231,34 @@ export const AppProvider = ({ children }) => {
         setLoading(false);
       }
     };
+
     fetchCollections();
   }, []);
+  // useEffect(() => {
+  //   const fetchCollections = async () => {
+  //     try {
+  //       const res = await fetch(`${BASE_URL}/api/collection/with/all-products`);
+
+  //       if (!res.ok) {
+  //         throw new Error("Failed to fetch collections");
+  //       }
+  //       const data = await res.json();
+
+  //       setCollections(data);
+  //     } catch (err) {
+  //       setError(err.message);
+  //       console.error("Error fetching collections:", err);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+  //   fetchCollections();
+  // }, []);
   //3 Deals Offers
+  const hasFetchedD = useRef(false);
   useEffect(() => {
+    if (hasFetchedD.current) return;
+    hasFetchedD.current = true;
     const fetchDealsOffers = async () => {
       try {
         const res = await fetch(`${BASE_URL}/api/deals-offers`);
@@ -243,16 +277,19 @@ export const AppProvider = ({ children }) => {
     fetchDealsOffers();
   }, []);
   //4 NavCollection
+  const hasFetched = useRef(false);
+
   useEffect(() => {
+    if (hasFetched.current) return;
+    hasFetched.current = true;
+
     const fetchNavCategories = async () => {
       try {
         const res = await fetch(`${BASE_URL}/api/collections`);
-
         if (!res.ok) {
           throw new Error("Failed to fetch DealsOffers");
         }
         const data = await res.json();
-
         setNavCollections(data.collections);
       } catch (err) {
         setError(err.message);
@@ -261,8 +298,30 @@ export const AppProvider = ({ children }) => {
         setLoading(false);
       }
     };
+
     fetchNavCategories();
   }, []);
+
+  // useEffect(() => {
+  //   const fetchNavCategories = async () => {
+  //     try {
+  //       const res = await fetch(`${BASE_URL}/api/collections`);
+
+  //       if (!res.ok) {
+  //         throw new Error("Failed to fetch DealsOffers");
+  //       }
+  //       const data = await res.json();
+
+  //       setNavCollections(data.collections);
+  //     } catch (err) {
+  //       setError(err.message);
+  //       console.error("Error fetching DealsOffers:", err);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+  //   fetchNavCategories();
+  // }, []);
 
   //  end
   ///////////////
@@ -344,33 +403,33 @@ export const AppProvider = ({ children }) => {
     }
   }, [recentlyViewed]);
   // Send data to API whenever recentlyViewed changes
-  useEffect(() => {
-    const updateRecentlyViewedData = async () => {
-      if (recentlyViewed.length) {
-        try {
-          const response = await fetch(`${BASE_URL}/api/recent-product/view`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ ids: recentlyViewed }), // Send the updated array
-          });
+  // useEffect(() => {
+  //   const updateRecentlyViewedData = async () => {
+  //     if (recentlyViewed.length) {
+  //       try {
+  //         const response = await fetch(`${BASE_URL}/api/recent-product/view`, {
+  //           method: "POST",
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //           },
+  //           body: JSON.stringify({ ids: recentlyViewed }), // Send the updated array
+  //         });
 
-          if (response.ok) {
-            const result = await response.json();
+  //         if (response.ok) {
+  //           const result = await response.json();
 
-            setRecentlyViewsData(result);
-          } else {
-            console.error("Failed to update recently viewed products.");
-          }
-        } catch (error) {
-          console.error("Error while sending recently viewed data:", error);
-        }
-      }
-    };
+  //           setRecentlyViewsData(result);
+  //         } else {
+  //           console.error("Failed to update recently viewed products.");
+  //         }
+  //       } catch (error) {
+  //         console.error("Error while sending recently viewed data:", error);
+  //       }
+  //     }
+  //   };
 
-    updateRecentlyViewedData();
-  }, [recentlyViewed]);
+  //   updateRecentlyViewedData();
+  // }, [recentlyViewed]);
 
   /**
    *   ///////////////////
@@ -405,32 +464,67 @@ export const AppProvider = ({ children }) => {
     }
   }, [recommendedViewed]);
 
-  useEffect(() => {
-    const updateRecommendedViewedData = async () => {
-      if (recommendedViewed.length) {
-        try {
-          const response = await fetch(`${BASE_URL}/api/recent-product/view`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ ids: recommendedViewed }),
-          });
+  // useEffect(() => {
+  //   const updateRecommendedViewedData = async () => {
+  //     if (recommendedViewed.length) {
+  //       try {
+  //         const response = await fetch(`${BASE_URL}/api/recent-product/view`, {
+  //           method: "POST",
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //           },
+  //           body: JSON.stringify({ ids: recommendedViewed }),
+  //         });
 
-          if (response.ok) {
-            const result = await response.json();
-            setRecommendedViewsData(result);
-          } else {
-            console.error("Failed to fetch recommended viewed products.");
-          }
-        } catch (error) {
-          console.error("Error fetching recommended viewed data:", error);
+  //         if (response.ok) {
+  //           const result = await response.json();
+  //           setRecommendedViewsData(result);
+  //         } else {
+  //           console.error("Failed to fetch recommended viewed products.");
+  //         }
+  //       } catch (error) {
+  //         console.error("Error fetching recommended viewed data:", error);
+  //       }
+  //     }
+  //   };
+
+  //   updateRecommendedViewedData();
+  // }, [recommendedViewed]);
+  useEffect(() => {
+    const mergedIds = Array.from(
+      new Set([...recentlyViewed, ...recommendedViewed])
+    );
+
+    if (!mergedIds.length) return;
+
+    const fetchViewedProducts = async () => {
+      try {
+        const response = await fetch(`${BASE_URL}/api/recent-product/view`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ids: mergedIds }),
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+
+          // You'll have to manually separate or filter here if needed
+          setRecentlyViewsData(
+            result.filter((item) => recentlyViewed.includes(item.id))
+          );
+          setRecommendedViewsData(
+            result.filter((item) => recommendedViewed.includes(item.id))
+          );
+        } else {
+          console.error("Failed to fetch viewed products.");
         }
+      } catch (error) {
+        console.error("Error fetching viewed products:", error);
       }
     };
 
-    updateRecommendedViewedData();
-  }, [recommendedViewed]);
+    fetchViewedProducts();
+  }, [recentlyViewed, recommendedViewed]);
 
   ////FILTER SINGLE PRODUCT VIEWS
   // Filter function that accepts only ID, category (single string), and condition
@@ -495,8 +589,10 @@ export const AppProvider = ({ children }) => {
       setUserData(parsedUserData);
     }
   }, []);
-
+  const hasFetchedWP = useRef(false);
   useEffect(() => {
+    if (hasFetchedWP.current) return;
+    hasFetchedWP.current = true;
     const syncWishlistFromLocalStorage = () => {
       const wishlistData =
         JSON.parse(localStorage.getItem("wishlistData")) || [];
@@ -524,10 +620,8 @@ export const AppProvider = ({ children }) => {
       }
     };
 
-    // Custom event শুনো
     window.addEventListener("wishlistUpdated", syncWishlistFromLocalStorage);
 
-    // একবার রান করাও পেজ লোডে
     syncWishlistFromLocalStorage();
 
     return () => {
@@ -646,21 +740,52 @@ export const AppProvider = ({ children }) => {
       const data = await response.json();
 
       if (response.ok) {
+        console.log(data, "data");
         setCouponResponse(data);
         setError("");
+        Swal.fire({
+          icon: "success",
+          title: "Coupon Applied!",
+          text: `You got ${data.discount}% off!`,
+          confirmButtonColor: "#22c55e",
+          customClass: {
+            confirmButton: "my-custom-btn",
+          },
+        });
       } else {
         setError(data.message || "Invalid coupon code.");
         setCouponResponse(null);
+        Swal.fire({
+          icon: "error",
+          title: "Invalid Coupon",
+          text: data.message || "Please try another code.",
+          confirmButtonColor: "#555",
+          customClass: {
+            confirmButton: "my-custom-btn",
+          },
+        });
       }
     } catch (err) {
       setError("Something went wrong.");
       setCouponResponse(null);
+      Swal.fire({
+        icon: "error",
+        title: "Oops!",
+        text: "Something went wrong. Please try again later.",
+        confirmButtonColor: "#ef4444",
+        customClass: {
+          confirmButton: "my-custom-btn",
+        },
+      });
     }
   };
   //Delivery charge options
+  const hasFetchedDC = useRef(false);
+  const fetchDeliveryOptions = useCallback(
+    async (force = false) => {
+      if (hasFetchedDC.current && !force) return;
+      hasFetchedDC.current = true;
 
-  useEffect(() => {
-    const fetchDeliveryOptions = async () => {
       try {
         const res = await fetch(`${BASE_URL}/api/delivery-charge`);
         const data = await res.json();
@@ -668,10 +793,25 @@ export const AppProvider = ({ children }) => {
       } catch (error) {
         console.error("Failed to fetch delivery charges", error);
       }
-    };
+    },
+    [BASE_URL]
+  );
 
+  useEffect(() => {
     fetchDeliveryOptions();
-  }, []);
+  }, [fetchDeliveryOptions]);
+  // useEffect(() => {
+  // const fetchDeliveryOptions = async () => {
+  //   try {
+  //     const res = await fetch(`${BASE_URL}/api/delivery-charge`);
+  //     const data = await res.json();
+  //     setDeliveryOptions(data.delivery_charge || []);
+  //   } catch (error) {
+  //     console.error("Failed to fetch delivery charges", error);
+  //   }
+  // };
+
+  // }, []);
 
   // নির্দিষ্ট ডেলিভারি চার্জ বের করো
   const selectedDelivery = deliveryOptions.find(
@@ -692,8 +832,10 @@ export const AppProvider = ({ children }) => {
   const [selectedDistrict, setSelectedDistrict] = useState(null);
   const [selectedThana, setSelectedThana] = useState(null);
   const [selectedUnion, setSelectedUnion] = useState(null);
-
+  const hasFetchedDivisions = useRef(false);
   useEffect(() => {
+    if (hasFetchedDivisions.current) return;
+    hasFetchedDivisions.current = true;
     fetch(`${BASE_URL}/api/divisions`)
       .then((res) => res.json())
       .then(setDivisions);
@@ -738,20 +880,6 @@ export const AppProvider = ({ children }) => {
   ///SITE META
   const [siteMeta, setSiteMeta] = useState({});
 
-  useEffect(() => {
-    const fetchSiteMeta = async () => {
-      try {
-        const res = await fetch(`${BASE_URL}/api/frontends`);
-        const data = await res.json();
-
-        setSiteMeta(data?.frontends[0]);
-      } catch (err) {
-        console.error("Failed to fetch site meta", err);
-      }
-    };
-
-    fetchSiteMeta();
-  }, []);
   ///BILLING ADDRESS
   const [billingAddress, setBillingAddress] = useState({});
   const [showModal, setShowModal] = useState(false);
@@ -764,8 +892,8 @@ export const AppProvider = ({ children }) => {
       const res = await fetch(`${BASE_URL}/api/user/billing-address`, {
         method: "GET",
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${userData.token}`,
+          "Content-Type": "application/json",
         },
       });
 
@@ -953,6 +1081,7 @@ export const AppProvider = ({ children }) => {
   const [currentPage, setCurrentPage] = useState(); //currentPage, setCurrentPage,totalPages, setTotalPages
   const [totalPages, setTotalPages] = useState(1);
   const [filteredProducts, setFilteredProducts] = useState([]);
+
   const buildApiUrl = () => {
     let apiUrl = `${BASE_URL}/api/product/search?`; //api/product/search?page=1
 
@@ -1018,7 +1147,6 @@ export const AppProvider = ({ children }) => {
 
       setCurrentPage(data?.Products?.current_page);
       setFilteredProducts(data);
-
       setTotalPages(data?.Products?.last_page);
     } catch (error) {
       console.error("Error fetching filtered products", error);
@@ -1055,23 +1183,71 @@ export const AppProvider = ({ children }) => {
     }
   };
   const [contactDetails, setContactDetails] = useState(null);
+  const hasFetchedFR = useRef(false);
 
   useEffect(() => {
-    const fetchContactDetails = async () => {
+    if (hasFetchedFR.current) return;
+    hasFetchedFR.current = true;
+    const fetchFrontendData = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/api/frontends`);
-        const frontendData = response.data?.frontends?.[0];
-        if (frontendData) {
-          setContactDetails(frontendData);
+        const response = await fetch(`${BASE_URL}/api/frontends`);
+        const data = await response.json();
+        const frontend = data?.frontends?.[0];
+
+        if (frontend) {
+          setLogo(frontend.site_logo_black);
+          setSiteMeta(frontend);
+          setContactDetails(frontend);
         }
       } catch (error) {
-        console.error("Error fetching contact details:", error);
+        console.error("Error fetching frontend data:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchContactDetails();
+    fetchFrontendData();
   }, []);
+  //CONTACT API
+  const sendContactForm = async (formData) => {
+    try {
+      const res = await fetch(`${BASE_URL}/api/contact-us`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.message || "Something went wrong");
+
+      return { success: true, message: data.message || "Message sent" };
+    } catch (error) {
+      return { success: false, message: error.message };
+    }
+  };
+
+  //////////////
+  ///ABOUT US PAGE-----
+  const fetchAboutData = async () => {
+    try {
+      const res = await axios.get(`${BASE_URL}/api/about-us`);
+
+      return res.data;
+    } catch (error) {
+      console.error("Failed to fetch About Us data:", error);
+      throw error;
+    }
+  };
+  //SECURITY PDF
+  const encodePDF = (filePath) => {
+    return btoa(filePath); // base64 encode
+  };
+  const decodePDF = (encodedPath) => {
+    return atob(encodedPath); // decode if needed
+  };
   const appInfo = {
     BASE_URL,
     loading,
@@ -1135,6 +1311,7 @@ export const AppProvider = ({ children }) => {
     deliveryAmount,
     selectedDelivery,
     selectedDeliveryTitle: selectedDelivery?.title || "",
+    fetchDeliveryOptions,
     //THANA,UNION,DIVISION,DISTRICT
     divisions,
     districts,
@@ -1194,9 +1371,13 @@ export const AppProvider = ({ children }) => {
     mobileSidebarFilter,
     setMobileSidebarFilter,
     //contactus
-    emailRef,
-    scrollToEmail,
+    sendContactForm,
     contactDetails,
+    ///about-us
+    fetchAboutData,
+    //SECURITY PURPOSE
+    encodePDF,
+    decodePDF,
   };
   return <AppContext.Provider value={appInfo}>{children}</AppContext.Provider>;
 };

@@ -15,6 +15,8 @@ import GuestCheckoutPage from "../pages/GuestCheckoutPage/GuestCheckoutPage";
 import UserCheckoutPage from "../pages/UserCheckoutPage/UserCheckoutPage";
 import ForgotPassword from "../pages/ForgotPassword/ForgotPassword";
 import AboutUs from "../pages/AboutUs/AboutUs";
+import PublicRoute from "../components/PublicRoute";
+import HelpCenter from "../pages/HelpCenter/HelpCenter";
 
 const AppRoutes = () => {
   const router = createBrowserRouter([
@@ -51,13 +53,25 @@ const AppRoutes = () => {
           element: <AboutUs />,
         },
         {
+          path: "/helpcenter",
+          element: <HelpCenter />,
+        },
+        {
           path: "/login",
-          element: <Login />,
+          element: (
+            <PublicRoute>
+              <Login />
+            </PublicRoute>
+          ),
         },
 
         {
           path: "/signup",
-          element: <SignUp />,
+          element: (
+            <PublicRoute>
+              <SignUp />
+            </PublicRoute>
+          ),
         },
         {
           path: "/password-reset",

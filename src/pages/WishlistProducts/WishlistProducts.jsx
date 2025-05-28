@@ -88,7 +88,7 @@ const WishlistProducts = () => {
 
   return (
     <div className="wishlist_content">
-      <h1 className="text-3xl font-bold my-4">My Wishlist</h1>
+      <h1 className="text-3xl font-bold my-4 text-gray-700">My Wishlist</h1>
 
       {initialLoad ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -119,13 +119,13 @@ const WishlistProducts = () => {
                     <img
                       src={`${BASE_URL}/${product.thumbnail}`}
                       alt={product.name}
-                      className="w-32 h-32 object-cover mb-4"
+                      className="w-24 h-24 sm:w-32 sm:h-32 object-cover mb-4"
                     />
                     <div className="ml-4">
-                      <h2 className="text-2xl font-semibold mb-1">
+                      <h2 className="text-xl sm:text-2xl font-semibold mb-1">
                         {product.title}
                       </h2>
-                      <p className="text-blue-400 font-bold mb-2">
+                      <p className="text-blue-400 font-bold mb-2 text-xl sm:text-2xl">
                         Price: ৳
                         {product.discount_price ? (
                           <>

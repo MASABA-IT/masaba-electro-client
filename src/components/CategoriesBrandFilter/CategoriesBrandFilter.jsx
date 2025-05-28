@@ -87,8 +87,6 @@ const CategoriesBrandFilter = () => {
   // Function to remove a single item from the list
 
   const removeItem = (itemToRemove) => {
-    console.log("remove-item", itemToRemove);
-
     // Remove from selectedItems
     const updatedItems = selectedItems.filter(
       (item) => item.id !== itemToRemove.id

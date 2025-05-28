@@ -49,7 +49,7 @@ const HomeRecommendedItems = () => {
             }`}
             onClick={() => handleProductClick(item.id)}
           >
-            <div className="aspect-w-1 aspect-h-1">
+            <div className="aspect-w-1 aspect-h-1 flex justify-center items-center">
               <img
                 src={`${BASE_URL}/${item.thumbnail}`}
                 alt={item.title}

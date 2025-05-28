@@ -15,7 +15,7 @@ const ProductMightLike = ({ videos = [], heading = "You may like" }) => {
   };
 
   return (
-    <div className="youMightLike bg-white xl:ml-4 flex flex-col gap-y-2">
+    <div className="youMightLike   xl:ml-4 flex flex-col gap-y-2">
       <h3 className="text-2xl py-4 px-8 flex items-center gap-x-4">
         {heading}
         <motion.div

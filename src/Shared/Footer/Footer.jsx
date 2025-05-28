@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import {
   FaFacebookF,
   FaInstagram,
@@ -14,7 +14,7 @@ import {
   MdOutlineMailOutline,
 } from "react-icons/md";
 import { useProductStore } from "../../providers/AppProviders";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import appImg from "../../assets/imgs/Group.png";
 import googleImg from "../../assets/imgs/market-button.png";
 
@@ -98,41 +98,47 @@ const Footer = () => {
       name: "facebook",
       icon: <FaFacebookF />,
       url: siteMeta?.social_facebook || "https://facebook.com",
-      hoverColor: "text-blue-400",
+      hoverColor: "border-blue-400",
     },
     {
       name: "twitter",
       icon: <FaTwitter />,
       url: siteMeta?.social_twitter || "https://twitter.com",
-      hoverColor: "text-blue-400",
+      hoverColor: "border-blue-400",
     },
     {
       name: "linkedin",
       icon: <FaLinkedinIn />,
       url: siteMeta?.social_linkedin || "https://linkedin.com",
-      hoverColor: "text-blue-400",
+      hoverColor: "border-blue-400",
     },
     {
       name: "instagram",
       icon: <FaInstagram />,
       url: siteMeta?.social_instagram || "https://instagram.com",
-      hoverColor: "text-red-400",
+      hoverColor: "border-red-400",
     },
-    // YouTube only if it exists
-    ...(siteMeta?.social_youtube
-      ? [
-          {
-            name: "youtube",
-            icon: <IoLogoYoutube />,
-            url: siteMeta?.social_youtube,
-            hoverColor: "text-red-400",
-          },
-        ]
-      : []),
+    // ...(siteMeta?.social_youtube
+    //   ? [
+    //       {
+    //         name: "youtube",
+    //         icon: <IoLogoYoutube />,
+    //         url: siteMeta?.social_youtube,
+    //         hoverColor: "text-red-400",
+    //       },
+    //     ]
+    //   : []),
   ];
+  // const emailRef = useRef(null);
+  // const location = useLocation();
 
+  // useEffect(() => {
+  //   if (location.hash === "#contact" && emailRef.current) {
+  //     emailRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+  //   }
+  // }, [location]);
   return (
-    <footer className="footer ">
+    <footer className="footer pb-28 sm:pb-0">
       {/* First Section: Subscribe */}
       <div className="w-full bg-[#eef2f5]">
         <div className="footer_content py-10  flex flex-col gap-y-2 text-center mb-8 text-gray-600 text-2xl">
@@ -142,7 +148,7 @@ const Footer = () => {
           <p className="  md:text-2xl mb-2">
             Get daily on upcoming offers from many suppliers all over the world
           </p>
-          <div className="w-[90%] sm:w-full md:w-full mx-auto flex justify-center items-center gap-3">
+          <div className="w-[90%] sm:w-full md:w-full mx-auto flex  justify-center items-center gap-3">
             {/* Input with Icon Wrapper */}
             <div className="relative flex items-center border rounded-md px-4 py-3 w-full max-w-md bg-white">
               {/* Icon - Hidden on focus */}
@@ -187,10 +193,15 @@ const Footer = () => {
             <p className="py-4 text-gray-500">{siteMeta?.site_description}</p>
             <ul className="social-links flex lg:justify-start items-center gap-x-2 sm:gap-x-4 lg:gap-x-10">
               {socialLinks.map((link, index) => (
-                <li key={index} className="group hover:cursor-pointer">
+                <li
+                  style={{ boxShadow: "0px 2px 112px #f2f2f2" }}
+                  key={index}
+                  className={`group hover:cursor-pointer  border duration-100   rounded-full hover:${link.hoverColor} `}
+                >
                   <a
                     href={link.url}
-                    className={`text-gray-500 group-hover:${link.hoverColor} duration-100`}
+                    style={{ color: "#555" }}
+                    className={`transition-colors duration-200`}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -203,10 +214,10 @@ const Footer = () => {
 
           {/* Column 2: Our About */}
           <div className="text-2xl text-gray-400">
-            <h3 className="text-2xl font-semibold mb-3 text-gray-600">About</h3>
+            <h3 className="text-2xl font-semibold mb-3 text-gray-200">About</h3>
             <ul>
               <li className="hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-blue-500 hover:to-teal-500 hover:scale-105 cursor-pointer transition-all duration-500 ease-in-out">
-                About Us
+                <Link to="/about"> About Us</Link>
               </li>
 
               <li className="hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-blue-500 hover:to-teal-500 hover:scale-105 cursor-pointer transition-all duration-500 ease-in-out">
@@ -241,12 +252,12 @@ const Footer = () => {
 
           {/* Column 4: Information Info */}
           <div className="text-2xl text-gray-400">
-            <h3 className="text-2xl font-semibold mb-3 text-gray-600">
+            <h3 className="text-2xl font-semibold mb-3 text-gray-200">
               Information
             </h3>
             <ul>
               <li className="hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-blue-500 hover:to-teal-500 hover:scale-105 cursor-pointer transition-all duration-500 ease-in-out">
-                Help Center
+                <Link to="/helpcenter">Help Center</Link>
               </li>
               <li className="hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-blue-500 hover:to-teal-500 hover:scale-105 cursor-pointer transition-all duration-500 ease-in-out">
                 Money Refund
@@ -255,14 +266,15 @@ const Footer = () => {
                 Shipping
               </li>
               <li className="hover:text-transparent hover:bg-clip-text hover:bg-gradient-to-r hover:from-blue-500 hover:to-teal-500 hover:scale-105 cursor-pointer transition-all duration-500 ease-in-out">
-                Contact Us
+                {/* <button onClick={() => scrollToEmail()}> Contact Us</button> */}
+                <Link to="/#contact">Contact Us</Link>
               </li>
             </ul>
           </div>
 
           {/* Column 5: For Users Info */}
           <div className="text-2xl text-gray-400">
-            <h3 className="text-2xl font-semibold mb-3 text-gray-600">
+            <h3 className="text-2xl font-semibold mb-3 text-gray-200">
               For Users
             </h3>
             <ul>
@@ -280,24 +292,34 @@ const Footer = () => {
           </div>
 
           {/* Column 6: For App Info */}
-          <div className="text-2xl text-gray-500">
+          <div className="text-2xl text-gray-200 ">
             <h3 className="text-2xl font-semibold mb-3">Get App</h3>
-            <ul className="flex flex-col gap-y-2">
-              <li className="hover:scale-110 cursor-pointer transition-all duration-500 ease-in-out">
-                <img
-                  src={appImg}
-                  alt="app Icon"
-                  className="h-14 transition-all duration-500 ease-in-out"
-                />
-              </li>
-              <li className="hover:scale-110 cursor-pointer transition-all duration-500 ease-in-out">
-                <img
-                  src={googleImg}
-                  alt="google playstore Icon"
-                  className="h-14 transition-all duration-500 ease-in-out"
-                />
-              </li>
-            </ul>
+            <div className=" ">
+              <ul className="flex flex-col gap-y-2">
+                <li className="cursor-pointer transform transition-transform duration-500 ease-in-out hover:scale-110">
+                  <a
+                    href="https://play.google.com/store/apps/details?id=your.app.id"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <img src={appImg} alt="app Icon" className="h-14" />
+                  </a>
+                </li>
+                <li className="cursor-pointer transform transition-transform duration-500 ease-in-out hover:scale-110">
+                  <a
+                    href="https://play.google.com/store/apps/details?id=your.other.app.id"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <img
+                      src={googleImg}
+                      alt="google playstore Icon"
+                      className="h-14"
+                    />
+                  </a>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>

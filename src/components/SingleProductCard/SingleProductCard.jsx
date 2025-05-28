@@ -25,7 +25,6 @@ const SingleProductCard = ({ product, isGridView }) => {
   // /categories/product/:id
 
   const handleProductClick = () => {
-    console.log("click");
     navigate(`/categories/product/${product.id}`);
   };
   const handleLikeClick = (e) => {
@@ -99,7 +98,7 @@ const SingleProductCard = ({ product, isGridView }) => {
       {!isGridView ? (
         // single column
         <div className="product-info relative p-4   justify-between my-auto h-[55%]   md:h-[95%]">
-          <h3 className="text-2xl md:text-3xl  text-gray-700 ">
+          <h3 className="text-2xl md:text-3xl text-gray-700 ">
             {product.title}
           </h3>
 
@@ -160,14 +159,14 @@ const SingleProductCard = ({ product, isGridView }) => {
           </button>
         </div>
       ) : (
-        <div className="product-info relative p-4 md:border-t justify-between my-auto h-[75%] md:h-auto">
-          <h3 className=" md:text-2xl text-gray-500 block md:hidden">
+        <div className="product-info relative p-4 md:border-t justify-between my-auto h-[65%] md:h-auto">
+          <h3 className="text-2xl font-semibold text-gray-700 block md:hidden">
             {product.title}
           </h3>
           {/* price */}
           {product?.discount_price ? (
             <div className="price-info mt-2">
-              <span className="text-3xl font-bold text-gray-600">
+              <span className="text-2xl font-bold text-gray-600">
                 ৳{parseFloat(product?.discount_price)}
               </span>
               <span className="text-xl line-through text-gray-400 ml-2">
@@ -175,7 +174,7 @@ const SingleProductCard = ({ product, isGridView }) => {
               </span>
             </div>
           ) : (
-            <span className="text-3xl font-bold text-gray-600">
+            <span className="text-2xl font-bold text-gray-600">
               ৳{parseFloat(product?.base_price)}
             </span>
           )}
@@ -195,7 +194,6 @@ const SingleProductCard = ({ product, isGridView }) => {
           <h3 className="text-[18px]  text-gray-600 hidden md:block font-sans font-normal">
             {product?.title}
           </h3>
-          {/* <p className="text-xl text-gray-500">{product.subtitle}</p> */}
         </div>
       )}
       {/* heart */}

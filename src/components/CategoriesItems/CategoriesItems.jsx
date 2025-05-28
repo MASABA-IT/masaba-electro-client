@@ -29,6 +29,7 @@ const CategoriesItems = ({ allData }) => {
     currentPage,
     mobileSidebarFilter,
     setMobileSidebarFilter,
+    searchCategories,
   } = useProductStore();
   const [allProducts, setAllProducts] = useState([]); // All product data
   const [loading, setLoading] = useState(true);
@@ -64,121 +65,6 @@ const CategoriesItems = ({ allData }) => {
     setLoading(false);
   }, [allData]);
 
-  // const filteredProducts = allProducts
-  //   .filter((product) => {
-  //     // Handle brand filter (assuming product has brand_id)
-  //     const matchBrand = selectedBrands?.length
-  //       ? selectedBrands.some((brand) => brand.id === product.brand_id)
-  //       : true;
-
-  //     // Handle category filter
-  //     const matchCategory = selectedCategories
-  //       ? product.category_id === selectedCategories.id
-  //       : true;
-
-  //     // Handle features filter
-  //     const matchFeatures = selectedFeatures?.length
-  //       ? selectedFeatures.every((f) => product.features?.includes(f))
-  //       : true;
-
-  //     // Handle rating filter (proper null checks)
-  //     const matchRating =
-  //       selectedRatings !== undefined && selectedRatings !== null
-  //         ? Math.floor(Number(product.average_rating)) === selectedRatings
-  //         : true;
-
-  //     // Handle price filter (use discount_price if available)
-  //     const productPrice = Number(product.discount_price || product.base_price);
-  //     const { min = 0, max = Infinity } = selectedPriceRange || {};
-  //     const matchPrice = productPrice >= min && productPrice <= max;
-
-  //     // Handle condition filter
-  //     const conditions = selectedCondition
-  //       ? Array.isArray(selectedCondition)
-  //         ? selectedCondition
-  //         : [selectedCondition]
-  //       : [];
-  //     const matchCondition = conditions.length
-  //       ? conditions.includes(product.condition)
-  //       : true;
-
-  //     return (
-  //       matchBrand &&
-  //       matchCategory &&
-  //       matchFeatures &&
-  //       matchRating &&
-  //       matchPrice &&
-  //       matchCondition
-  //     );
-  //   })
-  //   .sort((a, b) => {
-  //     // Sorting logic remains similar but updated for correct properties
-  //     const hasPriceFilter =
-  //       selectedPriceRange &&
-  //       (selectedPriceRange.min !== 0 || selectedPriceRange.max !== Infinity);
-
-  //     const aFullMatch = selectedFeatures?.length
-  //       ? selectedFeatures.every((f) => a.features?.includes(f))
-  //       : false;
-  //     const bFullMatch = selectedFeatures?.length
-  //       ? selectedFeatures.every((f) => b.features?.includes(f))
-  //       : false;
-
-  //     if (bFullMatch !== aFullMatch) {
-  //       return bFullMatch - aFullMatch;
-  //     }
-
-  //     const aPrice = Number(a.discount_price || a.base_price);
-  //     const bPrice = Number(b.discount_price || b.base_price);
-
-  //     if (hasPriceFilter && bPrice !== aPrice) {
-  //       return bPrice - aPrice;
-  //     }
-
-  //     const aRating = Number(a.average_rating) || 0;
-  //     const bRating = Number(b.average_rating) || 0;
-
-  //     if (bRating !== aRating) {
-  //       return bRating - aRating;
-  //     }
-
-  //     return bPrice - aPrice;
-  //   });
-  // Calculate pagination values
-
-  // const startIndex = (currentPage - 1) * itemsPerPage;
-  // console.log("Filtering with:", {
-  //   selectedBrands,
-  //   selectedCategories,
-  //   selectedFeatures,
-  //   selectedRatings,
-  //   selectedCondition,
-  //   selectedPriceRange,
-  // });
-
-  // const currentProducts = filteredProducts.slice(
-  //   startIndex,
-  //   startIndex + itemsPerPage
-  // );
-  // console.log(currentProducts, "currentProducts");
-  // Handlers for pagination controls
-  // const handlePrevPage = () => {
-  //   setCurrentPage((prev) => (prev > 1 ? prev - 1 : prev));
-  // };
-
-  // const handleNextPage = () => {
-  //   setCurrentPage((prev) => (prev < totalPages ? prev + 1 : prev));
-  // };
-
-  // // Handler for changing items per page from the dropdown
-  // const handleItemsPerPageChange = (value) => {
-  //   setItemsPerPage(value);
-  //   setCurrentPage(1); // reset to first page when value changes
-  //   setShowDropdown(false);
-  // };
-  // const handleToggleDropdown = () => {
-  //   setShowDropdown((prev) => !prev);
-  // };
   const isMobile = useIsMobile();
 
   // //////////change columns
@@ -200,6 +86,11 @@ const CategoriesItems = ({ allData }) => {
   const handleToggle = () => {
     setMobileSidebarFilter(!mobileSidebarFilter);
   };
+  // console.log(
+  //   allProducts,
+  //   searchCategories,
+  //   filteredProducts?.Products?.data?.length
+  // );
   return (
     <div className="categoriesitems_content ">
       {isMobile ? (
@@ -229,9 +120,17 @@ const CategoriesItems = ({ allData }) => {
           </div>
         </div>
       ) : (
-        <div className="container border px-4 py-3">
+        <div className="container border px-4 py-3 ">
           {!selectedCategories?.length > 0 ? (
-            <p>{`Now All ${allProducts?.length} items`}</p>
+            <p>
+              {`Now All ${
+                allProducts && searchCategories?.data
+                  ? allProducts.length
+                  : filteredProducts?.Products?.data
+                  ? filteredProducts?.Products?.data?.length
+                  : 0
+              } items`}
+            </p>
           ) : (
             <div className="flex justify-center items-center gap-x-2">
               <p>{`${allProducts.length} items in `}</p>
@@ -265,7 +164,7 @@ const CategoriesItems = ({ allData }) => {
                     [...navCollections]
                       .sort((a, b) => Number(a.id) - Number(b.id))
                       .map((collection, index) => (
-                        <option key={index} value={collection.id}>
+                        <option key={index + 1} value={collection.id}>
                           {limitWords(collection.title, 2)}
                         </option>
                       ))}
@@ -303,7 +202,160 @@ const CategoriesItems = ({ allData }) => {
 
       <CategoriesBrandFilter />
 
-      {/* {loading ? (
+      {/* bottom-old data */}
+      {loading ? (
+        <div className="text-center py-5">Loading...</div>
+      ) : filteredProducts?.Products?.data?.length > 0 ||
+        allData?.length > 0 ? (
+        <div
+          className={`product-list grid grid-cols-1 md:grid-cols-${
+            isGridView ? 3 : 1
+          } lg:grid-cols-${isGridView ? 4 : 1} gap-4`}
+        >
+          {(filteredProducts?.Products?.data?.length > 0
+            ? filteredProducts.Products.data
+            : allData
+          ).map((product, i) => (
+            <SingleProductCard
+              key={product.id || i}
+              product={product}
+              isGridView={isGridView}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="text-center text-2xl py-5 text-gray-500">
+          No products available.
+        </div>
+      )}
+
+      {/* Pagination */}
+
+      <PaginationsBtn />
+      {mobileSidebarFilter && <MobileCategoryList />}
+    </div>
+  );
+};
+
+export default CategoriesItems;
+
+// const filteredProducts = allProducts
+//   .filter((product) => {
+//     // Handle brand filter (assuming product has brand_id)
+//     const matchBrand = selectedBrands?.length
+//       ? selectedBrands.some((brand) => brand.id === product.brand_id)
+//       : true;
+
+//     // Handle category filter
+//     const matchCategory = selectedCategories
+//       ? product.category_id === selectedCategories.id
+//       : true;
+
+//     // Handle features filter
+//     const matchFeatures = selectedFeatures?.length
+//       ? selectedFeatures.every((f) => product.features?.includes(f))
+//       : true;
+
+//     // Handle rating filter (proper null checks)
+//     const matchRating =
+//       selectedRatings !== undefined && selectedRatings !== null
+//         ? Math.floor(Number(product.average_rating)) === selectedRatings
+//         : true;
+
+//     // Handle price filter (use discount_price if available)
+//     const productPrice = Number(product.discount_price || product.base_price);
+//     const { min = 0, max = Infinity } = selectedPriceRange || {};
+//     const matchPrice = productPrice >= min && productPrice <= max;
+
+//     // Handle condition filter
+//     const conditions = selectedCondition
+//       ? Array.isArray(selectedCondition)
+//         ? selectedCondition
+//         : [selectedCondition]
+//       : [];
+//     const matchCondition = conditions.length
+//       ? conditions.includes(product.condition)
+//       : true;
+
+//     return (
+//       matchBrand &&
+//       matchCategory &&
+//       matchFeatures &&
+//       matchRating &&
+//       matchPrice &&
+//       matchCondition
+//     );
+//   })
+//   .sort((a, b) => {
+//     // Sorting logic remains similar but updated for correct properties
+//     const hasPriceFilter =
+//       selectedPriceRange &&
+//       (selectedPriceRange.min !== 0 || selectedPriceRange.max !== Infinity);
+
+//     const aFullMatch = selectedFeatures?.length
+//       ? selectedFeatures.every((f) => a.features?.includes(f))
+//       : false;
+//     const bFullMatch = selectedFeatures?.length
+//       ? selectedFeatures.every((f) => b.features?.includes(f))
+//       : false;
+
+//     if (bFullMatch !== aFullMatch) {
+//       return bFullMatch - aFullMatch;
+//     }
+
+//     const aPrice = Number(a.discount_price || a.base_price);
+//     const bPrice = Number(b.discount_price || b.base_price);
+
+//     if (hasPriceFilter && bPrice !== aPrice) {
+//       return bPrice - aPrice;
+//     }
+
+//     const aRating = Number(a.average_rating) || 0;
+//     const bRating = Number(b.average_rating) || 0;
+
+//     if (bRating !== aRating) {
+//       return bRating - aRating;
+//     }
+
+//     return bPrice - aPrice;
+//   });
+// Calculate pagination values
+
+// const startIndex = (currentPage - 1) * itemsPerPage;
+// console.log("Filtering with:", {
+//   selectedBrands,
+//   selectedCategories,
+//   selectedFeatures,
+//   selectedRatings,
+//   selectedCondition,
+//   selectedPriceRange,
+// });
+
+// const currentProducts = filteredProducts.slice(
+//   startIndex,
+//   startIndex + itemsPerPage
+// );
+// console.log(currentProducts, "currentProducts");
+// Handlers for pagination controls
+// const handlePrevPage = () => {
+//   setCurrentPage((prev) => (prev > 1 ? prev - 1 : prev));
+// };
+
+// const handleNextPage = () => {
+//   setCurrentPage((prev) => (prev < totalPages ? prev + 1 : prev));
+// };
+
+// // Handler for changing items per page from the dropdown
+// const handleItemsPerPageChange = (value) => {
+//   setItemsPerPage(value);
+//   setCurrentPage(1); // reset to first page when value changes
+//   setShowDropdown(false);
+// };
+// const handleToggleDropdown = () => {
+//   setShowDropdown((prev) => !prev);
+// };
+{
+  /* {loading ? (
         <div className="text-center py-5">Loading...</div>
       ) : allData?.length > 0 ? (
         <div
@@ -323,8 +375,10 @@ const CategoriesItems = ({ allData }) => {
         <div className="text-center text-2xl py-5 text-gray-500">
           No products available.
         </div>
-      )} */}
-      {loading ? (
+      )} */
+}
+{
+  /* {loading ? (
         <div className="text-center py-5">Loading...</div>
       ) : filteredProducts?.Products?.data.length > 0 ? (
         <div
@@ -332,9 +386,9 @@ const CategoriesItems = ({ allData }) => {
             isGridView ? 3 : 1
           } lg:grid-cols-${isGridView ? 4 : 1} gap-4`}
         >
-          {filteredProducts?.Products?.data.map((product) => (
+          {filteredProducts?.Products?.data.map((product, i) => (
             <SingleProductCard
-              key={product.id}
+              key={i}
               product={product}
               isGridView={isGridView}
             />
@@ -344,14 +398,5 @@ const CategoriesItems = ({ allData }) => {
         <div className="text-center text-2xl py-5 text-gray-500">
           No products match your filters.
         </div>
-      )}
-
-      {/* Pagination */}
-
-      <PaginationsBtn />
-      {mobileSidebarFilter && <MobileCategoryList />}
-    </div>
-  );
-};
-
-export default CategoriesItems;
+      )} */
+}

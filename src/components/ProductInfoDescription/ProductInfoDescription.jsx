@@ -40,7 +40,7 @@ const ProductInfoDescription = ({
     });
   };
   return (
-    <div className="productInfoSwitch text-2xl mr-4 md:p-6 bg-white">
+    <div className="productInfoSwitch text-2xl mr-4 md:p-6  ">
       {/* Tabs */}
       {showTabs && (
         <div className="tabs border-b-2 overflow-x-auto whitespace-nowrap scrollbar-hide">
@@ -91,14 +91,16 @@ const ProductInfoDescription = ({
         <motion.div
           key={activeTab}
           variants={contentVariants}
+          text-xl
           initial="hidden"
           animate="visible"
           exit="exit"
           transition={{ duration: 0.3 }}
+          className="text-2xl"
         >
           {activeTab === 1 && hasDescription && (
             <div
-              className="description-area prose max-w-full"
+              className="description-area prose max-w-full "
               dangerouslySetInnerHTML={{ __html: description }}
             />
           )}

@@ -33,7 +33,6 @@ export default function CartItem({
   }, [selectedQty, item.id, item.price]);
 
   const handleQuantityChange = (newQty) => {
-    console.log("change");
     if (newQty >= 1) {
       setSelectedQty(newQty);
       updateItemQuantity(item.id, newQty);
@@ -69,14 +68,14 @@ export default function CartItem({
           alt={item.title}
           className="w-24 h-24 object-cover rounded-lg"
         />
-        <div>
+        <div className="font-thin">
           <h2 className="text-2xl xl:text-2xl font-semibold text-gray-600">
             {item.title}
           </h2>
-          <p className="text-2xl font-bold text-gray-500">
+          <p className="text-xl font-bold text-gray-500">
             Price: ৳{parseFloat(item.price)}
           </p>
-          <p className="text-2xl font-bold text-zinc-500">
+          <p className="text-xl font-bold text-zinc-500">
             Total Price: ৳{parseFloat(item.price * selectedQty)}
           </p>
         </div>

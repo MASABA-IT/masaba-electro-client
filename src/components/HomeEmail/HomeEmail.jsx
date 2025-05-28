@@ -1,36 +1,63 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import bgImg from "../../assets/imgs/emailBgimg.png";
 import { FaFacebookF, FaLinkedinIn, FaTwitter } from "react-icons/fa";
 import { useProductStore } from "../../providers/AppProviders";
+import { useLocation } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const HomeEmail = () => {
+  const { contactDetails, sendContactForm } = useProductStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { emailRef, contactDetails } = useProductStore();
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    phone: "",
-    message: "",
+    phone_number: "",
+    text: "",
   });
 
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Submit logic here...
-    alert("Message sent!");
-    setFormData({ name: "", email: "", phone: "", message: "" });
+
+    const response = await sendContactForm(formData);
+
+    if (response.success) {
+      Swal.fire({
+        title: "Message Sent!",
+        text: "Your message has been successfully submitted.",
+        icon: "success",
+        confirmButtonText: "OK",
+        timer: 3000,
+        timerProgressBar: true,
+        customClass: {
+          confirmButton: "swal2-confirm-custom",
+        },
+      });
+
+      setFormData({ name: "", email: "", phone_number: "", text: "" });
+    }
   };
+  const emailRef = useRef(null);
+  const location = useLocation();
+  useEffect(() => {
+    if (location.hash === "#contact" && emailRef.current) {
+      emailRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, [location]);
 
   return (
     <div
       ref={emailRef}
-      className="home_email relative min-h-[20vh] md:min-h-[40vh] flex flex-col md:flex-row items-center justify-between rounded-lg shadow-md overflow-hidden px-6 py-10 md:px-14"
+      id="contact"
+      className={`home_email relative min-h-[20vh] md:min-h-[40vh] flex flex-col md:flex-row items-center justify-between rounded-lg shadow-md overflow-hidden px-6 py-10 md:px-14 ${
+        contactDetails?.contact_status === 1 ? "block" : "hidden"
+      }`}
     >
       {/* Background */}
       <div
@@ -42,9 +69,12 @@ const HomeEmail = () => {
       {/* Left: Contact Info */}
       <div className="relative w-full h-full md:w-1/2  flex flex-col justify-between text-left md:p-8 z-10   mt-10 md:mt-0 space-y-4 ">
         <div>
-          <h2 className="text-4xl font-bold mb-2 text-gray-200">Contact Us</h2>
-          <p className="text-xl md:text-xl text-gray-200">
-            Reach out to us and we’ll respond as soon as possible.
+          <h2 className="text-4xl font-mono font-bold mb-2 text-gray-200">
+            Contact Us
+          </h2>
+          <p className="text-xl md:text-2xl text-gray-200">
+            Questions, feedback, or just want to say hello? We’d love to hear
+            from you!
           </p>
         </div>
         <div className="space-y-2   mt-4 ">
@@ -101,7 +131,7 @@ const HomeEmail = () => {
 
       {/* Right: Contact Form (Desktop) */}
       <div className="hidden md:flex flex-col gap-y-4 relative w-full md:w-1/2 bg-white p-6 rounded-lg shadow-md z-10">
-        <h2 className="text-3xl text-center font-semibold text-gray-700">
+        <h2 className="text-3xl text-center font-semibold text-[#5A6D66]">
           Get In Touch
         </h2>
         <form
@@ -116,9 +146,9 @@ const HomeEmail = () => {
               value={formData.name}
               onChange={handleChange}
               placeholder=" "
-              className=" peer  w-full border-b-2 border-gray-300 bg-transparent px-3 pt-6 pb-2 text-xl text-gray-900 focus:outline-none focus:border-blue-500"
+              className=" peer  w-full border-b-2 border-gray-300 bg-transparent px-3 pt-8 pb-2 text-2xl text-gray-900 focus:outline-none focus:border-blue-500"
             />
-            <label className=" absolute left-3 top-2 text-gray-500 text-xl transition-all peer-placeholder-shown:top-5 peer-placeholder-shown:text-2xl peer-placeholder-shown:text-gray-600 peer-focus:top-2 peer-focus:text-xl peer-focus:text-blue-500">
+            <label className=" absolute left-3 top-2  text-gray-500 text-xl transition-all peer-placeholder-shown:top-5 peer-placeholder-shown:text-2xl peer-placeholder-shown:text-gray-600 peer-focus:top-1 peer-focus:text-xl peer-focus:text-blue-500">
               Full Name
             </label>
           </div>
@@ -131,9 +161,9 @@ const HomeEmail = () => {
               value={formData.email}
               onChange={handleChange}
               placeholder=" "
-              className="peer w-full border-b-2 border-gray-300 bg-transparent px-3 pt-6 pb-2 text-base text-gray-900 focus:outline-none focus:border-blue-500"
+              className="peer w-full border-b-2 border-gray-300 bg-transparent px-3 pt-8 pb-2 text-2xl text-gray-900 focus:outline-none focus:border-blue-500"
             />
-            <label className="absolute left-3 top-2 text-gray-500 text-xl transition-all peer-placeholder-shown:top-5 peer-placeholder-shown:text-2xl peer-placeholder-shown:text-gray-600 peer-focus:top-2 peer-focus:text-xl peer-focus:text-blue-500">
+            <label className="absolute left-3 top-2 text-gray-500 text-xl transition-all peer-placeholder-shown:top-5 peer-placeholder-shown:text-2xl peer-placeholder-shown:text-gray-600 peer-focus:top-1 peer-focus:text-xl peer-focus:text-blue-500">
               Email Address
             </label>
           </div>
@@ -142,13 +172,13 @@ const HomeEmail = () => {
           <div className="relative col-span-1 md:col-span-2">
             <input
               type="tel"
-              name="phone"
-              value={formData.phone}
+              name="phone_number"
+              value={formData.phone_number}
               onChange={handleChange}
               placeholder=" "
-              className="peer w-full border-b-2 border-gray-300 bg-transparent px-3 pt-6 pb-2 text-base text-gray-900 focus:outline-none focus:border-blue-500"
+              className="peer w-full border-b-2 border-gray-300 bg-transparent px-3 pt-8 pb-2 text-2xl text-gray-900 focus:outline-none focus:border-blue-500"
             />
-            <label className="absolute left-3 top-2 text-gray-500 text-xl transition-all peer-placeholder-shown:top-5 peer-placeholder-shown:text-2xl peer-placeholder-shown:text-gray-600 peer-focus:top-2 peer-focus:text-xl peer-focus:text-blue-500">
+            <label className="absolute left-3 top-2 text-gray-500 text-xl transition-all peer-placeholder-shown:top-5 peer-placeholder-shown:text-2xl peer-placeholder-shown:text-gray-600 peer-focus:top-1 peer-focus:text-xl peer-focus:text-blue-500">
               Phone Number
             </label>
           </div>
@@ -156,12 +186,12 @@ const HomeEmail = () => {
           {/* Message Field */}
           <div className="relative col-span-1 md:col-span-2">
             <textarea
-              name="message"
-              value={formData.message}
+              name="text"
+              value={formData.text}
               onChange={handleChange}
               rows="4"
               placeholder=" "
-              className="peer w-full border-2 rounded-lg border-gray-300 bg-transparent px-3 pt-6 pb-2 text-base text-gray-900 focus:outline-none focus:border-blue-500 resize-none"
+              className="peer w-full border-2 rounded-lg border-gray-300 bg-transparent px-3 pt-8 pb-2 text-2xl text-gray-900 focus:outline-none focus:border-blue-500 resize-none"
             ></textarea>
             <label className="absolute left-3 top-2 text-gray-500 text-xl transition-all peer-placeholder-shown:top-5 peer-placeholder-shown:text-2xl peer-placeholder-shown:text-gray-600 peer-focus:top-2 peer-focus:text-xl peer-focus:text-blue-500">
               Your message

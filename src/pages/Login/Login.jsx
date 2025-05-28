@@ -90,8 +90,14 @@ const Login = () => {
 
         if (!response.ok) {
           console.error("Login failed ❌:", result);
-          alert(result.message || "Login failed!");
-          setIsLoading(false); // Reset loading state
+          // Swal.fire({
+          //   icon: "error",
+          //   title: "Login Failed ❌",
+          //   text: result.message || "Login failed!",
+          // });
+
+          setErrors({ password: "Passwords do not match!" });
+          setIsLoading(false);
           return;
         }
 
@@ -105,8 +111,6 @@ const Login = () => {
 
         const profileResult = await profileResponse.json();
         if (!profileResponse.ok) {
-          console.error("Failed to fetch profile data ❌:", profileResult);
-          alert(profileResult.message || "Failed to fetch profile data!");
           setIsLoading(false); // Reset loading state
           return;
         }
@@ -200,7 +204,7 @@ const Login = () => {
                 {showPassword ? <HiOutlineEyeOff /> : <HiOutlineEye />}
               </div>
               <div className="min-h-[20px]">
-                {errors.password && (
+                {errors && (
                   <p className="text-red-500 text-xl mt-1 ml-2">
                     {errors.password}
                   </p>

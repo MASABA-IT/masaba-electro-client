@@ -16,20 +16,40 @@ const AboutStatsSection = ({ statsData, backgroundImage }) => {
       <div className="relative z-10 w-full max-w-7xl px-4 text-center">
         {/* Cards */}
         <div className="mt-10 flex flex-col md:flex-row gap-6 items-center justify-center">
-          {statsData.map((item, index) => (
-            <div
-              key={index}
-              className="bg-white/10 backdrop-blur-lg p-6 rounded-xl shadow-lg w-full md:w-1/3 text-center"
-            >
-              <h2 className="text-6xl text-white border-b my-2">
-                {item.value}
+          <div className="bg-white/10 md:min-h-[270px] backdrop-blur-lg p-6 rounded-xl shadow-lg w-full md:w-1/3 text-center flex flex-col justify-between h-full">
+            <div>
+              <h2 className="text-2xl sm:text-4xl p-2 text-orange-300 border-b my-2">
+                Our Mission
               </h2>
-              <h3 className="text-2xl font-bold text-gray-200 mb-2">
-                {item.title}
-              </h3>
-              <p className="text-gray-200">{item.description}</p>
+
+              <p className="text-gray-200 text-xl sm:text-2xl">
+                {statsData?.mission}
+              </p>
             </div>
-          ))}
+          </div>
+          <div className="bg-white/10 md:min-h-[270px] backdrop-blur-lg p-6 rounded-xl shadow-lg w-full md:w-1/3 text-center flex flex-col justify-between h-full">
+            <div>
+              <h2 className="text-2xl sm:text-4xl p-2 text-orange-300 border-b my-2">
+                Our Drive and Vision
+              </h2>
+
+              <p className="text-gray-200 text-xl sm:text-2xl">
+                {statsData?.vision}
+              </p>
+            </div>
+          </div>
+          <div className="bg-white/10 md:min-h-[270px] backdrop-blur-lg p-6 rounded-xl shadow-lg w-full md:w-1/3 text-center flex flex-col justify-between h-full">
+            <div>
+              <h2 className="text-2xl sm:text-4xl p-2 text-orange-300 border-b my-2">
+                The Goal
+              </h2>
+
+              <p className="text-gray-200 text-xl sm:text-2xl">
+                {" "}
+                {statsData?.others}
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

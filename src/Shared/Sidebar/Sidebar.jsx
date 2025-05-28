@@ -10,6 +10,7 @@ import {
   FaRegHeart,
   FaListAlt,
   FaFolderOpen,
+  FaHeadset,
 } from "react-icons/fa";
 import { ImUser } from "react-icons/im";
 import { useProductStore } from "../../providers/AppProviders";
@@ -29,7 +30,7 @@ const Sidebar = ({ showSidebar, setShowSidebar }) => {
     setCollectionsId,
     setCategoryId,
     setSelectedCategories,
-    scrollToEmail,
+    emailRef,
   } = useProductStore();
   const profileData = userData?.profile?.data;
   const user = userData?.user;
@@ -83,8 +84,8 @@ const Sidebar = ({ showSidebar, setShowSidebar }) => {
     setCollectionsId(id);
   };
   const handleContactClick = () => {
-    setShowSidebar(false); // optional: close sidebar
-    scrollToEmail(); // scroll to HomeEmail section
+    setShowSidebar(false);
+    navigate("/#contact");
   };
 
   return (
@@ -211,7 +212,14 @@ const Sidebar = ({ showSidebar, setShowSidebar }) => {
             <span>Contact Us</span>
           </button>
           <Link to="/about" className="flex gap-x-4 py-1">
-            <FaInfoCircle className="icon" /> <span>About</span>
+            <FaInfoCircle className="icon" /> <span>About Us</span>
+          </Link>
+          <Link
+            to="/helpcenter"
+            className="flex items-center gap-x-4 py-1 hover:text-blue-600 transition-colors duration-300"
+          >
+            <FaHeadset className="  text-gray-600" />
+            <span className="  font-medium">Help Center</span>
           </Link>
         </div>
 

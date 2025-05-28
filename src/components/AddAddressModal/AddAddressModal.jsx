@@ -17,7 +17,6 @@ const AddressModal = ({ onClose, onSave, defaultAddress = null }) => {
     fetchBillingAddress,
     saveUserAddress,
   } = useProductStore();
-  console.log(defaultAddress, "defaultAddrs");
   const [formData, setFormData] = useState({
     name: "",
     phone: "",

@@ -32,12 +32,17 @@ const ProductDetails = () => {
     cartData,
     addToCart,
     createCartItem,
+    // fetchDeliveryOptions,
+    // deliveryOptions,
   } = useProductStore();
-
   const { category, condition, id } = useParams();
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [resetTrigger, setResetTrigger] = useState(false);
   const [newProduct, setNewProduct] = useState(null);
+  // useEffect(() => {
+  //   fetchDeliveryOptions(); // only fetch when needed
+  // }, []);
+  // console.log(deliveryOptions, "check");
   useEffect(() => {
     if (productData?.productArray) {
       const initialQty = 1;

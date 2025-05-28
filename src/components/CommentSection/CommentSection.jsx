@@ -49,10 +49,9 @@ const CommentSection = ({ product }) => {
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
     const { username, email, comment, phone_number } = formData;
-    console.log(comment.trim());
+
     if (comment.trim()) {
       try {
-        console.log(formData);
         const result = await postComment({
           product_id: product.id,
           comment,
@@ -60,7 +59,7 @@ const CommentSection = ({ product }) => {
           username,
           email,
         });
-        console.log("Comment posted successfully:", result);
+
         setFormData({
           product_id: null,
           username: "",
@@ -177,7 +176,7 @@ const CommentSection = ({ product }) => {
             <div>
               <button
                 type="submit"
-                className="bg-green-600 hover:bg-green-700 outline-none text-white text-2xl font-medium px-6 py-3 rounded-xl shadow-md transition duration-300 w-full md:w-fit"
+                className=" bg-green-600 hover:bg-green-700 outline-none text-white text-xl sm:text-2xl font-medium px-6 py-2 sm:py-3 rounded-xl shadow-md transition duration-300 w-auto md:w-fit"
               >
                 Submit Comment
               </button>

@@ -19,6 +19,7 @@ const UserCheckoutPage = () => {
     cartData,
     sendOrderToServer,
     setCartData,
+    logo,
   } = useProductStore();
   const [billingSmry, setBillingSmry] = useState(() => {
     const stored = localStorage.getItem("billingSummary");
@@ -170,15 +171,22 @@ const UserCheckoutPage = () => {
 
       const result = await sendOrderToServer(finalOrderData);
 
+      const orderId = result.data.order.id;
       if (result?.success) {
-        Swal.fire({
-          icon: "success",
-          title: "Order Placed!",
-          text: "Your order was successfully placed.",
-          showConfirmButton: false,
-          timer: 2000,
-          htmlContainer: "swal2-text-custom",
-        });
+        // Swal.fire({
+        //   icon: "success",
+        //   title: "Order Placed!",
+        //   text: "Your order was successfully placed.",
+        //   showConfirmButton: false,
+        //   timer: 2000,
+        //   htmlContainer: "swal2-text-custom",
+        // });
+        showSuccessAlert(
+          "Order Placed!",
+          "Your order has been placed successfully.",
+          logo,
+          orderId
+        );
         clearCart();
       } else {
         throw new Error(result?.error || "Something went wrong.");
@@ -191,6 +199,36 @@ const UserCheckoutPage = () => {
         text: error.message || "Unable to place the order. Please try again.",
       });
     }
+  };
+  const showSuccessAlert = (title, message, logo, orderId) => {
+    Swal.fire({
+      title: `<strong style="font-size: 18px;">${title}Your order details and tracking information have been sent to your email.</strong>`,
+      html: `
+      <p style="margin-bottom: 6px;">${message}</p>
+      <p style="font-size: 14px; color: #065f46;"><strong>Order ID:</strong> #${orderId}</p>
+    `,
+      text: message,
+      icon: "success",
+      confirmButtonText: "OK",
+      background: "#ecfdf5",
+      color: "#065f46",
+      customClass: {
+        popup: "rounded-2xl p-6 shadow-xl",
+        confirmButton:
+          "bg-[#065f46] text-white px-4 py-2 rounded mt-4 text-base",
+        icon: "swal2-icon-success",
+        title: "mt-6 text-center text-lg font-semibold",
+      },
+      imageUrl: logo ? `${BASE_URL}/${logo}` : "/assets/logo/nav-logo.svg",
+      imageAlt: "Logo",
+      imageWidth: 50,
+      imageHeight: 50,
+      imageClass: "absolute top-4 right-4",
+      allowOutsideClick: false,
+    }).then(() => {
+      // ✅ Full page reload to home after OK
+      window.location.href = "/";
+    });
   };
 
   // const handleButtonClick = async () => {

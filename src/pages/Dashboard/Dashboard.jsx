@@ -41,7 +41,7 @@ const Dashboard = () => {
   } = useProductStore();
   const [activeIndex, setActiveIndex] = useState(0);
   const { orders, profile, index } = useParams();
-  console.log(clientOrders, "clientOrders");
+
   const menuItems = [
     { name: "Profile", icon: <FaUser />, section: "profile" },
     {

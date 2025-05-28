@@ -67,7 +67,7 @@ const CollectionItem = ({ item }) => {
             )}
           </div>
 
-          <div className="item-image absolute right-2 bottom-6 h-20 w-20 overflow-hidden rounded">
+          <div className="item-image absolute right-2 bottom-6 h-20 w-20 overflow-hidden rounded ">
             <img
               src={`${BASE_URL}/${item.thumbnail}`}
               alt={item.title}

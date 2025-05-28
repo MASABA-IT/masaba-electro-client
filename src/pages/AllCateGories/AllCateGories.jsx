@@ -29,9 +29,9 @@ const AllCategories = () => {
     if (!collectionId & categoryId) {
       const categoryFromParam = parseInt(id) ? parseInt(id) : 1;
       setCategoryId(categoryFromParam);
-      setCollectionsId(null); // ensure collection is cleared
+      setCollectionsId(""); //null remove
     } else if (collectionId & !categoryId) {
-      setCollectionsId(null);
+      setCollectionsId("");
     }
   }, []);
 
@@ -89,6 +89,7 @@ const AllCategories = () => {
       ) : (
         <CategoriesItems allData={searchCategories?.data} />
       )}
+      {/* <CategoriesItems allData={searchCategories?.data} /> */}
     </section>
   );
 };

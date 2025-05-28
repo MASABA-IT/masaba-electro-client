@@ -72,7 +72,7 @@ const HomeExtraServices = () => {
       <h2 className="mb-6 px-4 md:p-0">Our Extra Services</h2>
 
       {/* Mobile view - stacked with Framer Motion scroll animation */}
-      <div className="min-h-[190px] md:hidden relative ">
+      <div className="min-h-[190px] md:hidden relative hidden">
         <motion.div
           className="absolute w-full flex justify-center items-center"
           initial={{ opacity: 0, y: 50 }}
@@ -113,7 +113,7 @@ const HomeExtraServices = () => {
         </motion.div>
 
         {/* Navigation buttons */}
-        <div className="absolute top-1/2 left-0 right-0 flex justify-between px-4">
+        <div className="absolute top-1/3 left-0 right-0 flex justify-between px-4">
           {/* Previous Button */}
           <button
             onClick={prevCard}
@@ -141,7 +141,7 @@ const HomeExtraServices = () => {
       </div>
 
       {/* Desktop / Laptop view - grid layout */}
-      <div className="md:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:block hidden">
+      <div className="md:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:block px-4">
         {services.map((service) => (
           <div
             key={service.id}

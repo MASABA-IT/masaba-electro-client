@@ -158,14 +158,16 @@ const CartSummary = ({
                   ৳{parseFloat(subtotal)}
                 </td>
               </tr>
-              <tr>
-                <td className="text-xl font-semibold py-2 text-red-500">
-                  Discount
-                </td>
-                <td className="text-xl font-semibold py-2 text-right text-red-500">
-                  -৳{parseFloat(discountAmount)}
-                </td>
-              </tr>
+              {discountAmount > 0 && (
+                <tr>
+                  <td className="text-xl font-semibold py-2 text-red-500">
+                    Discount
+                  </td>
+                  <td className="text-xl font-semibold py-2 text-right text-red-500">
+                    -৳{parseFloat(discountAmount)}
+                  </td>
+                </tr>
+              )}
               <tr>
                 <td className="text-xl font-semibold py-2">
                   Delivery ({selectedDeliveryTitle})

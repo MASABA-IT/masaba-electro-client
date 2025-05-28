@@ -90,7 +90,7 @@ const ProductDetailsInfo = ({ product }) => {
   // };
 
   return (
-    <div className="productDetailsInfo mt-8 rounded-lg shadow-sm">
+    <div className="productDetailsInfo mt-8 rounded-lg shadow-sm  ">
       {/* Content Data Daynamically set  left */}
       <ProductInfoDescription
         description={

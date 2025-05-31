@@ -5,7 +5,8 @@ import { updateWishlistInLocalStorage } from "../../utils/wishlist";
 import { useNavigate } from "react-router-dom";
 
 const WishlistProducts = () => {
-  const { showWishlist, BASE_URL } = useProductStore();
+  const { showWishlist, BASE_URL, syncWishlistFromLocalStorage } =
+    useProductStore();
   const navigate = useNavigate();
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -43,10 +44,11 @@ const WishlistProducts = () => {
     navigate(`/categories/product/${productId}`);
   };
 
-  const handleRemoveItem = (e, productId) => {
+  const handleRemoveItem = async (e, productId) => {
     e.stopPropagation();
     setLoading(true);
     updateWishlistInLocalStorage(productId, "remove");
+    await syncWishlistFromLocalStorage();
     // Reset to page 1 if the current page would be empty after removal
     if (currentProducts.length === 1 && currentPage > 1) {
       setCurrentPage(currentPage - 1);

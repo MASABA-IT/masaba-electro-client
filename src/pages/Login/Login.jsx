@@ -87,9 +87,9 @@ const Login = () => {
         });
 
         const result = await response.json();
-
+        console.log(result, "userId");
         if (!response.ok) {
-          console.error("Login failed ❌:", result);
+          // console.error("Login failed ❌:", result);
           // Swal.fire({
           //   icon: "error",
           //   title: "Login Failed ❌",
@@ -122,6 +122,7 @@ const Login = () => {
           user: {
             name: result.user.name,
             email: result.user.email,
+            userId: result.user.id,
           },
           profile: profileResult, // Add profile data to userData
         };

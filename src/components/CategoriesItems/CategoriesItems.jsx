@@ -86,11 +86,7 @@ const CategoriesItems = ({ allData }) => {
   const handleToggle = () => {
     setMobileSidebarFilter(!mobileSidebarFilter);
   };
-  // console.log(
-  //   allProducts,
-  //   searchCategories,
-  //   filteredProducts?.Products?.data?.length
-  // );
+
   return (
     <div className="categoriesitems_content ">
       {isMobile ? (
@@ -202,7 +198,7 @@ const CategoriesItems = ({ allData }) => {
 
       <CategoriesBrandFilter />
 
-      {/* bottom-old data */}
+      {/* bottom-old data system */}
       {loading ? (
         <div className="text-center py-5">Loading...</div>
       ) : filteredProducts?.Products?.data?.length > 0 ||

@@ -6,7 +6,7 @@ import { useProductStore } from "../../providers/AppProviders";
 import { updateWishlistInLocalStorage } from "../../utils/wishlist";
 
 const SingleProductCard = ({ product, isGridView }) => {
-  const { BASE_URL } = useProductStore();
+  const { BASE_URL, syncWishlistFromLocalStorage } = useProductStore();
 
   const [isLiked, setIsLiked] = useState(false);
   const navigate = useNavigate();
@@ -27,15 +27,17 @@ const SingleProductCard = ({ product, isGridView }) => {
   const handleProductClick = () => {
     navigate(`/categories/product/${product.id}`);
   };
-  const handleLikeClick = (e) => {
+  const handleLikeClick = async (e) => {
     e.stopPropagation();
 
     const currentLikedStatus = !isLiked;
     if (currentLikedStatus) {
       updateWishlistInLocalStorage(product.id, "add");
       addToWishlistAPI(product.id);
+      await syncWishlistFromLocalStorage();
     } else {
       updateWishlistInLocalStorage(product.id, "remove");
+      await syncWishlistFromLocalStorage();
     }
     setIsLiked(currentLikedStatus);
   };

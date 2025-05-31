@@ -32,7 +32,7 @@ const ProductDetails = () => {
     cartData,
     addToCart,
     createCartItem,
-    // fetchDeliveryOptions,
+    syncWishlistFromLocalStorage,
     // deliveryOptions,
   } = useProductStore();
   const { category, condition, id } = useParams();
@@ -59,15 +59,17 @@ const ProductDetails = () => {
   useEffect(() => {
     setSaved(saveId);
   }, [saveId]);
-  const handleSaveToggle = (e) => {
+  const handleSaveToggle = async (e) => {
     e.stopPropagation();
 
     const currentLikedStatus = !saveId;
     if (currentLikedStatus) {
       updateWishlistInLocalStorage(product.id, "add");
       addToWishlistAPI(product.id);
+      await syncWishlistFromLocalStorage();
     } else {
       updateWishlistInLocalStorage(product.id, "remove");
+      await syncWishlistFromLocalStorage();
     }
     setSaved(currentLikedStatus);
   };

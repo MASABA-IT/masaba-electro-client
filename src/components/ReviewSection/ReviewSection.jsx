@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useProductStore } from "../../providers/AppProviders";
 import { FaRegStar, FaStar } from "react-icons/fa";
 import Pagination from "../Pagination/Pagination";
+import Swal from "sweetalert2";
 
 const ReviewSection = ({ product }) => {
-  const { name: userName, BASE_URL } = useProductStore();
-  const [rating, setRating] = useState(0);
+  const { name: userName, BASE_URL, userData } = useProductStore();
+  const [rating, setRating] = useState(4);
   const [hoverRating, setHoverRating] = useState(0);
   const [reviewText, setReviewText] = useState("");
 
@@ -42,17 +43,79 @@ const ReviewSection = ({ product }) => {
     }
   }, [product?.id, currentPage]);
 
-  const handleReviewSubmit = (e) => {
-    e.preventDefault();
-    if (userName && rating && reviewText.trim()) {
-      console.log("Submit review:", {
-        user: userName,
-        rating,
-        review: reviewText,
-        date: new Date(),
+  const submitReview = async ({ productId, rating, reviewText }) => {
+    try {
+      const response = await fetch(`${BASE_URL}/api/review`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userData?.token}`,
+        },
+        body: JSON.stringify({
+          product_id: productId,
+          rating,
+          review: reviewText,
+        }),
       });
-      setRating(0);
+
+      const result = await response.json();
+
+      if (response.ok) {
+        console.log("✅ Review submitted successfully:", result);
+        return result;
+      } else {
+        console.error("❌ Failed to submit review:", result);
+        throw new Error(result.message || "Unknown error");
+      }
+    } catch (error) {
+      console.error("🚨 Error:", error);
+      throw error;
+    }
+  };
+  console.log(reviews, "reviews");
+  const handleReviewSubmit = async (e) => {
+    e.preventDefault();
+
+    const trimmedReview = reviewText.trim();
+    if (!rating || !trimmedReview) {
+      alert("Please fill in all required fields.");
+      return;
+    }
+
+    try {
+      await submitReview({
+        productId: product.id,
+        rating,
+        reviewText: trimmedReview,
+      });
+
+      // Optional: Reset form
+
       setReviewText("");
+      fetchReviews(1);
+      Swal.fire({
+        icon: "success",
+        title: "Review Submitted!",
+        text: "✅ Thank you for your feedback!",
+        confirmButtonText: "Close",
+        customClass: {
+          confirmButton:
+            "bg-orange-400 hover:bg-orange-500 text-white font-semibold px-4 py-2 rounded shadow-md",
+        },
+        buttonsStyling: false,
+      });
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops!",
+        text: "❌ Failed to submit review. Please try again.",
+        confirmButtonText: "Okay",
+        customClass: {
+          confirmButton:
+            "bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded shadow-md",
+        },
+        buttonsStyling: false,
+      });
     }
   };
 
@@ -74,8 +137,9 @@ const ReviewSection = ({ product }) => {
       </div>
 
       <div className="flex flex-col gap-6">
-        {userName && (
-          <div className="lg:w-[40%] w-full bg-white p-4 rounded">
+        {/* review form */}
+        {
+          <div className="lg:w-[40%] w-full bg-white p-4 rounded hidden ">
             <h3 className="text-2xl font-semibold text-gray-700 mb-2">
               Add Your Review
             </h3>
@@ -120,13 +184,16 @@ const ReviewSection = ({ product }) => {
               </button>
             </form>
           </div>
-        )}
+        }
 
         <div className="w-full xl:w-[90%] mx-auto flex-1 space-y-4">
           {reviews?.map((review, index) => (
             <div key={index} className="p-4 bg-gray-50 rounded-lg shadow-sm">
               <div className="flex items-start gap-3">
-                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-gray-300 text-white flex items-center justify-center font-bold text-lg shadow">
+                <div
+                  className="flex-shrink-0 w-10 h-10 rounded-full border border-orange-300 bg-orange-200 text-stone-600 flex items-center justify-center font-bold text-lg"
+                  style={{ textShadow: "0px 2px 3px orange" }}
+                >
                   {review.user?.name?.charAt(0)}
                 </div>
                 <div className="flex-1">

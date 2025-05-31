@@ -89,7 +89,6 @@ const AllCategories = () => {
       ) : (
         <CategoriesItems allData={searchCategories?.data} />
       )}
-      {/* <CategoriesItems allData={searchCategories?.data} /> */}
     </section>
   );
 };

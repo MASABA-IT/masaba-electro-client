@@ -43,7 +43,10 @@ const NavbarHeader = () => {
           </button>
           <Link
             to="/categories"
-            onClick={() => setCategoryId(1)}
+            onClick={() => {
+              setSelectedCategories(null);
+              setCategoryId(1);
+            }}
             className="whitespace-nowrap   hover:text-blue-600 transition-all duration-300"
           >
             All Category

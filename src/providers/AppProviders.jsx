@@ -347,6 +347,8 @@ export const AppProvider = ({ children }) => {
     phone_number,
     email,
     comment,
+    parent_id,
+    user_id,
   }) => {
     try {
       const response = await fetch(`${BASE_URL}/api/product/comment`, {
@@ -360,6 +362,8 @@ export const AppProvider = ({ children }) => {
           phone_number,
           email,
           comment,
+          parent_id,
+          user_id,
         }),
       });
 
@@ -369,7 +373,7 @@ export const AppProvider = ({ children }) => {
       }
 
       const result = await response.json();
-      return result; // You can handle this in your UI
+      console.log(result, "result");
     } catch (error) {
       console.error("Error posting comment:", error.message);
       throw error; // Let the caller handle the error
@@ -589,47 +593,84 @@ export const AppProvider = ({ children }) => {
       setUserData(parsedUserData);
     }
   }, []);
+
+  /** ---------------whishlist------------ */
+  // const hasFetchedWP = useRef(false);
+  // useEffect(() => {
+  //   // if (hasFetchedWP.current) return;
+  //   // hasFetchedWP.current = true;
+  //   const syncWishlistFromLocalStorage = () => {
+  //     const wishlistData =
+  //       JSON.parse(localStorage.getItem("wishlistData")) || [];
+
+  //     if (wishlistData.length > 0) {
+  //       const url = `${BASE_URL}/api/wishlist/products`;
+  //       const data = { product_ids: wishlistData };
+
+  //       fetch(url, {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify(data),
+  //       })
+  //         .then((response) => response.json())
+  //         .then((data) => {
+  //           setShowWishlist(data.products);
+  //         })
+  //         .catch((error) => {
+  //           console.error("Error syncing wishlist:", error);
+  //         });
+  //     } else {
+  //       setShowWishlist([]);
+  //     }
+  //   };
+
+  //   window.addEventListener("wishlistUpdated", syncWishlistFromLocalStorage);
+
+  //   syncWishlistFromLocalStorage();
+
+  //   return () => {
+  //     window.removeEventListener(
+  //       "wishlistUpdated",
+  //       syncWishlistFromLocalStorage
+  //     );
+  //   };
+  // }, []);
   const hasFetchedWP = useRef(false);
-  useEffect(() => {
-    if (hasFetchedWP.current) return;
-    hasFetchedWP.current = true;
-    const syncWishlistFromLocalStorage = () => {
-      const wishlistData =
-        JSON.parse(localStorage.getItem("wishlistData")) || [];
 
-      if (wishlistData.length > 0) {
-        const url = `${BASE_URL}/api/wishlist/products`;
-        const data = { product_ids: wishlistData };
+  const syncWishlistFromLocalStorage = () => {
+    const wishlistData = JSON.parse(localStorage.getItem("wishlistData")) || [];
 
-        fetch(url, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
+    if (wishlistData.length > 0) {
+      const url = `${BASE_URL}/api/wishlist/products`;
+      const data = { product_ids: wishlistData };
+
+      fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          setShowWishlist(data.products);
         })
-          .then((response) => response.json())
-          .then((data) => {
-            setShowWishlist(data.products);
-          })
-          .catch((error) => {
-            console.error("Error syncing wishlist:", error);
-          });
-      } else {
-        setShowWishlist([]);
-      }
-    };
+        .catch((error) => {
+          console.error("Error syncing wishlist:", error);
+        });
+    } else {
+      setShowWishlist([]);
+    }
+  };
 
-    window.addEventListener("wishlistUpdated", syncWishlistFromLocalStorage);
-
-    syncWishlistFromLocalStorage();
-
-    return () => {
-      window.removeEventListener(
-        "wishlistUpdated",
-        syncWishlistFromLocalStorage
-      );
-    };
+  // Run once on component mount
+  useEffect(() => {
+    if (!hasFetchedWP.current) {
+      hasFetchedWP.current = true;
+      syncWishlistFromLocalStorage();
+    }
   }, []);
   ///////////////
   //////CARTDATA
@@ -1144,7 +1185,6 @@ export const AppProvider = ({ children }) => {
     try {
       const response = await fetch(apiUrl);
       const data = await response.json();
-
       setCurrentPage(data?.Products?.current_page);
       setFilteredProducts(data);
       setTotalPages(data?.Products?.last_page);
@@ -1241,13 +1281,7 @@ export const AppProvider = ({ children }) => {
       throw error;
     }
   };
-  //SECURITY PDF
-  const encodePDF = (filePath) => {
-    return btoa(filePath); // base64 encode
-  };
-  const decodePDF = (encodedPath) => {
-    return atob(encodedPath); // decode if needed
-  };
+
   const appInfo = {
     BASE_URL,
     loading,
@@ -1292,6 +1326,7 @@ export const AppProvider = ({ children }) => {
     handleLogout,
     //showWishlist
     showWishlist,
+    syncWishlistFromLocalStorage,
     //cart-data
     cartData,
     addToCart,
@@ -1375,9 +1410,6 @@ export const AppProvider = ({ children }) => {
     contactDetails,
     ///about-us
     fetchAboutData,
-    //SECURITY PURPOSE
-    encodePDF,
-    decodePDF,
   };
   return <AppContext.Provider value={appInfo}>{children}</AppContext.Provider>;
 };

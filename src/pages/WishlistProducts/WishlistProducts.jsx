@@ -42,7 +42,7 @@ const WishlistProducts = () => {
 
   const handleCardClick = (productId) => {
     navigate(`/categories/product/${productId}`);
-  };
+  };        
 
   const handleRemoveItem = async (e, productId) => {
     e.stopPropagation();

@@ -9,7 +9,8 @@ import "swiper/css"; // ✅ import Swiper styles
 import { AiOutlineInfoCircle } from "react-icons/ai";
 
 const CartLetterSave = () => {
-  const { showWishlist, BASE_URL } = useProductStore();
+  const { showWishlist, BASE_URL, syncWishlistFromLocalStorage } =
+    useProductStore();
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   // useEffect(() => {
@@ -32,10 +33,12 @@ const CartLetterSave = () => {
     navigate(`/categories/product/${productId}`);
   };
 
-  const handleRemoveItem = (e, productId) => {
+  const handleRemoveItem = async (e, productId) => {
     e.stopPropagation();
-    setIsLoading(true);
+
     updateWishlistInLocalStorage(productId, "remove");
+    await syncWishlistFromLocalStorage();
+  
     setTimeout(() => setIsLoading(false), 300);
   };
 
@@ -44,7 +47,7 @@ const CartLetterSave = () => {
       className={`cartLetterSave bg-white border-2 rounded-xl `}
       style={{ display: showWishlist.length !== 0 ? "block" : "none" }}
     >
-      <h2 className="text-2xl xl:text-3xl p-3 xl:p-6 font-bold">
+      <h2 className="text-2xl   p-3 xl:p-6 font-bold">
         Saved for later ({showWishlist.length})
       </h2>
 

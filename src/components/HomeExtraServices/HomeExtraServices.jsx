@@ -69,7 +69,9 @@ const HomeExtraServices = () => {
 
   return (
     <div className="home_services w-full rounded-lg">
-      <h2 className="mb-6 px-4 md:p-0">Our Extra Services</h2>
+      <h2 className="mb-6 px-4 md:p-0 text-2xl sm:text-3xl">
+        Our Extra Services
+      </h2>
 
       {/* Mobile view - stacked with Framer Motion scroll animation */}
       <div className="min-h-[190px] md:hidden relative hidden">

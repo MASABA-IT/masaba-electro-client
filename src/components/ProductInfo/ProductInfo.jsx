@@ -5,6 +5,13 @@ import { CgComment } from "react-icons/cg";
 import { MdOutlineShoppingBasket } from "react-icons/md";
 import StarRating from "../StarRating/StarRating";
 import { useProductStore } from "../../providers/AppProviders";
+function getAverageRating(reviews) {
+  if (!reviews || reviews.length === 0) return 0;
+  const approvedReviews = reviews.filter((r) => r.status === "approved");
+  if (approvedReviews.length === 0) return 0;
+  const total = approvedReviews.reduce((sum, r) => sum + r.rating, 0);
+  return total / approvedReviews.length;
+}
 
 const ProductInfo = ({ product }) => {
   const { BASE_URL } = useProductStore();
@@ -15,6 +22,11 @@ const ProductInfo = ({ product }) => {
   const categoryBook =
     product?.category?.title?.trim()?.toLowerCase() === "book";
 
+  const reviews = product.reviews?.data || [];
+
+  // Calculate average rating from approved reviews
+  const avgRating = getAverageRating(reviews);
+  console.log(product);
   return (
     <div className="product_info md:px-4 xl:px-10 py-2 mt-10 md:mt-0 xl:mt-0">
       {/* Stock Status */}
@@ -54,16 +66,16 @@ const ProductInfo = ({ product }) => {
       {/* Rating, Reviews, Sold */}
       <div className="text-2xl flex flex-wrap gap-x-4 items-center text-gray-600 mt-2">
         <div className="flex items-center gap-x-1">
-          <StarRating rating={product.rating || 0} />
-          <span className="text-orange-300">{product.rating || 0}</span>
+          <StarRating rating={avgRating} />
+          <span className="text-orange-300">{avgRating.toFixed(1)}</span>
         </div>
 
-        {product.reviews && (
+        {reviews.length > 0 && (
           <>
             <GoDotFill className="text-gray-300 text-xl" />
             <div className="flex items-center gap-x-1">
               <CgComment />
-              <span>{product.reviews.length} Reviews</span>
+              <span>{reviews.length} Reviews</span>
             </div>
           </>
         )}

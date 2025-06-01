@@ -69,7 +69,7 @@ const HomeEmail = () => {
       {/* Left: Contact Info */}
       <div className="relative w-full h-full md:w-1/2  flex flex-col justify-between text-left md:p-8 z-10   mt-10 md:mt-0 space-y-4 ">
         <div>
-          <h2 className="text-4xl font-mono font-bold mb-2 text-gray-200">
+          <h2 className="text-3xl sm:text-4xl font-mono font-bold mb-2 text-gray-200">
             Contact Us
           </h2>
           <p className="text-xl md:text-2xl text-gray-200">

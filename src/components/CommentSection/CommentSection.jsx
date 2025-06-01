@@ -245,7 +245,7 @@ const CommentSection = ({ product }) => {
         className={`bg-gray-50 p-4 rounded shadow-sm transition-all duration-200 ${
           isReply ? "ml-6 mt-3" : ""
         }`}
-        style={{ marginLeft: `${depth * 20}px` }}
+        style={{ marginLeft: `${depth * 2}px` }}
       >
         <div className="flex items-start gap-3">
           <div className="flex-shrink-0">
@@ -255,7 +255,7 @@ const CommentSection = ({ product }) => {
               }`}
             />
           </div>
-          <div className="flex-1 min-w-0">
+          <div className="flex-1 min-w-0  ">
             <div className="flex justify-between items-baseline flex-wrap gap-2">
               <p className="font-bold text-xl text-gray-800 truncate">
                 {comment.username}
@@ -276,7 +276,7 @@ const CommentSection = ({ product }) => {
               </p>
 
               {replyingTo === comment.id ? (
-                <div className="mt-2 ml-4 space-y-2">
+                <div className="mt-2 ml-4  space-y-2">
                   <input
                     type="text"
                     value={replyText}
@@ -322,7 +322,7 @@ const CommentSection = ({ product }) => {
             {depth === 0 && replyCount > 0 && !showAllReplies && (
               <button
                 onClick={() => toggleReplies(comment.id)}
-                className="text-blue-600 text-lg font-medium hover:underline"
+                className="text-blue-600 text-lg font-medium hover:underline "
               >
                 View {replyCount} {replyCount === 1 ? "reply" : "replies"}
               </button>

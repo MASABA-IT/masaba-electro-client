@@ -142,7 +142,7 @@ const Footer = () => {
       {/* First Section: Subscribe */}
       <div className="w-full bg-[#eef2f5]">
         <div className="footer_content py-10  flex flex-col gap-y-2 text-center mb-8 text-gray-600 text-2xl">
-          <h2 className="text-3xl font-semibold mb-2  ">
+          <h2 className="text-2xl sm:text-3xl font-semibold mb-2  ">
             Subscribe on Our Newsletter
           </h2>
           <p className="  md:text-2xl mb-2">

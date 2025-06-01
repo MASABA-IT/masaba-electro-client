@@ -25,6 +25,7 @@ const ReviewSection = ({ product }) => {
         ` ${BASE_URL}/api/product/view/${product.id}?page=${page}`
       );
       const data = await res.json();
+      console.log(data.productArray.reviews, "data.productArray.reviews");
       setReviews(data.productArray.reviews.data);
       setPagination({
         current_page: data.productArray.reviews.current_page,
@@ -128,10 +129,43 @@ const ReviewSection = ({ product }) => {
         <p className="text-lg md:text-xl font-medium text-gray-600 mb-4">
           See what others are saying, and share your experience too!
         </p>
-        <div className="flex justify-center items-center gap-4 mb-4">
-          <FaStar className="text-yellow-400 text-5xl animate-ping-slow drop-shadow-lg" />
-          <FaStar className="text-yellow-500 text-6xl animate-bounce drop-shadow-xl" />
-          <FaStar className="text-yellow-400 text-5xl animate-ping-slow drop-shadow-lg" />
+        <div className="relative flex justify-center items-center gap-1 mb-6 py-4">
+          {/* Glowing background effect */}
+          <div className="absolute inset-0 bg-yellow-100/20 blur-xl rounded-full -z-10"></div>
+
+          {/* Animated stars with staggered effects */}
+          {[1, 2, 3, 4, 5].map((star) => (
+            <div
+              key={star}
+              className={`
+        relative transform transition-all duration-700
+        ${star === 3 ? "scale-125" : "scale-100"}
+        hover:scale-150 hover:z-10
+      `}
+            >
+              {/* Main star */}
+              <FaStar
+                className={`
+        text-${star === 3 ? "5xl" : star % 2 ? "4xl" : "3xl"}
+        ${
+          star === 3
+            ? "text-yellow-500 drop-shadow-xl animate-float"
+            : "text-yellow-400/90 drop-shadow-lg animate-pulse-slow"
+        }
+        transition-colors duration-300
+      `}
+              />
+
+              {/* Subtle glow effect */}
+              <div
+                className={`
+        absolute inset-0 rounded-full 
+        ${star === 3 ? "bg-yellow-400/30 animate-glow" : "bg-yellow-300/20"}
+        -z-10 blur-md
+      `}
+              ></div>
+            </div>
+          ))}
         </div>
         <div className="w-full h-[1rem] bg-yellow-400 my-4"></div>
       </div>

@@ -37,7 +37,7 @@ const HomeRecommendedItems = () => {
       className="home_recommendedItems w-full rounded-lg"
       style={{ display: recommendedViewsData.length !== 0 ? "block" : "none" }}
     >
-      <h2 className="mb-4">Recommended Items</h2>
+      <h2 className="mb-4 text-2xl sm:text-3xl">Recommended Items</h2>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {recommendedViewsData.map((item) => (

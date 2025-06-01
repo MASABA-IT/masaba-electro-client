@@ -23,6 +23,7 @@ import Swal from "sweetalert2";
 import { IoMdSettings } from "react-icons/io";
 import { MdPageview } from "react-icons/md";
 import { CiViewList } from "react-icons/ci";
+import ReviewModal from "../../components/ReviewModal/ReviewModal";
 // import WishlistProducts from "../WishlistProducts/WishlistProducts";
 
 const Dashboard = () => {
@@ -299,6 +300,29 @@ const Dashboard = () => {
     setIsModalOpen(!isModalOpen);
     setSelectedOrderId(orderID);
   };
+  const canReview = (orderStatus) => orderStatus === "Delivered";
+  const submitReview = async (formData) => {
+    const response = await fetch(`${BASE_URL}/api/review`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${userData.token}`,
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to submit review");
+    }
+
+    return await response.json();
+  };
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 600);
+  }, []);
 
   return (
     <div className="dashboard__content relative">
@@ -430,8 +454,105 @@ const Dashboard = () => {
                 <p>Total Orders: {clientOrders.length}</p>
               )}
             </div>
+            {isLoading ? (
+              <div className="space-y-4 p-4">
+                {[...Array(3)].map((_, index) => (
+                  <div
+                    key={index}
+                    className="border rounded p-4 shadow-sm bg-white animate-pulse space-y-3"
+                  >
+                    <div className="h-4 bg-gray-300 rounded w-1/3"></div>
+                    <div className="h-4 bg-gray-300 rounded w-1/2"></div>
+                    <div className="h-4 bg-gray-300 rounded w-1/4"></div>
+                    <div className="flex justify-between mt-4">
+                      <div className="h-6 bg-gray-300 rounded w-20"></div>
+                      <div className="h-6 bg-gray-300 rounded w-20"></div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              clientOrders?.length > 0 && (
+                <div className="orders-list space-y-4 p-4 max-h-[400px] overflow-y-auto">
+                  {clientOrders.map((order) => (
+                    <div
+                      key={order.id}
+                      className="order-card border rounded p-4 shadow-sm flex flex-col sm:flex-row justify-between sm:items-center gap-4 bg-white"
+                    >
+                      <div className="w-full sm:w-1/2">
+                        <div>
+                          {" "}
+                          <p>
+                            <strong>Order ID:</strong> #{order.id}
+                          </p>
+                          <p>
+                            <strong>Status:</strong>{" "}
+                            <span
+                              className={`font-semibold text-2xl ${getStatusColor(
+                                order.status
+                              )}`}
+                            >
+                              {order.status}
+                            </span>
+                          </p>
+                          <p>
+                            <strong>Payment Method:</strong>{" "}
+                            {order.payment_method}
+                          </p>
+                          <div className="flex">
+                            <button
+                              onClick={() => toggleModal(order.id)}
+                              className="flex justify-center items-center gap-x-2 text-xl  sm:text-2xl border-2 px-2 py-1 bg-blue-500 text-white rounded-xl"
+                            >
+                              <CiViewList className="text-2xl sm:text-3xl text-white" />
+                              <span>Views</span>
+                            </button>
+                            {canReview(order.status) && (
+                              <ReviewModal
+                                orderId={order.id}
+                                orderDetails={order.order_details}
+                                userData={userData}
+                                BASE_URL={BASE_URL}
+                                onReviewSubmit={submitReview}
+                              />
+                            )}
+                          </div>
+                        </div>
+                      </div>
 
-            {clientOrders && (
+                      <div className="w-full sm:w-1/2 text-left sm:text-right space-y-1">
+                        <div className="flex justify-between sm:justify-end gap-2 sm:gap-4 text-xl">
+                          <span className="text-gray-500 font-medium">
+                            Subtotal:
+                          </span>
+                          <span className="font-semibold text-gray-700">
+                            ৳ {order.sub_total}
+                          </span>
+                        </div>
+                        <div className="flex justify-between sm:justify-end gap-2 sm:gap-4 text-xl">
+                          <span className="text-gray-500 font-medium">
+                            Delivery:
+                          </span>
+                          <span className="text-gray-700">
+                            + ৳ {order.delivery_charge}
+                          </span>
+                        </div>
+                        <div className="border-t pt-1 mt-1 flex justify-between sm:justify-end gap-2 sm:gap-4 text-2xl">
+                          <span className="text-gray-600 font-bold">
+                            Total:
+                          </span>
+                          <span className="text-2xl font-bold text-green-600">
+                            ৳ {order.total_amount}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )
+            )}
+
+            {/* {clientOrders && (
               <div className="orders-list space-y-4 p-4 max-h-[400px] overflow-y-auto">
                 {clientOrders.map((order) => (
                   <div
@@ -458,13 +579,24 @@ const Dashboard = () => {
                           <strong>Payment Method:</strong>{" "}
                           {order.payment_method}
                         </p>
-                        <button
-                          onClick={() => toggleModal(order.id)}
-                          className="flex justify-center items-center gap-x-2 text-xl  sm:text-2xl border-2 px-2 py-1 bg-blue-500 text-white rounded-xl"
-                        >
-                          <CiViewList className="text-2xl sm:text-3xl text-white" />
-                          <span>Views</span>
-                        </button>
+                        <div className="flex">
+                          <button
+                            onClick={() => toggleModal(order.id)}
+                            className="flex justify-center items-center gap-x-2 text-xl  sm:text-2xl border-2 px-2 py-1 bg-blue-500 text-white rounded-xl"
+                          >
+                            <CiViewList className="text-2xl sm:text-3xl text-white" />
+                            <span>Views</span>
+                          </button>
+                          {canReview(order.status) && (
+                            <ReviewModal
+                              orderId={order.id}
+                              orderDetails={order.order_details}
+                              userData={userData}
+                              BASE_URL={BASE_URL}
+                              onReviewSubmit={submitReview}
+                            />
+                          )}
+                        </div>
                       </div>
                     </div>
 
@@ -495,7 +627,7 @@ const Dashboard = () => {
                   </div>
                 ))}
               </div>
-            )}
+            )} */}
           </div>
         )}
         {selectedSection === "address" && (

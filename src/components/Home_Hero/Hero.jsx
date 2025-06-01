@@ -83,7 +83,7 @@ const Hero = ({ onScrollToCollections }) => {
           Latest trending
         </h3>
         <h1
-          className=" text-4xl md:text-6xl text-zinc-700 font-normal mt-2"
+          className=" text-3xl md:text-6xl text-zinc-700 font-normal mt-2"
           style={{
             textShadow: "0 2px 4px #f4f3f2",
             fontFamily: "cursive",
@@ -93,7 +93,7 @@ const Hero = ({ onScrollToCollections }) => {
         </h1>
         <button
           onClick={onScrollToCollections}
-          className="text-blue-500 text-3xl md:text-gray-500  px-4 py-3 bg-white my-4 rounded-lg hover:text-gray-600 hover:bg-gray-50 transition-all duration-75 shadow-md hover:shadow-sm hover:cursor-pointer "
+          className="text-blue-500 text-2xl sm:text-3xl md:text-gray-500  px-4 py-3 bg-white my-4 rounded-lg hover:text-gray-600 hover:bg-gray-50 transition-all duration-75 shadow-md hover:shadow-sm hover:cursor-pointer "
         >
           Learn More
         </button>

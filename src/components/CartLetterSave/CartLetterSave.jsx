@@ -38,7 +38,7 @@ const CartLetterSave = () => {
 
     updateWishlistInLocalStorage(productId, "remove");
     await syncWishlistFromLocalStorage();
-  
+
     setTimeout(() => setIsLoading(false), 300);
   };
 
@@ -107,10 +107,10 @@ const CartLetterSave = () => {
                     ৳&nbsp;{product.base_price}
                   </p>
                 )} */}
-                <p className="text-2xl sm:text-xl text-center   text-gray-600 mb-1">
+                <p className="text-2xl sm:text-xl font-bold text-center   text-gray-600 mb-1">
                   ৳&nbsp;{product.base_price}
                 </p>
-                <h2 className="text-xl sm:text-2xl font-medium text-gray-600 mb-3 text-center line-clamp-2">
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-600 mb-3 text-center line-clamp-2">
                   {product.title}
                 </h2>
                 <div className="mt-auto btn_group flex justify-between text-xl">

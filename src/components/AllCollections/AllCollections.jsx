@@ -44,7 +44,7 @@ const CollectionItem = ({ item }) => {
         // ✅ Real Content after image is loaded
         <div className="">
           <div className="item-info space-y-2 ">
-            <h4 className="text-lg md:text-2xl font-serif ">
+            <h4 className="text-xl md:text-2xl font-serif font-semibold ">
               {" "}
               {item.title.length > 20
                 ? item.title.slice(0, 20) + "..."

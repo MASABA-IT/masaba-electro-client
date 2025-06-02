@@ -116,7 +116,7 @@ const CategoriesItems = ({ allData }) => {
           </div>
         </div>
       ) : (
-        <div className="container border px-4 py-3 ">
+        <div className="container border px-4 py-3  ">
           {!selectedCategories?.length > 0 ? (
             <p>
               {`Now All ${
@@ -226,9 +226,8 @@ const CategoriesItems = ({ allData }) => {
       )}
 
       {/* Pagination */}
-
-      <PaginationsBtn />
       {mobileSidebarFilter && <MobileCategoryList />}
+      <PaginationsBtn />
     </div>
   );
 };

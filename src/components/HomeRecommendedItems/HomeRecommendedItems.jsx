@@ -57,7 +57,7 @@ const HomeRecommendedItems = () => {
               />
             </div>
             <div className="p-2">
-              <h3 className="text-sm font-medium">{item.title}</h3>
+              <h3 className="text-xl sm:text-2xl font-bold">{item.title}</h3>
               <div className="mt-2 text-xl font-semibold text-green-600">
                 {item.discount_price ? (
                   <>

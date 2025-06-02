@@ -32,7 +32,7 @@ const ProductDetailsRelated = ({ relatedProducts }) => {
               </div>
 
               <div className="p-3 ">
-                <h2 className="text-2xl font-medium text-gray-800 line-clamp-2 h-[2.8em]">
+                <h2 className="text-2xl font-bold text-gray-800 line-clamp-2 h-[2.8em]">
                   {product.title}
                 </h2>
 
@@ -40,29 +40,32 @@ const ProductDetailsRelated = ({ relatedProducts }) => {
                   {product.discount_price ? (
                     <div className="flex flex-col sm:flex-row items-center sm:justify-center gap-x-4 ">
                       <div className="flex items-center gap-2">
-                        <p className="text-xl sm:text-xl font-bold text-red-600">
+                        <p className="text-2xl sm:text-xl font-bold text-red-600">
                           ৳ {parseFloat(product.discount_price).toFixed(2)}
                         </p>
                       </div>{" "}
-                      <p className="text-lg text-gray-500 line-through">
+                      <p className="text-xl text-gray-500 line-through">
                         ৳ {parseFloat(product.base_price).toFixed(2)}
                       </p>
                     </div>
                   ) : (
-                    <p className="text-center text-xl font-bold text-gray-800">
+                    <p className="text-center text-2xl font-bold text-gray-800">
                       ৳ {parseFloat(product.base_price).toFixed(2)}
                     </p>
                   )}
                 </div>
               </div>
-              <span className="absolute top-4 right-4 text-lg bg-red-100 text-red-800 px-1.5 py-0.5 rounded">
-                {Math.round(
-                  ((product.base_price - product.discount_price) /
-                    product.base_price) *
-                    100
+              {product.discount_price &&
+                product.base_price > product.discount_price && (
+                  <span className="absolute top-4 right-4 text-xl bg-red-100 text-red-800 px-1.5 py-0.5 rounded">
+                    {Math.round(
+                      ((product.base_price - product.discount_price) /
+                        product.base_price) *
+                        100
+                    )}
+                    % off
+                  </span>
                 )}
-                % off
-              </span>
             </div>
           ))}
         </div>

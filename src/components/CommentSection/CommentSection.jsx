@@ -76,7 +76,7 @@ const CommentSection = ({ product }) => {
       email: userData ? userData.user.email : email,
       user_id: userData ? userData.user.userId : null,
     };
-    console.log(payload, "payload");
+
     try {
       await postComment(payload);
 
@@ -167,7 +167,7 @@ const CommentSection = ({ product }) => {
       if (userData?.token) {
         replyPayload.user_id = userData.user.userId;
       }
-      console.log(replyPayload, "now -reply-");
+
       await postComment(replyPayload);
 
       // Reset states
@@ -204,13 +204,13 @@ const CommentSection = ({ product }) => {
       parentId: "",
     });
   };
-  console.log(replyData, "replyData");
+
   useEffect(() => {
     if (product?.id) {
       fetchComments(currentPage);
     }
   }, [product?.id, currentPage]);
-  console.log(comments);
+
   const [expandedComments, setExpandedComments] = useState({});
   const [visibleReplies, setVisibleReplies] = useState({});
 

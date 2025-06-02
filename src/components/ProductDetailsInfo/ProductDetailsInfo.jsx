@@ -88,7 +88,7 @@ const ProductDetailsInfo = ({ product }) => {
   //   slidesToScroll: 1,
   //   fade: true, // Apply fade effect between slides
   // };
-
+  console.log(product, "product");
   return (
     <div className="productDetailsInfo mt-8 rounded-lg shadow-sm  ">
       {/* Content Data Daynamically set  left */}
@@ -135,7 +135,12 @@ const ProductDetailsInfo = ({ product }) => {
         }
         reviews={product?.reviews}
         termsAndConditions={product?.terms_conditions}
-        shipping={product?.shipping}
+        shipping={product.shipping}
+        author={product?.author}
+        specifications={
+          product?.specifications.length ? product.specifications : null
+        }
+        summary={product?.summary}
       />
 
       {/* you may like right */}

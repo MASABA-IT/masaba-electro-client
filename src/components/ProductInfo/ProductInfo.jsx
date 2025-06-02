@@ -26,7 +26,7 @@ const ProductInfo = ({ product }) => {
 
   // Calculate average rating from approved reviews
   const avgRating = getAverageRating(reviews);
-  console.log(product);
+
   return (
     <div className="product_info md:px-4 xl:px-10 py-2 mt-10 md:mt-0 xl:mt-0">
       {/* Stock Status */}

@@ -162,7 +162,7 @@ const MobileCategoryList = () => {
                             transition={{ duration: 0.2 }}
                             className="overflow-hidden "
                           >
-                            <div className="mt-2 ml-2 text-lg">
+                            <div className="mt-2 ml-2 text-lg px-6">
                               {/* TYPE: checkbox */}
                               {filter.type === "checkbox" &&
                                 (filter.children?.categories || [])

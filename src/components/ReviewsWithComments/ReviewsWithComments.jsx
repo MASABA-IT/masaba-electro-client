@@ -5,7 +5,6 @@ import ReviewSection from "../ReviewSection/ReviewSection";
 import CommentSection from "../CommentSection/CommentSection";
 
 const ReviewsWithComments = ({ product }) => {
-  console.log(product);
   return (
     <div className="reviewsWithComments col-start-2 col-end-10 space-y-10">
       {product?.reviews?.data?.length > 0 && (

@@ -100,7 +100,7 @@ const SingleProductCard = ({ product, isGridView }) => {
       {!isGridView ? (
         // single column
         <div className="product-info relative p-4   justify-between my-auto h-[55%]   md:h-[95%]">
-          <h3 className="text-2xl md:text-3xl text-gray-700 ">
+          <h3 className="text-2xl md:text-3xl   text-gray-700 ">
             {product.title}
           </h3>
 
@@ -193,7 +193,7 @@ const SingleProductCard = ({ product, isGridView }) => {
               <span>{formatViews(product?.review_count)}</span>
             </div>
           </div>
-          <h3 className="text-[18px]  text-gray-600 hidden md:block font-sans font-normal">
+          <h3 className="text-xl md:text-2xl   text-gray-700  hidden md:block font-sans font-bold">
             {product?.title}
           </h3>
         </div>
